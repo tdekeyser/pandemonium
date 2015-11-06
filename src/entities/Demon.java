@@ -1,6 +1,6 @@
 package entities;
 
-public abstract class Demon {
+public abstract class Demon { // abstract Demon class
 	String name;
 	String gender;
 	Demon partner;
