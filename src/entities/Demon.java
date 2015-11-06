@@ -10,5 +10,8 @@ public abstract class Demon {
 	public Demon() {
 		// TODO Auto-generated constructor stub
 	}
-
+	
+	public void growOlder() { // grow 1 year older
+		this.age++;
+	}
 }
