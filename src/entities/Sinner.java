@@ -1,29 +1,13 @@
 package entities;
 
-public abstract class Demon implements Moveable {
-	final String name;
-	final String gender;
-	
+public class Sinner implements Moveable {
 	int age;
-	boolean isAlive = true; // when demon is created, it is alive by default
-	Demon partner;
+	int divinity;
+	int[] currentPosition = new int[2];
+	boolean isAlive = true; // ironic naming, but still...
 	
-	int cruelty; // cruelty defines a demon's position within the hierarchy
-	int[] currentPosition = new int[2]; // coordinates on the board
-
-	public Demon(String name, int age, String gender) {
-		this.name = name;
-		this.age = age;
-		this.gender = gender;
-	}
-	
-	public void growOlder() { // grow 1 year older
-		this.age++;
-	}
-	
-	public void killSinner(Sinner victim) { // demon kills a victim and gains cruelty
-		victim.isAlive = false;
-		this.cruelty++;
+	public Sinner() {
+		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
@@ -51,4 +35,5 @@ public abstract class Demon implements Moveable {
 	public void moveDown() {
 		this.currentPosition[0]++; // add to first value of current position = move down
 	}
+
 }
