@@ -1,19 +1,17 @@
 package entities;
 
 public class Sinner implements Moveable {
-	int age;
+
 	int divinity;
-	int[] currentPosition = new int[2];
 	boolean isAlive = true; // ironic naming, but still...
+	int[] currentPosition = new int[2];
+	int age;
 	
 	public Sinner() {
-		// TODO Auto-generated constructor stub
 	}
 	
-	@Override
-	public boolean isMoveable(int[] currentPosition) {
-		// check current position against board
-		return true;
+	public void growOlder() { // grow 1 year older
+		this.age++;
 	}
 	
 	@Override
@@ -35,5 +33,4 @@ public class Sinner implements Moveable {
 	public void moveDown() {
 		this.currentPosition[0]++; // add to first value of current position = move down
 	}
-
 }
