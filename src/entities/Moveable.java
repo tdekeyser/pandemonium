@@ -1,9 +1,7 @@
 package entities;
 
-// Interface for any entity that can move
+// Interface for any entity that can move, not public so only accessible within the package entities
 interface Moveable {	
-	
-	public boolean isMoveable(int[] currentPosition); // check whether entity can go somewhere
 	
 	public void moveLeft();
 	public void moveRight();
