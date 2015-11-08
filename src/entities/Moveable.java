@@ -1,6 +1,6 @@
 package entities;
 
-// Interface for any entity that can move
+// Interface for any entity that can move, not public so only accessible within the package entities
 interface Moveable {	
 	
 	public void moveLeft();
