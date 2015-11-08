@@ -1,6 +1,9 @@
 package entities;
 
 public abstract class Demon extends LivingEntity {
+	/* abstract class is superclass for InfernalDemon, Imp, DemonCommander
+	 * not a superclass for CradleOfFilth
+	 */
 	
 	final String name;
 	Demon partner;

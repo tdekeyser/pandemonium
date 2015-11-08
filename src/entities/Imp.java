@@ -18,20 +18,16 @@ public class Imp extends Demon {
 		super.age = 4;
 	}
 	
+	public String stringRepr() {
+		//String Representation for class Imp
+		return "I";
+	}
+	
 	public void cannibalize(Imp impVictim) {
 		// destroys Imp object at same position and increases cruelty
 		impVictim.isAlive = false;
 		this.cruelty++;
 	}
 	
-	public static void main(String[] args) {
-		int[] pos = {3,4};
-		Imp zot = new Imp("zot", "man", pos);
-		CradleOfFilth c = new CradleOfFilth("man", pos);
-		System.out.println(Arrays.toString(c.currentPosition));
-		
-		System.out.println("result is" + zot.age + zot.name + zot.isAlive +zot.gender);
-		
-	}
 	
 }
