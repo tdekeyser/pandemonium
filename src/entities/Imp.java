@@ -1,5 +1,4 @@
 package entities;
-import java.util.Arrays;
 
 public class Imp extends Demon {
 	/* class for the lesser demon, 3rd in hierarchy and first mature
@@ -19,7 +18,7 @@ public class Imp extends Demon {
 	}
 	
 	public String stringRepr() {
-		//String Representation for class Imp
+		// String Representation for class Imp
 		return "I";
 	}
 	

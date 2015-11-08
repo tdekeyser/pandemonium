@@ -17,6 +17,11 @@ public class CradleOfFilth extends LivingEntity {
 		super(gender, currentPosition);
 	}
 	
+	public String stringRepre() {
+		// String representation of CradleOfFilth object
+		return "CoF";
+	}
+	
 	public void increaseMaturity() {
 		// adds 1 year to COF's maturity status
 		this.cruelty++;
