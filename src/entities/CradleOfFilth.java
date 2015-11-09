@@ -17,7 +17,8 @@ public class CradleOfFilth extends LivingEntity {
 		super(gender, currentPosition);
 	}
 	
-	public String stringRepre() {
+	@Override
+	public String toString() {
 		// String representation of CradleOfFilth object
 		return "CoF";
 	}

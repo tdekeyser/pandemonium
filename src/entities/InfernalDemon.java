@@ -17,7 +17,8 @@ public class InfernalDemon extends Demon {
 		super(name, gender, currentPosition);
 	}
 	
-	public String stringRepr() {
+	@Override
+	public String toString() {
 		//String Representation for class InfernalDemon
 		return "InfD";
 	}

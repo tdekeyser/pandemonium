@@ -9,7 +9,8 @@ public class DemonCommander extends Demon {
 		
 	}
 	
-	public String stringRepr() {
+	@Override
+	public String toString() {
 		//String representation for class 'DemonCommander'
 		return "DC";
 	}

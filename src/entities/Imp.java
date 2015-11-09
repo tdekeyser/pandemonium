@@ -17,7 +17,8 @@ public class Imp extends Demon {
 		super.age = 4;
 	}
 	
-	public String stringRepr() {
+	@Override
+	public String toString() {
 		// String Representation for class Imp
 		return "I";
 	}

@@ -8,7 +8,8 @@ public class Sinner extends LivingEntity {
 		super(gender, currentPosition);
 	}
 	
-	public String stringRepr() {
+	@Override
+	public String toString() {
 		// String representation of Sinner object
 		return "S";
 	}
