@@ -15,5 +15,6 @@ public class DemonCommander extends Demon {
 		return "DC";
 	}
 	
+	// TODO folders that gather all demons + think about getters/setters for variables??
 	
 }

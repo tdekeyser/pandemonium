@@ -6,14 +6,14 @@ public abstract class LivingEntity implements Moveable {
 	boolean isAlive = true;
 	int[] currentPosition = new int[2]; // current position on the board
 	int age;
-	String gender;
+	final String gender;
 
 	public LivingEntity(String gender, int[] currentPosition) {
 		this.gender = gender;
 		this.currentPosition = currentPosition;
 	}
 	
-	public void growOlder() {
+	public void increaseAge() {
 		// grow 1 year older
 		this.age++;
 	}
