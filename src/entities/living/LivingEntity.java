@@ -1,21 +1,50 @@
-package entities;
+package entities.living;
 
 public abstract class LivingEntity implements Moveable {
 	// superclass for every living entity
 	
-	boolean isAlive = true;
-	int[] currentPosition = new int[2]; // current position on the board
-	int age;
-	final String gender;
+	private boolean isAlive = true;
+	private int[] currentPosition = new int[2]; // current position on the board
+	private int age;
+	private final String gender;
 
 	public LivingEntity(String gender, int[] currentPosition) {
 		this.gender = gender;
 		this.currentPosition = currentPosition;
 	}
 	
+	public void declareDead () {
+		// set isAlive to false
+		this.isAlive = false;
+	}
+	
+	public int[] getCurrentPosition() {
+		// getter method for currentPosition
+		return this.currentPosition;
+	}
+	
+	public void setCurrentPosition(int[] newPosition) {
+		// setter method for currentPosition
+		this.currentPosition = newPosition;
+	}
+	
+	public void setAge(int a) {
+		// setter method for age
+		this.age = a;
+	}
+	
+	public int getAge() {
+		// getter method for age
+		return this.age;
+	}
+	
 	public void increaseAge() {
 		// grow 1 year older
 		this.age++;
+	}
+	
+	public String getGender() {
+		return this.gender;
 	}
 	
 	@Override

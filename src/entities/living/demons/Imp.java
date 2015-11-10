@@ -1,4 +1,4 @@
-package entities;
+package entities.living.demons;
 
 public class Imp extends Demon {
 	/* class for the lesser demon, 3rd in hierarchy and first mature
@@ -14,7 +14,7 @@ public class Imp extends Demon {
 
 	public Imp(String name, String gender, int[] currentPosition) {
 		super(name, gender, currentPosition);
-		super.age = 4;
+		super.setAge(4);
 	}
 	
 	@Override
@@ -25,7 +25,7 @@ public class Imp extends Demon {
 	
 	public void cannibalize(Imp impVictim) {
 		// destroys Imp object at same position and increases cruelty
-		impVictim.isAlive = false;
+		impVictim.declareDead();
 		this.cruelty++;
 	}
 	

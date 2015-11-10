@@ -1,4 +1,4 @@
-package entities;
+package entities.living;
 
 // Interface for any entity that can move, not public so only accessible within the package entities
 interface Moveable {	

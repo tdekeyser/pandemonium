@@ -1,4 +1,6 @@
-package entities;
+package entities.living.demons;
+
+import entities.living.Sinner;
 
 public class InfernalDemon extends Demon {
 	/* class for the Greater demon, 1st in hierarchy 
@@ -25,7 +27,7 @@ public class InfernalDemon extends Demon {
 	
 	public void tortureSinner(Sinner victim) {
 		//torture method decreases a Sinner victim's divinity & increases infD's cruelty
-		victim.divinity--;
+		victim.decreaseDivinity();
 		this.cruelty++;
 	}
 

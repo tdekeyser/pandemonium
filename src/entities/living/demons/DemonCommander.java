@@ -1,4 +1,4 @@
-package entities;
+package entities.living.demons;
 
 public class DemonCommander extends Demon {
 	

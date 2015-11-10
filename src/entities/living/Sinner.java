@@ -1,11 +1,19 @@
-package entities;
+package entities.living;
 
 public class Sinner extends LivingEntity {
 
-	int divinity; // divinity defines a sinner's position within the hierarchy
+	private int divinity; // divinity defines a sinner's position within the hierarchy
 	
 	public Sinner(String gender, int[] currentPosition) {
 		super(gender, currentPosition);
+	}
+	
+	public void increaseDivinity() {
+		this.divinity++;
+	}
+	
+	public void decreaseDivinity() {
+		this.divinity--;
 	}
 	
 	@Override

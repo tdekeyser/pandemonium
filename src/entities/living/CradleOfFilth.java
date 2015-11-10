@@ -1,4 +1,4 @@
-package entities;
+package entities.living;
 
 public class CradleOfFilth extends LivingEntity {
 	/* class for lowest hierarchy

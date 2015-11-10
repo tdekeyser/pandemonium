@@ -1,4 +1,7 @@
-package entities;
+package entities.living.demons;
+
+import entities.living.LivingEntity;
+import entities.living.Sinner;
 
 public abstract class Demon extends LivingEntity {
 	/* abstract class is superclass for InfernalDemon, Imp, DemonCommander
@@ -15,7 +18,7 @@ public abstract class Demon extends LivingEntity {
 	}
 	
 	public void killSinner(Sinner victim) { // demon kills a victim and gains cruelty
-		victim.isAlive = false;
+		victim.declareDead();
 		this.cruelty++;
 	}
 	
