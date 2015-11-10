@@ -13,6 +13,11 @@ public abstract class LivingEntity implements Moveable {
 		this.currentPosition = currentPosition;
 	}
 	
+	public boolean getIsAlive() {
+		// get isAlive
+		return this.isAlive;
+	}
+	
 	public void declareDead () {
 		// set isAlive to false
 		this.isAlive = false;

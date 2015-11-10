@@ -2,9 +2,7 @@ Pandemonium
 
 TODO: 
 
-1.folder to gather same classes;
-
-2. accessor methods? -> other classes/packages don't have to increase anything
+1. accessor methods? -> other classes/packages don't have to increase anything
 	-> e.g. in Imp
 
 private int cruelty;

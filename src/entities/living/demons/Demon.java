@@ -17,7 +17,8 @@ public abstract class Demon extends LivingEntity {
 		this.name = name;
 	}
 	
-	public void killSinner(Sinner victim) { // demon kills a victim and gains cruelty
+	public void killSinner(Sinner victim) {
+		// demon kills a victim and gains cruelty
 		victim.declareDead();
 		this.cruelty++;
 	}

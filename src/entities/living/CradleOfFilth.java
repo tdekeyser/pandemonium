@@ -5,13 +5,11 @@ public class CradleOfFilth extends LivingEntity {
 	 * CrafleOfFilth has the following variables:
 	 * 		String name,
 	 * 		String gender,
-	 * 		int age,
+	 * 		int age, --> at age 3, it turns into an Imp object
 	 * 		boolean isAlive,
 	 * 		int[] currentPosition,
 	 * 		int cruelty
 	 */
-	
-	int cruelty; // at cruelty = 3, matures to Imp
 	
 	public CradleOfFilth(String gender, int[] currentPosition) {
 		super(gender, currentPosition);
@@ -21,11 +19,6 @@ public class CradleOfFilth extends LivingEntity {
 	public String toString() {
 		// String representation of CradleOfFilth object
 		return "CoF";
-	}
-	
-	public void increaseMaturity() {
-		// adds 1 year to COF's maturity status
-		this.cruelty++;
 	}
 	
 }

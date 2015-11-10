@@ -8,18 +8,18 @@ public class Sinner extends LivingEntity {
 		super(gender, currentPosition);
 	}
 	
+	@Override
+	public String toString() {
+		// String representation of Sinner object
+		return "S";
+	}
+	
 	public void increaseDivinity() {
 		this.divinity++;
 	}
 	
 	public void decreaseDivinity() {
 		this.divinity--;
-	}
-	
-	@Override
-	public String toString() {
-		// String representation of Sinner object
-		return "S";
 	}
 	
 }
