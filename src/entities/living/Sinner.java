@@ -1,5 +1,7 @@
 package entities.living;
 
+import java.util.Arrays;
+
 public class Sinner extends LivingEntity {
 
 	private int divinity; // divinity defines a sinner's position within the hierarchy
@@ -11,7 +13,26 @@ public class Sinner extends LivingEntity {
 	@Override
 	public String toString() {
 		// String representation of Sinner object
+		StringBuilder info = new StringBuilder();
+		info.append("Name: Sinner");
+		info.append("\nGender: ");
+		info.append(this.getGender());
+		info.append("\nAge: ");
+		info.append(this.getAge());
+		info.append("\nDivinity: ");
+		info.append(this.getDivinity());
+		info.append("\nPosition: ");
+		info.append(Arrays.toString(this.getCurrentPosition()));
+		return info.toString();
+	}
+	
+	public String toStringShort() {
+		// board representation
 		return "S";
+	}
+	
+	public int getDivinity() {
+		return this.divinity;
 	}
 	
 	public void increaseDivinity() {

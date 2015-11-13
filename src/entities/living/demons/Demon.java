@@ -8,9 +8,9 @@ public abstract class Demon extends LivingEntity {
 	 * not a superclass for CradleOfFilth
 	 */
 	
-	final String name;
+	private final String name;
 	Demon partner;
-	int cruelty; // cruelty defines a demon's position within the hierarchy
+	private int cruelty; // cruelty defines a demon's position within the hierarchy
 
 	public Demon(String name, String gender, int[] currentPosition) {
 		super(gender, currentPosition);
@@ -20,6 +20,28 @@ public abstract class Demon extends LivingEntity {
 	public void killSinner(Sinner victim) {
 		// demon kills a victim and gains cruelty
 		victim.declareDead();
+		this.increaseCruelty();
+	}
+	
+	public boolean hasPartner() {
+		// returns true if there is a partner
+		return this.partner != null;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public int getCruelty() {
+		return this.cruelty;
+	}
+	
+	public void setCruelty(int c) {
+		this.cruelty = c;
+	}
+	
+	public void increaseCruelty() {
+		// increase cruelty of demon by 1
 		this.cruelty++;
 	}
 	

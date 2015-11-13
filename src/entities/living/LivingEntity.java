@@ -13,6 +13,8 @@ public abstract class LivingEntity implements Moveable {
 		this.currentPosition = currentPosition;
 	}
 	
+	public abstract String toStringShort(); // board representation of object
+	
 	public boolean getIsAlive() {
 		// get isAlive
 		return this.isAlive;
