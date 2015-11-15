@@ -1,9 +1,11 @@
 package entities.unliving;
 
-public class UnlivingEntity {
+import entities.Entity;
+
+public abstract class UnlivingEntity extends Entity {
 
 	public UnlivingEntity() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 }

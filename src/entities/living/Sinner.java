@@ -12,6 +12,11 @@ public class Sinner extends LivingEntity {
 	
 	@Override
 	public String toString() {
+		// board representation
+		return "S";
+	}
+	
+	public String toStringLong() {
 		// String representation of Sinner object
 		StringBuilder info = new StringBuilder();
 		info.append("Name: Sinner");
@@ -24,11 +29,6 @@ public class Sinner extends LivingEntity {
 		info.append("\nPosition: ");
 		info.append(Arrays.toString(this.getCurrentPosition()));
 		return info.toString();
-	}
-	
-	public String toStringShort() {
-		// board representation
-		return "S";
 	}
 	
 	public int getDivinity() {

@@ -24,6 +24,11 @@ public class InfernalDemon extends Demon {
 	
 	@Override
 	public String toString() {
+		// board representation of InfernalDemon
+		return "InfD";
+	}
+	
+	public String toStringLong() {
 		//String Representation for class InfernalDemon
 		StringBuilder info = new StringBuilder();
 		info.append("Name: ");
@@ -38,11 +43,6 @@ public class InfernalDemon extends Demon {
 		info.append(Arrays.toString(this.getCurrentPosition()));
 		return info.toString();
 	}	
-	
-	public String toStringShort() {
-		// board representation of InfernalDemon
-		return "InfD";
-	}
 	
 	public void tortureSinner(Sinner victim) {
 		//torture method decreases a Sinner victim's divinity & increases infD's cruelty

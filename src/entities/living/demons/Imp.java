@@ -2,6 +2,8 @@ package entities.living.demons;
 
 import java.util.Arrays;
 
+import entities.living.CradleOfFilth;
+
 public class Imp extends Demon {
 	/* class for the lesser demon, 3rd in hierarchy and first mature
 	 * Imp has following variables:
@@ -19,12 +21,12 @@ public class Imp extends Demon {
 		this.setAge(4);
 	}
 	
-	@Override
-	public String toString() {
+	public String toStringLong() {
 		// String Representation for class Imp
 		StringBuilder info = new StringBuilder();
 		info.append("Name: ");
 		info.append(this.getName());
+		info.append("\nType: Imp");
 		info.append("\nGender: ");
 		info.append(this.getGender());
 		info.append("\nAge: ");
@@ -36,7 +38,8 @@ public class Imp extends Demon {
 		return info.toString();
 	}
 	
-	public String toStringShort() {
+	@Override
+	public String toString() {
 		// board representation of Imp
 		return "I";
 	}
@@ -55,5 +58,18 @@ public class Imp extends Demon {
 		return evolved_obj;
 	}
 	
+	public static void main(String[] args) {
+		// TEST Imp
+		
+		int[] cofPos = {3,4};
+		CradleOfFilth cof = new CradleOfFilth("female", cofPos);
+		cof.increaseAge();
+		cof.increaseAge();
+		
+		Imp impie = cof.evolve();
+		cof = null;
+		
+		System.out.println(impie.toString());		
+	}
 	
 }

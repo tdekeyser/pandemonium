@@ -3,6 +3,7 @@ package entities.living;
 import java.util.Arrays;
 
 import entities.living.demons.Imp;
+import framework.NameGenerator;
 
 public class CradleOfFilth extends LivingEntity {
 	/* class for lowest hierarchy
@@ -22,9 +23,15 @@ public class CradleOfFilth extends LivingEntity {
 	
 	@Override
 	public String toString() {
+		// board representation of object
+		return "CoF";
+	}
+	
+	public String toStringLong() {
 		// String representation of CradleOfFilth object
 		StringBuilder info = new StringBuilder();
-		info.append("Name: Cradle of Filth\nGender: ");
+		info.append("Type: Cradle of Filth");
+		info.append("\nGender: ");
 		info.append(this.getGender());
 		info.append("\nAge: ");
 		info.append(this.getAge());
@@ -33,16 +40,19 @@ public class CradleOfFilth extends LivingEntity {
 		return info.toString();
 	}
 	
-	public String toStringShort() {
-		// board representation of object
-		return "CoF";
+	public Imp evolve() {
+		// generate random demon name, then create new Imp object same gender and position
+		NameGenerator n = new NameGenerator();
+		Imp evolved_obj = new Imp(n.getDemonName(), this.getGender(), this.getCurrentPosition());
+		return evolved_obj;
 	}
 	
-	public Imp evolve() {
-		// make this object into a Imp; then delete this object
-		// generate random Demon name first, say 'Belzebub'
-		Imp evolved_obj = new Imp("Belzebub", this.getGender(), this.getCurrentPosition());
-		return evolved_obj;
+	public static void main(String[] args) {
+		// TEST CradleOfFilth
+		
+		int[] cofPos = {3,4};
+		CradleOfFilth cof = new CradleOfFilth("female", cofPos);
+		System.out.println(cof.toString());
 	}
 	
 }

@@ -12,6 +12,11 @@ public class DemonCommander extends Demon {
 	
 	@Override
 	public String toString() {
+		// board representation of DemonCommander
+		return "DC";
+	}
+	
+	public String toStringLong() {
 		//String representation for class 'DemonCommander'
 		StringBuilder info = new StringBuilder();
 		info.append("Name: ");
@@ -26,10 +31,5 @@ public class DemonCommander extends Demon {
 		info.append(Arrays.toString(this.getCurrentPosition()));
 		return info.toString();
 	}	
-	
-	public String toStringShort() {
-		// board representation of DemonCommander
-		return "DC";
-	}
 	
 }
