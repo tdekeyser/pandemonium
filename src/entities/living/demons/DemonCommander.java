@@ -8,6 +8,7 @@ public class DemonCommander extends Demon {
 
 	public DemonCommander(String name, String gender, int[] currentPosition) {
 		super(name, gender, currentPosition);
+		this.setType("DemonCommander");
 	}
 	
 	@Override
@@ -20,15 +21,15 @@ public class DemonCommander extends Demon {
 		//String representation for class 'DemonCommander'
 		StringBuilder info = new StringBuilder();
 		info.append("Name: ");
-		info.append(this.getName());
+		info.append(getName());
 		info.append("\nGender: ");
-		info.append(this.getGender());
+		info.append(getGender());
 		info.append("\nAge: ");
-		info.append(this.getAge());
+		info.append(getAge());
 		info.append("\nCruelty: ");
-		info.append(this.getCruelty());
+		info.append(getCruelty());
 		info.append("\nPosition: ");
-		info.append(Arrays.toString(this.getCurrentPosition()));
+		info.append(Arrays.toString(getCurrentPosition()));
 		return info.toString();
 	}	
 	

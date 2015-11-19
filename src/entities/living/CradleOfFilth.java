@@ -19,6 +19,7 @@ public class CradleOfFilth extends LivingEntity {
 	public CradleOfFilth(String gender, int[] currentPosition) {
 		super(gender, currentPosition);
 		this.setAge(1);
+		this.setType("CradleOfFilth");
 	}
 	
 	@Override
@@ -32,11 +33,11 @@ public class CradleOfFilth extends LivingEntity {
 		StringBuilder info = new StringBuilder();
 		info.append("Type: Cradle of Filth");
 		info.append("\nGender: ");
-		info.append(this.getGender());
+		info.append(getGender());
 		info.append("\nAge: ");
-		info.append(this.getAge());
+		info.append(getAge());
 		info.append("\nPosition: ");
-		info.append(Arrays.toString(this.getCurrentPosition()));
+		info.append(Arrays.toString(getCurrentPosition()));
 		return info.toString();
 	}
 	

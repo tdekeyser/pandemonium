@@ -17,19 +17,19 @@ public class NameGenerator {
 	private List<String> demonNames = new ArrayList<>();
 	
 	public NameGenerator() {
-		this.readNames();
+		readNames();
 	}
 	
 	public NameGenerator(String filePath) throws IOException {
 		// overloaded constructor to change filePath to different file
 		
 		if (Files.exists(Paths.get(filePath))) {
-			this.setFilePath(filePath);
+			setFilePath(filePath);
 		} else {
 			throw new IOException("NameGenerator: FilePath does not exist.");
 		}
 		
-		this.readNames();
+		readNames();
 	}
 	
 	public void setFilePath(String filePath) {
@@ -39,24 +39,19 @@ public class NameGenerator {
 	
 	public void readNames() {
 		// generate demon names based on filePath
-		try (BufferedReader reader = Files.newBufferedReader(Paths.get(this.filePath), Charset.defaultCharset())) {
+		try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), Charset.defaultCharset())) {
 			// create bufferedreader and append all read lines to List<String> demonNames
 			String line = null;
 			while ((line = reader.readLine()) != null) {
-				this.demonNames.add(line);
+				demonNames.add(line);
 			}
 		} catch (IOException x) { x.printStackTrace(); }		
 	}
 	
 	public String getDemonName() {
 		// generates a random demon name from the file with demon names
-		try {
-			int randomIndex = Randomizer.random(this.demonNames.size());
-			return demonNames.get(randomIndex).trim();
-		} catch (IOException x) {
-			x.printStackTrace();
-			return "Unknown";
-		}
+		int randomIndex = Randomizer.random(demonNames.size());
+		return demonNames.get(randomIndex).trim();
 	}
 	
 	public static void main(String[] args) throws IOException {

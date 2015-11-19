@@ -19,22 +19,23 @@ public class Imp extends Demon {
 	public Imp(String name, String gender, int[] currentPosition) {
 		super(name, gender, currentPosition);
 		this.setAge(4);
+		this.setType("Imp");
 	}
 	
 	public String toStringLong() {
 		// String Representation for class Imp
 		StringBuilder info = new StringBuilder();
 		info.append("Name: ");
-		info.append(this.getName());
+		info.append(getName());
 		info.append("\nType: Imp");
 		info.append("\nGender: ");
-		info.append(this.getGender());
+		info.append(getGender());
 		info.append("\nAge: ");
-		info.append(this.getAge());
+		info.append(getAge());
 		info.append("\nCruelty: ");
-		info.append(this.getCruelty());
+		info.append(getCruelty());
 		info.append("\nPosition: ");
-		info.append(Arrays.toString(this.getCurrentPosition()));
+		info.append(Arrays.toString(getCurrentPosition()));
 		return info.toString();
 	}
 	
@@ -52,7 +53,8 @@ public class Imp extends Demon {
 	
 	public InfernalDemon evolve() {
 		// evolve Imp to InfernalDemon, after cruelty = 6
-		InfernalDemon evolved_obj = new InfernalDemon("Belzebub", this.getGender(), this.getCurrentPosition());
+		
+		InfernalDemon evolved_obj = new InfernalDemon(this.getName(), this.getGender(), this.getCurrentPosition());
 		evolved_obj.setAge(this.getAge());
 		if (this.hasPartner()) { evolved_obj.partner = this.partner; }
 		return evolved_obj;

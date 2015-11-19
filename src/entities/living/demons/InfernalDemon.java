@@ -20,6 +20,7 @@ public class InfernalDemon extends Demon {
 		//Constructor for class InfernalDemon
 		super(name, gender, currentPosition);
 		this.setCruelty(6);
+		this.setType("InfernalDemon");
 	}
 	
 	@Override
@@ -52,7 +53,8 @@ public class InfernalDemon extends Demon {
 	
 	public DemonCommander evolve() {
 		// evolve infernaldemon into demoncommander, after cruelty = 16
-		DemonCommander evolved_obj = new DemonCommander("Belzebub", this.getGender(), this.getCurrentPosition());
+		
+		DemonCommander evolved_obj = new DemonCommander(this.getName(), this.getGender(), this.getCurrentPosition());
 		evolved_obj.setAge(this.getAge());
 		if (this.hasPartner()) { evolved_obj.partner = this.partner; }
 		return evolved_obj;

@@ -8,6 +8,7 @@ public class Sinner extends LivingEntity {
 	
 	public Sinner(String gender, int[] currentPosition) {
 		super(gender, currentPosition);
+		this.setType("Sinner");
 	}
 	
 	@Override

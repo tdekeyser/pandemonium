@@ -11,9 +11,9 @@ public abstract class LivingEntity extends Entity implements Moveable {
 
 	public LivingEntity(String gender, int[] currentPosition) {
 		this.gender = gender;
-		this.setCurrentPosition(currentPosition);
+		setCurrentPosition(currentPosition);
 	}
-	
+
 	public boolean getIsAlive() {
 		// get isAlive
 		return this.isAlive;
@@ -24,9 +24,9 @@ public abstract class LivingEntity extends Entity implements Moveable {
 		this.isAlive = false;
 	}
 	
-	public void setAge(int a) {
+	public void setAge(int age) {
 		// setter method for age
-		this.age = a;
+		this.age = age;
 	}
 	
 	public int getAge() {
@@ -46,33 +46,33 @@ public abstract class LivingEntity extends Entity implements Moveable {
 	@Override
 	public void moveLeft() {
 		// subtract from second value of current position = move left
-		int[] currentPosition = this.getCurrentPosition();
+		int[] currentPosition = getCurrentPosition();
 		currentPosition[1]--;
-		this.setCurrentPosition(currentPosition);
+		setCurrentPosition(currentPosition);
 	}
 	
 	@Override
 	public void moveRight() {
 		// add to second value of current position = move right
-		int[] currentPosition = this.getCurrentPosition();
+		int[] currentPosition = getCurrentPosition();
 		currentPosition[1]++;
-		this.setCurrentPosition(currentPosition);
+		setCurrentPosition(currentPosition);
 	}
 	
 	@Override
 	public void moveUp() {
 		// subtract first value of current position = move up
-		int[] currentPosition = this.getCurrentPosition();
+		int[] currentPosition = getCurrentPosition();
 		currentPosition[0]--;
-		this.setCurrentPosition(currentPosition);
+		setCurrentPosition(currentPosition);
 	}
 	
 	@Override
 	public void moveDown() {
 		// add to first value of current position = move down
-		int[] currentPosition = this.getCurrentPosition();
+		int[] currentPosition = getCurrentPosition();
 		currentPosition[0]++;
-		this.setCurrentPosition(currentPosition);
+		setCurrentPosition(currentPosition);
 	}
 
 }
