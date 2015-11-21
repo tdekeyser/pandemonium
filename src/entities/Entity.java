@@ -24,5 +24,5 @@ public abstract class Entity {
 	}
 	
 	public abstract String toStringLong(); // obligatory board representation of entity object
-
+	
 }

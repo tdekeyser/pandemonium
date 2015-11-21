@@ -14,7 +14,7 @@ public abstract class LivingEntity extends Entity implements Moveable {
 		setCurrentPosition(currentPosition);
 	}
 
-	public boolean getIsAlive() {
+	public boolean isAlive() {
 		// get isAlive
 		return this.isAlive;
 	}

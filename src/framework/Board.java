@@ -44,7 +44,7 @@ public class Board {
 			
 			int[] epos = entity.getCurrentPosition();
 			boardMatrix[epos[0]][epos[1]] += entity.toString() + " ";
-			
+
 			String eposStr = Arrays.toString(epos);
 			
 			if (boardMap.containsKey(eposStr)) {
@@ -66,6 +66,11 @@ public class Board {
 		clearMatrix();					// clear matrix
 		boardMap.clear(); 				// clear boardmap to allow position switch
 		initialiseBoard(); 			// re-initialise board with new list of entities
+	}
+	
+	public Map<String, List<Entity>> getBoardMap() {
+		// returns complete boardMap
+		return boardMap;
 	}
 	
 	public List<Entity> objectsAtPosition(int[] requestedPosition) {

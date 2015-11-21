@@ -2,17 +2,21 @@ package framework;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.NoSuchMethodException;
 
 import entities.ActionSchema;
 import entities.Entity;
+import entities.living.LivingEntity;
 import entities.living.CradleOfFilth;
 import entities.living.Sinner;
 import entities.living.demons.Imp;
+import entities.living.demons.Demon;
 
 public class Computer {
 	/* class that brings together methods to compute a new state based on (user) input
 	 * New entityList:
 	 * 		- createLivingEntities(int amountofLiving, int[] entityDistribution)
+	 * 		- activateLiving(List<Entity> entitiesOnPositionX)
 	 * Random positions:
 	 * 		- computeRandomPosition()
 	 */
@@ -28,25 +32,6 @@ public class Computer {
 		this.actionSchema = new ActionSchema(boardDimensions);
 		this.heat = heat;
 		this.chanceOnPlague = chanceOnPlague;
-	}
-	
-	private int[] computeRandomPosition() {
-		// gets a random position depending on Board dimensions
-		
-		int[] newPosition = new int[2];
-		newPosition[0] = Randomizer.random(boardDimensions[0]);
-		newPosition[1] = Randomizer.random(boardDimensions[1]);
-		return newPosition;
-	}
-	
-	public List<Entity> activateEntities(List<Entity> previousEntities) {
-		// computes a random action for each entity and 
-		List<Entity> newEntities = new ArrayList<>();
-		
-		for (Entity e : previousEntities) {
-			newEntities.add(actionSchema.doAction(e));
-		}
-		return newEntities;
 	}
 	
 	public List<Entity> createLivingEntities(int amountOfLiving, int[] entityDistribution) {
@@ -80,19 +65,94 @@ public class Computer {
 		return livingEntities;
 	}
 	
-	public static void main(String[] args) {
-		// TEST Computer
+	private int[] computeRandomPosition() {
+		// gets a random position depending on Board dimensions
 		
-		int[] boardDimensions = {7, 7};
-		int heat = 0;
-		int chanceOnPlague = 0;
-		
-		int[] entityDistribution = {40, 30, 30};
-		int amountOfLiving = 10;
-		
-		Computer c = new Computer(boardDimensions, heat, chanceOnPlague);
-		
-		c.createLivingEntities(amountOfLiving, entityDistribution);
+		int[] newPosition = new int[2];
+		newPosition[0] = Randomizer.random(boardDimensions[0]);
+		newPosition[1] = Randomizer.random(boardDimensions[1]);
+		return newPosition;
+	}
+	
+	public void activateUnliving() {
+		// activates unliving things
 		
 	}
+	
+	public List<Entity> activateLiving(List<Entity> ePosList) {
+		
+		List<Entity> newEntities = new ArrayList<>();
+		
+		if (ePosList.size() == 1) {
+			// single element on position
+			Entity soleEntity = ePosList.get(0);
+			newEntities.add(actionSchema.doAction(soleEntity));
+			
+		} else {
+			// if more than one entity on position, iterate over entities and over its possible targets
+			
+			List<Entity> targets =  new ArrayList<>(); // clone entitiesOnPositionX for all possible targets
+			for (Entity entityOP : ePosList) {
+				targets.add(entityOP);
+			}
+			
+			for (int i=0; i<ePosList.size(); i++) {
+				Entity e = ePosList.get(i);
+				
+				if (!((LivingEntity) e).isAlive()) { targets.remove(e); continue; } // if entity is dead, remove it from possible targets and continue
+				
+				if (e.getType().equals("CradleOfFilth") || e.getType().equals("Sinner")) { // cradle or sinners do not have targets
+					newEntities.add(actionSchema.doAction(e));
+					targets.remove(e);
+					
+				} else { // there is a possible target; now randomize whether it will target or not
+					int r = Randomizer.random(2 + Math.abs(heat/10)); // heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
+					if (r == 0) { // don't target
+						newEntities.add(actionSchema.doAction(e));
+						targets.remove(e);
+						
+					} else { // do the target
+						targetLoop: for (Entity target : targets) {
+							if ( (e.getType().equals(target.getType()) && (((Demon) e).getName().equals(((Demon) target).getName())))) {
+								if (targets.size()==1) { // if the same demon is the sole target, do its action
+									newEntities.add(actionSchema.doAction(e));
+								} else {
+									continue targetLoop;
+								}
+							} else {
+								try {
+									List<Entity> actionResult = actionSchema.doAction(e, target);
+									
+									Entity eResult = actionResult.get(0);
+									Entity tarResult = actionResult.get(1);
+									LivingEntity targetInEPos = (LivingEntity) ePosList.get(ePosList.indexOf(target));
+									
+									if (((LivingEntity) tarResult).isAlive()) { // check if target is still alive, add it to newEntities
+										newEntities.addAll(actionResult);
+										targetInEPos.declareDead(); // tar cannot be targeted a second time
+										
+									} else { // if not, add the killer to newEntities, but declare target dead
+										newEntities.add(eResult);
+										targetInEPos.declareDead();
+									}
+									break targetLoop; // if an action is successful, break out of loop
+								} catch (NoSuchMethodException x) { continue targetLoop; } // if an action is unsuccessful, continue
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		for (int i=0; i<newEntities.size(); i++) {
+			// final loop to remove entities that have been declared dead during final iteration and to increase age of all
+			Entity newE = newEntities.get(i);
+			if (!((LivingEntity) newE).isAlive()) { newEntities.remove(newE); }
+			
+			((LivingEntity) newE).increaseAge();
+		}
+		
+		return newEntities;
+	}
+	
 }

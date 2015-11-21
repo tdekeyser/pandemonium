@@ -13,7 +13,7 @@ public class NameGenerator {
 	 * NameGenerator contains the getDemonName() method that returns a random name from the file with demon names
 	 */
 
-	private String filePath = "/home/tom/Copy/Java/pandemonium/src/framework/demon_names.txt";
+	private String filePath = "src/demon_names.txt";
 	private List<String> demonNames = new ArrayList<>();
 	
 	public NameGenerator() {
