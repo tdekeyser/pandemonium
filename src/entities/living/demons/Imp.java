@@ -1,7 +1,5 @@
 package entities.living.demons;
 
-import java.util.Arrays;
-
 import entities.living.CradleOfFilth;
 
 public class Imp extends Demon {
@@ -20,23 +18,6 @@ public class Imp extends Demon {
 		super(name, gender, currentPosition);
 		this.setAge(4);
 		this.setType("Imp");
-	}
-	
-	public String toStringLong() {
-		// String Representation for class Imp
-		StringBuilder info = new StringBuilder();
-		info.append("Name: ");
-		info.append(getName());
-		info.append("\nType: Imp");
-		info.append("\nGender: ");
-		info.append(getGender());
-		info.append("\nAge: ");
-		info.append(getAge());
-		info.append("\nCruelty: ");
-		info.append(getCruelty());
-		info.append("\nPosition: ");
-		info.append(Arrays.toString(getCurrentPosition()));
-		return info.toString();
 	}
 	
 	@Override
@@ -71,7 +52,7 @@ public class Imp extends Demon {
 		Imp impie = cof.evolve();
 		cof = null;
 		
-		System.out.println(impie.toString());		
+		System.out.println(impie.toStringLong());		
 	}
 	
 }

@@ -28,6 +28,7 @@ public class CradleOfFilth extends LivingEntity {
 		return "CoF";
 	}
 	
+	@Override
 	public String toStringLong() {
 		// String representation of CradleOfFilth object
 		StringBuilder info = new StringBuilder();

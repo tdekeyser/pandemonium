@@ -1,7 +1,5 @@
 package entities.living.demons;
 
-import java.util.Arrays;
-
 import entities.living.Sinner;
 
 public class InfernalDemon extends Demon {
@@ -28,22 +26,6 @@ public class InfernalDemon extends Demon {
 		// board representation of InfernalDemon
 		return "InfD";
 	}
-	
-	public String toStringLong() {
-		//String Representation for class InfernalDemon
-		StringBuilder info = new StringBuilder();
-		info.append("Name: ");
-		info.append(this.getName());
-		info.append("\nGender: ");
-		info.append(this.getGender());
-		info.append("\nAge: ");
-		info.append(this.getAge());
-		info.append("\nCruelty: ");
-		info.append(this.getCruelty());
-		info.append("\nPosition: ");
-		info.append(Arrays.toString(this.getCurrentPosition()));
-		return info.toString();
-	}	
 	
 	public void tortureSinner(Sinner victim) {
 		//torture method decreases a Sinner victim's divinity & increases infD's cruelty

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.lang.NoSuchMethodException;
 
-import entities.ActionSchema;
 import entities.Entity;
 import entities.living.LivingEntity;
 import entities.living.CradleOfFilth;
@@ -38,27 +37,19 @@ public class Computer {
 		// initial state of living entities; choose between S, CoF, and I based on entityDistribution
 		
 		List<Entity> livingEntities = new ArrayList<>(); // output
-		String gender = "";
 		NameGenerator n = new NameGenerator();
 		
 		for (int i=0; i<amountOfLiving; i++) {
 			Entity newEntity;
 			
-			// randomize gender
-			int g = Randomizer.random(1);
-			switch (g) {
-				case 0: gender = "male"; break;
-				case 1: gender = "female"; break;
-			}
-			
 			// randomize object type acc to distribution, e.g. 40 (S), 30 (CoF), 30 (I)
 			int r = Randomizer.random(100);
 			if (r <= entityDistribution[0]) {
-				newEntity = new Sinner(gender, computeRandomPosition());
+				newEntity = spawnSinner();
 			} else if (r >= 100 - entityDistribution[2]) {
-				newEntity = new Imp(n.getDemonName(), gender, computeRandomPosition());
+				newEntity = new Imp(n.getDemonName(), randomizeGender(), computeRandomPosition());
 			} else {
-				newEntity = new CradleOfFilth(gender, computeRandomPosition());
+				newEntity = new CradleOfFilth(randomizeGender(), computeRandomPosition());
 			}
 			livingEntities.add(newEntity);
 		}
@@ -72,6 +63,21 @@ public class Computer {
 		newPosition[0] = Randomizer.random(boardDimensions[0]);
 		newPosition[1] = Randomizer.random(boardDimensions[1]);
 		return newPosition;
+	}
+	
+	private String randomizeGender() {
+		// randomize gender
+		String gender = "Unknown";
+		int g = Randomizer.random(2);
+		switch (g) {
+			case 0:	gender = "male";
+			case 1: gender = "female";
+		}
+		return gender;
+	}
+	
+	private Entity spawnSinner() {
+		return new Sinner(randomizeGender(), computeRandomPosition());
 	}
 	
 	public void activateUnliving() {
@@ -97,9 +103,9 @@ public class Computer {
 			}
 			
 			for (int i=0; i<ePosList.size(); i++) {
-				Entity e = ePosList.get(i);
+				LivingEntity e = (LivingEntity) ePosList.get(i);
 				
-				if (!((LivingEntity) e).isAlive()) { targets.remove(e); continue; } // if entity is dead, remove it from possible targets and continue
+				if (!e.isAlive()) { targets.remove(e); continue; } // if entity is dead, remove it from possible targets and continue
 				
 				if (e.getType().equals("CradleOfFilth") || e.getType().equals("Sinner")) { // cradle or sinners do not have targets
 					newEntities.add(actionSchema.doAction(e));
@@ -119,15 +125,15 @@ public class Computer {
 								} else {
 									continue targetLoop;
 								}
-							} else {
+							} else { // target is a different entity
 								try {
 									List<Entity> actionResult = actionSchema.doAction(e, target);
 									
 									Entity eResult = actionResult.get(0);
-									Entity tarResult = actionResult.get(1);
+									LivingEntity tarResult = (LivingEntity) actionResult.get(1);
 									LivingEntity targetInEPos = (LivingEntity) ePosList.get(ePosList.indexOf(target));
 									
-									if (((LivingEntity) tarResult).isAlive()) { // check if target is still alive, add it to newEntities
+									if (tarResult.isAlive()) { // check if target is still alive, add it to newEntities
 										newEntities.addAll(actionResult);
 										targetInEPos.declareDead(); // tar cannot be targeted a second time
 										
@@ -144,12 +150,22 @@ public class Computer {
 			}
 		}
 		
+		// final loop to remove entities that have been declared dead during final iteration and to increase age of all		
 		for (int i=0; i<newEntities.size(); i++) {
-			// final loop to remove entities that have been declared dead during final iteration and to increase age of all
-			Entity newE = newEntities.get(i);
-			if (!((LivingEntity) newE).isAlive()) { newEntities.remove(newE); }
-			
-			((LivingEntity) newE).increaseAge();
+			LivingEntity newE = (LivingEntity) newEntities.get(i);
+			if (!newE.isAlive()) { newEntities.remove(newE); }
+			newE.increaseAge();
+		}
+		
+		// spawn Sinners according to chanceOnPlague
+		if (chanceOnPlague > 0) {
+			for (int i=0; i<=chanceOnPlague; i+=10) { // when chanceOnPlague=100, in best case 10 Sinners spawn
+				int g = Randomizer.random(2);
+				switch (g) {
+					case 0:	continue;
+					case 1: newEntities.add(spawnSinner());
+				}
+			}
 		}
 		
 		return newEntities;

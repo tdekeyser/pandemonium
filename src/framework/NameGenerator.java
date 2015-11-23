@@ -32,12 +32,18 @@ public class NameGenerator {
 		readNames();
 	}
 	
-	public void setFilePath(String filePath) {
+	public String getDemonName() {
+		// generates a random demon name from the file with demon names
+		int randomIndex = Randomizer.random(demonNames.size());
+		return demonNames.get(randomIndex).trim();
+	}
+	
+	private void setFilePath(String filePath) {
 		// set different filePath variable
 		this.filePath = filePath;
 	}
 	
-	public void readNames() {
+	private void readNames() {
 		// generate demon names based on filePath
 		try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), Charset.defaultCharset())) {
 			// create bufferedreader and append all read lines to List<String> demonNames
@@ -46,12 +52,6 @@ public class NameGenerator {
 				demonNames.add(line);
 			}
 		} catch (IOException x) { x.printStackTrace(); }		
-	}
-	
-	public String getDemonName() {
-		// generates a random demon name from the file with demon names
-		int randomIndex = Randomizer.random(demonNames.size());
-		return demonNames.get(randomIndex).trim();
 	}
 	
 	public static void main(String[] args) throws IOException {

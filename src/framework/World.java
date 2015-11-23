@@ -14,6 +14,7 @@ public class World {
 	private int[] amountOfEntities = new int[2]; 	// with [0] living and [1] unliving
 	private int[] entityDistribution;
 	private int amountOfStates;
+	private int timeBetweenStates = 1000; // in ms
 	
 	private Computer computer;
 	private Board board;
@@ -71,10 +72,14 @@ public class World {
 		System.out.println(updateStr);
 		try {
 		    //thread to sleep for the specified number of milliseconds
-			Thread.sleep(1000);
+			Thread.sleep(timeBetweenStates);
 		} catch (InterruptedException ie) {
 		    System.out.println(ie);
 		}	
+	}
+	
+	public void setTimeBetweenStates(int timeBetweenStates) {
+		this.timeBetweenStates = timeBetweenStates;
 	}
 	
 	public List<Entity> objectsAtPosition(int[] requestedPosition) {
@@ -87,16 +92,16 @@ public class World {
 	}
 	
 	public void run() {
-		// runs the world according to the amount of states"
+		// runs the world according to the amount of states
 		for (int i=0; i<amountOfStates; i++) {
-			this.update(Integer.toString(i));
+			update(Integer.toString(i));
 		}
 	}
 	
 	public static void main(String[] args) {
 		// TEST World class
 		
-		int amountOfStates = 20;
+		int amountOfStates = 30;
 		int[] boardDimensions = {5, 5};
 		int[] amountOfEntities = {10, 0}; // (living,unliving)
 		int[] entityDistribution = {50, 30, 20}; // (S, CoF, I)
@@ -106,8 +111,14 @@ public class World {
 		try {
 			World w = new World(amountOfStates, amountOfEntities, entityDistribution, boardDimensions, heat, chanceOnPlague);
 			w.initialise();
+			
+			w.setTimeBetweenStates(1000);
 			w.run();
 			
+			int[] rp = {3,4};
+			for (Entity o : w.objectsAtPosition(rp)) {
+				System.out.println(o.toStringLong());
+			}
 		} catch (IOException io) { io.printStackTrace(); }
 		
 	}

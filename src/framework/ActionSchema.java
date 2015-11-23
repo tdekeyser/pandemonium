@@ -1,15 +1,15 @@
-package entities;
+package framework;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import entities.Entity;
 import entities.living.CradleOfFilth;
 import entities.living.LivingEntity;
 import entities.living.Sinner;
 import entities.living.demons.DemonCommander;
 import entities.living.demons.Imp;
 import entities.living.demons.InfernalDemon;
-import framework.Randomizer;
 
 public class ActionSchema {
 	/* provides entity random method activation

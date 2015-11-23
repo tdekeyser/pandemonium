@@ -18,13 +18,11 @@ public class Log {
 	
 	public void appendToLog(String info) {
 		// append to the StringBuilder
-		
 		logText.append(getDate() + System.lineSeparator() + info + System.lineSeparator() + System.lineSeparator());
 	}
 	
 	private String getDate() {
 		// gets date and time
-		
 		Date date = new Date();
 		SimpleDateFormat df = new SimpleDateFormat("E dd.MM.yyy 'at' hh:mm:ss a");
 		return df.format(date);

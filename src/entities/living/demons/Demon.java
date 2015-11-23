@@ -1,5 +1,7 @@
 package entities.living.demons;
 
+import java.util.Arrays;
+
 import entities.living.LivingEntity;
 import entities.living.Sinner;
 
@@ -15,6 +17,18 @@ public abstract class Demon extends LivingEntity {
 	public Demon(String name, String gender, int[] currentPosition) {
 		super(gender, currentPosition);
 		this.name = name;
+	}
+	
+	@Override	
+	public String toStringLong() {
+		StringBuilder info = new StringBuilder();
+		info.append("Name: " + getName() + System.lineSeparator());
+		info.append("Type: " + getType() + System.lineSeparator());
+		info.append("Gender: " + getGender() + System.lineSeparator());
+		info.append("Age: " + getAge() + System.lineSeparator());
+		info.append("Cruelty: " + getCruelty() + System.lineSeparator());
+		info.append("Position: " + Arrays.toString(getCurrentPosition()) + System.lineSeparator());
+		return info.toString();
 	}
 	
 	public void killSinner(Sinner victim) {

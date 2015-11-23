@@ -1,6 +1,8 @@
 package entities;
 
-public abstract class Entity {
+import java.util.Arrays;
+
+public abstract class Entity implements Printable {
 	// abstract superclass for all entities; defines a currentPosition
 	
 	private String type;
@@ -23,6 +25,11 @@ public abstract class Entity {
 		return type;
 	}
 	
-	public abstract String toStringLong(); // obligatory board representation of entity object
+	public String toStringLong(){
+		StringBuilder info = new StringBuilder();
+		info.append("Type: " + getType() + System.lineSeparator());
+		info.append("Position: " + Arrays.toString(getCurrentPosition()) + System.lineSeparator());
+		return info.toString();
+	};
 	
 }
