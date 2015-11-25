@@ -31,6 +31,7 @@ public class InfernalDemon extends Demon {
 		//torture method decreases a Sinner victim's divinity & increases infD's cruelty
 		victim.decreaseDivinity();
 		this.increaseCruelty();
+		this.increaseCruelty();
 	}
 	
 	public DemonCommander evolve() {

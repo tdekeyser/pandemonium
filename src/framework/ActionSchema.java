@@ -76,8 +76,11 @@ public class ActionSchema {
 		
 	private Entity doSinnerAction(Sinner e) {
 		// sinner specific randomizer
-		
-		return moveRandomly((LivingEntity) e);
+		int r = Randomizer.random(2);
+		switch (r) {
+			case 0: e.pray(); return e;
+			default: return moveRandomly((LivingEntity) e);
+		} 
 	}
 	
 	private Entity doCradleAction(CradleOfFilth e) {
@@ -105,7 +108,7 @@ public class ActionSchema {
 	private Entity doInfernalDemonAction(InfernalDemon e) {
 		// infernaldemon specific action randomizer
 		
-		if ((e.getCruelty() == 16) || (e.getAge() == 50)) {
+		if ((e.getCruelty() == 18) || (e.getAge() == 50)) {
 			DemonCommander einf = e.evolve();
 			return einf;
 		} else {

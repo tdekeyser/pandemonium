@@ -9,6 +9,7 @@ import entities.living.LivingEntity;
 import entities.living.CradleOfFilth;
 import entities.living.Sinner;
 import entities.living.demons.Imp;
+import entities.unliving.DemonicFury;
 import entities.living.demons.Demon;
 
 public class Computer {
@@ -49,7 +50,7 @@ public class Computer {
 			} else if (r >= 100 - entityDistribution[2]) {
 				newEntity = new Imp(n.getDemonName(), randomizeGender(), computeRandomPosition());
 			} else {
-				newEntity = new CradleOfFilth(randomizeGender(), computeRandomPosition());
+				newEntity = spawnCradle();
 			}
 			livingEntities.add(newEntity);
 		}
@@ -70,14 +71,41 @@ public class Computer {
 		String gender = "Unknown";
 		int g = Randomizer.random(2);
 		switch (g) {
-			case 0:	gender = "male";
-			case 1: gender = "female";
+			case 0:	gender = "male"; break;
+			case 1: gender = "female"; break;
 		}
 		return gender;
 	}
 	
 	private Entity spawnSinner() {
 		return new Sinner(randomizeGender(), computeRandomPosition());
+	}
+	
+	private Entity spawnCradle() {
+		return new CradleOfFilth(randomizeGender(), computeRandomPosition());
+	}
+	
+	public List<Entity> spawnPlagues(List<Entity> entityList) {
+		// spawn Sinners according to chanceOnPlague
+		if (chanceOnPlague > 0) {
+			for (int i=0; i<=chanceOnPlague; i+=20) { // when chanceOnPlague=100, in best case 5 Sinners spawn
+				if (Randomizer.random(2)==0) { entityList.add(spawnSinner()); }
+			}
+		}
+		if (chanceOnPlague >= 50) {
+			for (int i=0; i<=chanceOnPlague; i+=40) {
+				if (Randomizer.random(2)==0) { entityList.add(spawnCradle()); }
+			}
+		}
+		return entityList;
+	}
+	
+	public List<Entity> demonicFury(List<Entity> entityList) {
+		if (Randomizer.random(102-heat) == 0) {
+			return DemonicFury.unleash(entityList);
+		} else {
+			return entityList;
+		}
 	}
 	
 	public void activateUnliving() {
@@ -119,6 +147,7 @@ public class Computer {
 						
 					} else { // do the target
 						targetLoop: for (Entity target : targets) {
+							
 							if ( (e.getType().equals(target.getType()) && (((Demon) e).getName().equals(((Demon) target).getName())))) {
 								if (targets.size()==1) { // if the same demon is the sole target, do its action
 									newEntities.add(actionSchema.doAction(e));
@@ -141,8 +170,12 @@ public class Computer {
 										newEntities.add(eResult);
 										targetInEPos.declareDead();
 									}
+									
 									break targetLoop; // if an action is successful, break out of loop
-								} catch (NoSuchMethodException x) { continue targetLoop; } // if an action is unsuccessful, continue
+									
+								} catch (NoSuchMethodException x) {
+									continue targetLoop; // if an action is unsuccessful, continue
+								}
 							}
 						}
 					}
@@ -157,16 +190,7 @@ public class Computer {
 			newE.increaseAge();
 		}
 		
-		// spawn Sinners according to chanceOnPlague
-		if (chanceOnPlague > 0) {
-			for (int i=0; i<=chanceOnPlague; i+=10) { // when chanceOnPlague=100, in best case 10 Sinners spawn
-				int g = Randomizer.random(2);
-				switch (g) {
-					case 0:	continue;
-					case 1: newEntities.add(spawnSinner());
-				}
-			}
-		}
+		
 		
 		return newEntities;
 	}

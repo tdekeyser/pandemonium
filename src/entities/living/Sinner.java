@@ -24,13 +24,17 @@ public class Sinner extends LivingEntity {
 		info.append("Name: Sinner" + System.lineSeparator());
 		info.append("Gender: " + getGender() + System.lineSeparator());
 		info.append("Age: " + getAge() + System.lineSeparator());
-		info.append("Divinity: " + getDivinity());
+		info.append("Divinity: " + getDivinity() + System.lineSeparator());
 		info.append("Position: " + Arrays.toString(this.getCurrentPosition()) + System.lineSeparator());
 		return info.toString();
 	}
 	
 	public int getDivinity() {
 		return this.divinity;
+	}
+	
+	public void pray() {
+		increaseDivinity();
 	}
 	
 	public void increaseDivinity() {

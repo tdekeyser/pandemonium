@@ -62,7 +62,10 @@ public class World {
 		
 		for (List<Entity> entitiesOnPosition : board.getBoardMap().values()) {
 			entityList.addAll(computer.activateLiving(entitiesOnPosition));
-		}	
+		}
+		
+		// spawn sinners acc to chanceOnPlague
+		entityList = computer.spawnPlagues(entityList);
 
 		// send new entities to Board for update
 		board.updateBoard(entityList);
@@ -101,12 +104,12 @@ public class World {
 	public static void main(String[] args) {
 		// TEST World class
 		
-		int amountOfStates = 30;
+		int amountOfStates = 40;
 		int[] boardDimensions = {5, 5};
 		int[] amountOfEntities = {10, 0}; // (living,unliving)
 		int[] entityDistribution = {50, 30, 20}; // (S, CoF, I)
 		int heat = 10; // P(kill)=2/3
-		int chanceOnPlague = 0;
+		int chanceOnPlague = 50;
 		
 		try {
 			World w = new World(amountOfStates, amountOfEntities, entityDistribution, boardDimensions, heat, chanceOnPlague);

@@ -52,7 +52,8 @@ public class Imp extends Demon {
 		Imp impie = cof.evolve();
 		cof = null;
 		
-		System.out.println(impie.toStringLong());		
+		System.out.println(impie.toStringLong());	
+
 	}
 	
 }
