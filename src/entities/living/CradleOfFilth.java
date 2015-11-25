@@ -44,8 +44,8 @@ public class CradleOfFilth extends LivingEntity {
 	
 	public Imp evolve() {
 		// generate random demon name, then create new Imp object same gender and position
-		NameGenerator n = new NameGenerator();
-		Imp evolved_obj = new Imp(n.getDemonName(), this.getGender(), this.getCurrentPosition());
+		NameGenerator n = new NameGenerator("demonic");
+		Imp evolved_obj = new Imp(n.getName(), this.getGender(), this.getCurrentPosition());
 		return evolved_obj;
 	}
 	

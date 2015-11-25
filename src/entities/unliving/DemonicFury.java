@@ -9,6 +9,7 @@ import entities.living.Sinner;
 import entities.living.demons.Demon;
 
 public class DemonicFury extends UnlivingEntity {
+	// demonic fury increases all demons' cruelty and decreases all sinners' divinity
 	
 	public static List<Entity> unleash(List<Entity> entityList) {
 		List<Entity> newList = new ArrayList<>();

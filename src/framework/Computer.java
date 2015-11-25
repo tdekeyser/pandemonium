@@ -1,16 +1,16 @@
 package framework;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.lang.NoSuchMethodException;
 
 import entities.Entity;
 import entities.living.LivingEntity;
-import entities.living.CradleOfFilth;
 import entities.living.Sinner;
+import entities.living.CradleOfFilth;
 import entities.living.demons.Imp;
 import entities.unliving.DemonicFury;
-import entities.living.demons.Demon;
 
 public class Computer {
 	/* class that brings together methods to compute a new state based on (user) input
@@ -38,7 +38,7 @@ public class Computer {
 		// initial state of living entities; choose between S, CoF, and I based on entityDistribution
 		
 		List<Entity> livingEntities = new ArrayList<>(); // output
-		NameGenerator n = new NameGenerator();
+		NameGenerator dn = new NameGenerator("demonic");
 		
 		for (int i=0; i<amountOfLiving; i++) {
 			Entity newEntity;
@@ -48,7 +48,7 @@ public class Computer {
 			if (r <= entityDistribution[0]) {
 				newEntity = spawnSinner();
 			} else if (r >= 100 - entityDistribution[2]) {
-				newEntity = new Imp(n.getDemonName(), randomizeGender(), computeRandomPosition());
+				newEntity = new Imp(dn.getName(), randomizeGender(), computeRandomPosition());
 			} else {
 				newEntity = spawnCradle();
 			}
@@ -114,7 +114,7 @@ public class Computer {
 	}
 	
 	public List<Entity> activateLiving(List<Entity> ePosList) {
-		
+
 		List<Entity> newEntities = new ArrayList<>();
 		
 		if (ePosList.size() == 1) {
@@ -129,53 +129,53 @@ public class Computer {
 			for (Entity entityOP : ePosList) {
 				targets.add(entityOP);
 			}
-			
+
 			for (int i=0; i<ePosList.size(); i++) {
 				LivingEntity e = (LivingEntity) ePosList.get(i);
 				
-				if (!e.isAlive()) { targets.remove(e); continue; } // if entity is dead, remove it from possible targets and continue
+				targets.remove(e); // remove entity itself (first occurence of same entity in case of sinner/cradle) from target list
+				if (targets.size()==0) { newEntities.add(actionSchema.doAction(e)); break; } // if no targets left
+				if (!e.isAlive()) {continue;} // if entity is dead, continue
 				
-				if (e.getType().equals("CradleOfFilth") || e.getType().equals("Sinner")) { // cradle or sinners do not have targets
+				if (e.getType().equals("CradleOfFilth")) { // cradles do not have targets
 					newEntities.add(actionSchema.doAction(e));
-					targets.remove(e);
 					
 				} else { // there is a possible target; now randomize whether it will target or not
 					int r = Randomizer.random(2 + Math.abs(heat/10)); // heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
 					if (r == 0) { // don't target
 						newEntities.add(actionSchema.doAction(e));
-						targets.remove(e);
 						
 					} else { // do the target
+						
 						targetLoop: for (Entity target : targets) {
-							
-							if ( (e.getType().equals(target.getType()) && (((Demon) e).getName().equals(((Demon) target).getName())))) {
-								if (targets.size()==1) { // if the same demon is the sole target, do its action
-									newEntities.add(actionSchema.doAction(e));
-								} else {
-									continue targetLoop;
-								}
-							} else { // target is a different entity
-								try {
-									List<Entity> actionResult = actionSchema.doAction(e, target);
+							System.out.println(targets);
+							try {
+								List<Entity> actionResult = actionSchema.doAction(e, target);
+								
+								Entity eResult = actionResult.get(0);
+								if (actionResult.size()==1) { newEntities.add(eResult); break; } // this occurs when a sinner has failed to target
+								
+								LivingEntity tarResult = (LivingEntity) actionResult.get(1);
+								LivingEntity targetInEPos = (LivingEntity) ePosList.get(ePosList.indexOf(target));
+								
+								if (tarResult.isAlive()) { // check if target is still alive, add it to newEntities
+									newEntities.addAll(actionResult);
+									targetInEPos.declareDead(); // tar cannot be targeted a second time
 									
-									Entity eResult = actionResult.get(0);
-									LivingEntity tarResult = (LivingEntity) actionResult.get(1);
-									LivingEntity targetInEPos = (LivingEntity) ePosList.get(ePosList.indexOf(target));
-									
-									if (tarResult.isAlive()) { // check if target is still alive, add it to newEntities
+								} else if (actionResult.size() == 3) {
+									if (actionResult.get(2).getType().equals("AngelOfDeath")) {
 										newEntities.addAll(actionResult);
-										targetInEPos.declareDead(); // tar cannot be targeted a second time
-										
-									} else { // if not, add the killer to newEntities, but declare target dead
-										newEntities.add(eResult);
-										targetInEPos.declareDead();
 									}
 									
-									break targetLoop; // if an action is successful, break out of loop
-									
-								} catch (NoSuchMethodException x) {
-									continue targetLoop; // if an action is unsuccessful, continue
+								} else { // if not, add the killer to newEntities, but declare target dead
+									newEntities.add(eResult);
+									targetInEPos.declareDead();
 								}
+								
+								break targetLoop; // if an action is successful, break out of loop
+								
+							} catch (NoSuchMethodException x) {
+								continue targetLoop; // if an action is unsuccessful, continue
 							}
 						}
 					}
@@ -183,14 +183,13 @@ public class Computer {
 			}
 		}
 		
+		
 		// final loop to remove entities that have been declared dead during final iteration and to increase age of all		
 		for (int i=0; i<newEntities.size(); i++) {
 			LivingEntity newE = (LivingEntity) newEntities.get(i);
 			if (!newE.isAlive()) { newEntities.remove(newE); }
 			newE.increaseAge();
 		}
-		
-		
 		
 		return newEntities;
 	}

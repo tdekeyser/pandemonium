@@ -14,13 +14,16 @@ public class NameGenerator {
 	 */
 
 	private String filePath = "src/demon_names.txt";
-	private List<String> demonNames = new ArrayList<>();
+	private List<String> names = new ArrayList<>();
 	
-	public NameGenerator() {
+	public NameGenerator(String type) {
+		if (type.equals("angelic")) {
+			setFilePath("src/angelic_names.txt");
+		}
 		readNames();
 	}
 	
-	public NameGenerator(String filePath) throws IOException {
+	public NameGenerator(String type, String filePath) throws IOException {
 		// overloaded constructor to change filePath to different file
 		
 		if (Files.exists(Paths.get(filePath))) {
@@ -32,10 +35,10 @@ public class NameGenerator {
 		readNames();
 	}
 	
-	public String getDemonName() {
+	public String getName() {
 		// generates a random demon name from the file with demon names
-		int randomIndex = Randomizer.random(demonNames.size());
-		return demonNames.get(randomIndex).trim();
+		int randomIndex = Randomizer.random(names.size());
+		return names.get(randomIndex).trim();
 	}
 	
 	private void setFilePath(String filePath) {
@@ -49,7 +52,7 @@ public class NameGenerator {
 			// create bufferedreader and append all read lines to List<String> demonNames
 			String line = null;
 			while ((line = reader.readLine()) != null) {
-				demonNames.add(line);
+				names.add(line);
 			}
 		} catch (IOException x) { x.printStackTrace(); }		
 	}
@@ -57,9 +60,9 @@ public class NameGenerator {
 	public static void main(String[] args) throws IOException {
 		// TEST NameGenerator
 		
-		NameGenerator n = new NameGenerator();
-		System.out.println("Amount of names: " + n.demonNames.size());
-		System.out.println("Random name: " + n.getDemonName());
+		NameGenerator n = new NameGenerator("demonic");
+		System.out.println("Amount of names: " + n.names.size());
+		System.out.println("Random name: " + n.getName());
 	}
 
 }

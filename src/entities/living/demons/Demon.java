@@ -59,4 +59,9 @@ public abstract class Demon extends LivingEntity {
 		this.cruelty++;
 	}
 	
+	public void decreaseCruelty() {
+		// increase cruelty of demon by 1
+		this.cruelty--;
+	}
+	
 }

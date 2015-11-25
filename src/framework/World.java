@@ -49,6 +49,7 @@ public class World {
 		board.initialiseBoard();	// initialises board
 		
 		worldLog.appendToLog("Initial" + System.lineSeparator() + board.toString());
+		System.out.println(worldLog.fetchLog());
 	}
 	
 	public void update(String id) {
@@ -61,6 +62,7 @@ public class World {
 		// get new entities from Computer
 		
 		for (List<Entity> entitiesOnPosition : board.getBoardMap().values()) {
+			System.out.println(board.getBoardMap());
 			entityList.addAll(computer.activateLiving(entitiesOnPosition));
 		}
 		
@@ -96,7 +98,7 @@ public class World {
 	
 	public void run() {
 		// runs the world according to the amount of states
-		for (int i=0; i<amountOfStates; i++) {
+		for (int i=1; i<amountOfStates; i++) {
 			update(Integer.toString(i));
 		}
 	}
@@ -104,24 +106,24 @@ public class World {
 	public static void main(String[] args) {
 		// TEST World class
 		
-		int amountOfStates = 40;
-		int[] boardDimensions = {5, 5};
+		int amountOfStates = 30;
+		int[] boardDimensions = {4, 4};
 		int[] amountOfEntities = {10, 0}; // (living,unliving)
-		int[] entityDistribution = {50, 30, 20}; // (S, CoF, I)
-		int heat = 10; // P(kill)=2/3
-		int chanceOnPlague = 50;
+		int[] entityDistribution = {100, 0, 0}; // (S, CoF, I)
+		int heat = 0; // P(kill)=2/3
+		int chanceOnPlague = 0;
 		
 		try {
 			World w = new World(amountOfStates, amountOfEntities, entityDistribution, boardDimensions, heat, chanceOnPlague);
 			w.initialise();
 			
-			w.setTimeBetweenStates(1000);
+			w.setTimeBetweenStates(100);
 			w.run();
 			
-			int[] rp = {3,4};
-			for (Entity o : w.objectsAtPosition(rp)) {
-				System.out.println(o.toStringLong());
-			}
+			//int[] rp = {3,4};
+//			for (Entity o : w.objectsAtPosition(rp)) {
+//				System.out.println(o.toStringLong());
+//			}
 		} catch (IOException io) { io.printStackTrace(); }
 		
 	}

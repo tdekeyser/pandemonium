@@ -2,6 +2,9 @@ package entities.living;
 
 import java.util.Arrays;
 
+import entities.living.demons.AngelOfDeath;
+import framework.NameGenerator;
+
 public class Sinner extends LivingEntity {
 
 	private int divinity; // divinity defines a sinner's position within the hierarchy
@@ -21,7 +24,7 @@ public class Sinner extends LivingEntity {
 	public String toStringLong() {
 		// String representation of Sinner object
 		StringBuilder info = new StringBuilder();
-		info.append("Name: Sinner" + System.lineSeparator());
+		info.append("Name: " + getType() + System.lineSeparator());
 		info.append("Gender: " + getGender() + System.lineSeparator());
 		info.append("Age: " + getAge() + System.lineSeparator());
 		info.append("Divinity: " + getDivinity() + System.lineSeparator());
@@ -37,12 +40,27 @@ public class Sinner extends LivingEntity {
 		increaseDivinity();
 	}
 	
+	public void setDivinity(int d) {
+		this.divinity = d;
+	}
+	
 	public void increaseDivinity() {
 		this.divinity++;
 	}
 	
 	public void decreaseDivinity() {
 		this.divinity--;
+	}
+	
+	public AngelOfDeath evolve(Sinner partner) {
+		 // two sinners can merge into an AngelOfDeath
+		NameGenerator an = new NameGenerator("angelic");
+		AngelOfDeath aod = new AngelOfDeath(an.getName(), this.getGender(), this.getCurrentPosition());
+		aod.setAge(this.getAge());
+		
+		this.declareDead(); partner.declareDead(); // declare both Sinners dead
+		
+		return aod;	
 	}
 	
 }

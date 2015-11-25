@@ -108,7 +108,7 @@ public class Board {
 		// TEST Board
 		
 		int[] pos = {3,4};
-		int[] pos2 = {5,6};
+		int[] pos2 = {3,4};
 		CradleOfFilth cof = new CradleOfFilth("male", pos);
 		Imp impie = cof.evolve();
 		CradleOfFilth cof2 = new CradleOfFilth("female", pos2);
@@ -136,6 +136,7 @@ public class Board {
 			
 			System.out.println(a.toString());
 			System.out.println(a.objectsAtPosition(pos));
+			System.out.println(a.getBoardMap());
 			
 			
 		} catch (IOException io) { io.printStackTrace(); }
