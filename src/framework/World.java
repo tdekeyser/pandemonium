@@ -10,7 +10,6 @@ import entities.Entity;
 public class World {
 	
 	private Log worldLog = new Log("WORLD LOG"); // simple log String
-	// TODO make log for every entity
 	
 	private int[] amountOfEntities = new int[2]; 	// with [0] living and [1] unliving
 	private int[] entityDistribution;
