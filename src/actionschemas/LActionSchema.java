@@ -1,4 +1,4 @@
-package framework;
+package actionschemas;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,15 +11,16 @@ import entities.living.demons.AngelOfDeath;
 import entities.living.demons.DemonCommander;
 import entities.living.demons.Imp;
 import entities.living.demons.InfernalDemon;
+import framework.Randomizer;
 
-public class ActionSchema {
-	/* provides entity random method activation
+public class LActionSchema {
+	/* Provides living entity random method activation
 	 * Only 1 (overloaded) method is available outside this class: doAction(Entity e) and doAction(Entity e, Entity target)
 	 */
 	
 	private int[] boardDimensions;
 	
-	public ActionSchema(int[] boardDimensions) {
+	public LActionSchema(int[] boardDimensions) {
 		this.boardDimensions = boardDimensions;
 	}
 	
@@ -96,8 +97,8 @@ public class ActionSchema {
 		
 		targetresult.add(0, e); // add subject to front
 		targetresult.add(1, target);
-		System.out.println(targetresult);
-		System.out.println(((LivingEntity) targetresult.get(1)).isAlive());
+//		System.out.println(targetresult);
+//		System.out.println(((LivingEntity) targetresult.get(1)).isAlive());
 		return targetresult;
 	}
 		
@@ -239,7 +240,7 @@ public class ActionSchema {
 			return e;
 		}
 	}
-	// TODO check moving; if in right top corner, entities sometimes disappear...
+	
 	public static void main(String[] args) {
 		int[] dim = {3,3};
 		int[] pos = {1,1};
@@ -248,7 +249,7 @@ public class ActionSchema {
 		s1.setDivinity(7);
 		s2.setDivinity(8);
 		
-		ActionSchema as = new ActionSchema(dim);
+		LActionSchema as = new LActionSchema(dim);
 		
 		System.out.println(s1.getType());
 		System.out.println(s2.getType());

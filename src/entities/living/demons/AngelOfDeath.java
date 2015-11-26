@@ -1,5 +1,7 @@
 package entities.living.demons;
 
+import java.util.Arrays;
+
 import entities.living.CradleOfFilth;
 import entities.living.Sinner;
 import entities.living.demons.Demon;
@@ -22,17 +24,20 @@ public class AngelOfDeath extends Demon {
 		victim.declareDead();
 		this.decreaseCruelty();
 		this.decreaseCruelty();
+		this.appendToLog("Killed Cradle at position " + Arrays.toString(victim.getCurrentPosition()));
 	}
 	
 	public void killImp(Imp victim) {
 		victim.declareDead();
 		this.decreaseCruelty();
+		this.appendToLog("Killed Imp at position " + Arrays.toString(victim.getCurrentPosition()));
 	}
 	
 	public void killInfernalDemon(InfernalDemon victim) {
 		victim.declareDead();
 		this.decreaseCruelty();
 		this.decreaseCruelty();
+		this.appendToLog("Killed InfernalDemon at position " + Arrays.toString(victim.getCurrentPosition()));
 	}
 	
 	@Override
@@ -40,6 +45,7 @@ public class AngelOfDeath extends Demon {
 		// demon kills a victim and gains cruelty
 		victim.declareDead();
 		this.decreaseCruelty();
+		this.appendToLog("Killed Sinner at position " + Arrays.toString(victim.getCurrentPosition()));
 	}
 	
 }

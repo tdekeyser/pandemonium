@@ -20,6 +20,7 @@ public class CradleOfFilth extends LivingEntity {
 		super(gender, currentPosition);
 		this.setAge(1);
 		this.setType("CradleOfFilth");
+		this.appendToLog("CradleOfFilth, " + this.getGender() + System.lineSeparator() + "======");
 	}
 	
 	@Override
@@ -46,6 +47,8 @@ public class CradleOfFilth extends LivingEntity {
 		// generate random demon name, then create new Imp object same gender and position
 		NameGenerator n = new NameGenerator("demonic");
 		Imp evolved_obj = new Imp(n.getName(), this.getGender(), this.getCurrentPosition());
+		evolved_obj.emptyLog();
+		evolved_obj.copyAndAppendToLog(this, evolved_obj.toStringLong() + "Evolved from Cradle.");
 		return evolved_obj;
 	}
 	

@@ -23,7 +23,7 @@ public class DemonicFury extends UnlivingEntity {
 			}
 			newList.add(living);
 		}
-		System.out.println("Demonic Fury unleashed.");
+		System.out.println("Demonic Fury unleashed!");
 		return newList;
 	}
 	

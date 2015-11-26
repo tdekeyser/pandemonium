@@ -1,5 +1,7 @@
 package entities.living.demons;
 
+import java.util.Arrays;
+
 import entities.living.Sinner;
 
 public class InfernalDemon extends Demon {
@@ -32,6 +34,7 @@ public class InfernalDemon extends Demon {
 		victim.decreaseDivinity();
 		this.increaseCruelty();
 		this.increaseCruelty();
+		this.appendToLog("Tortured Sinner at position " + Arrays.toString(this.getCurrentPosition()));
 	}
 	
 	public DemonCommander evolve() {
@@ -39,7 +42,9 @@ public class InfernalDemon extends Demon {
 		
 		DemonCommander evolved_obj = new DemonCommander(this.getName(), this.getGender(), this.getCurrentPosition());
 		evolved_obj.setAge(this.getAge());
+		evolved_obj.setCruelty(this.getCruelty());
 		if (this.hasPartner()) { evolved_obj.partner = this.partner; }
+		evolved_obj.copyAndAppendToLog(this, evolved_obj.toStringLong() + "Evolved from InfernalDemon.");
 		return evolved_obj;
 	}
 

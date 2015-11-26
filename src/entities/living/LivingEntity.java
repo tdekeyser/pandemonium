@@ -1,5 +1,7 @@
 package entities.living;
 
+import java.util.Arrays;
+
 import entities.Entity;
 
 public abstract class LivingEntity extends Entity implements Moveable {
@@ -16,12 +18,13 @@ public abstract class LivingEntity extends Entity implements Moveable {
 
 	public boolean isAlive() {
 		// get isAlive
-		return this.isAlive;
+		return isAlive;
 	}
 	
-	public void declareDead () {
+	public void declareDead() {
 		// set isAlive to false
-		this.isAlive = false;
+		isAlive = false;
+		appendToLog("Died: " + toStringLong());
 	}
 	
 	public void setAge(int age) {
@@ -31,16 +34,16 @@ public abstract class LivingEntity extends Entity implements Moveable {
 	
 	public int getAge() {
 		// getter method for age
-		return this.age;
+		return age;
 	}
 	
 	public void increaseAge() {
 		// grow 1 year older
-		this.age++;
+		age++;
 	}
 	
 	public String getGender() {
-		return this.gender;
+		return gender;
 	}
 	
 	@Override
@@ -49,6 +52,7 @@ public abstract class LivingEntity extends Entity implements Moveable {
 		int[] currentPosition = getCurrentPosition();
 		currentPosition[1]--;
 		setCurrentPosition(currentPosition);
+		appendToLog("Moved to " + Arrays.toString(currentPosition));
 	}
 	
 	@Override
@@ -57,6 +61,7 @@ public abstract class LivingEntity extends Entity implements Moveable {
 		int[] currentPosition = getCurrentPosition();
 		currentPosition[1]++;
 		setCurrentPosition(currentPosition);
+		appendToLog("Moved to " + Arrays.toString(currentPosition));
 	}
 	
 	@Override
@@ -65,6 +70,7 @@ public abstract class LivingEntity extends Entity implements Moveable {
 		int[] currentPosition = getCurrentPosition();
 		currentPosition[0]--;
 		setCurrentPosition(currentPosition);
+		appendToLog("Moved to " + Arrays.toString(currentPosition));
 	}
 	
 	@Override
@@ -73,6 +79,7 @@ public abstract class LivingEntity extends Entity implements Moveable {
 		int[] currentPosition = getCurrentPosition();
 		currentPosition[0]++;
 		setCurrentPosition(currentPosition);
+		appendToLog("Moved to " + Arrays.toString(currentPosition));
 	}
 
 }

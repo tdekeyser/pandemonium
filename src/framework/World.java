@@ -20,7 +20,7 @@ public class World {
 	private Computer computer;
 	private Board board;
 	
-	private List<Entity> entityList = new ArrayList<>();
+	public List<Entity> entityList = new ArrayList<>();
 	
 	public World(
 			int amountOfStates,
@@ -58,12 +58,13 @@ public class World {
 		
 		entityList.clear(); // clear the previous entityList
 		
+		List<Entity> livingList = new ArrayList<>();
 		for (List<Entity> entitiesOnPosition : board.getBoardMap().values()) { // get new entities from Computer
-			entityList.addAll(computer.activateLiving(entitiesOnPosition));
+			livingList.addAll(computer.activateLiving(entitiesOnPosition));
 		}
 		
-//		 entityList.addAll(activateUnliving(unlivinglist)); // then other unliving entities
-		entityList.addAll(computer.spawnPlagued()); // spawn sinners acc to chanceOnPlague
+		entityList.addAll(computer.activateUnliving(livingList)); // activate unliving entities and add surviving to entityList
+		entityList.addAll(computer.spawnPlagued()); // spawn sinners/cradles acc to chanceOnPlague
 
 		board.updateBoard(entityList); // send new entities to Board for update
 		
@@ -101,12 +102,12 @@ public class World {
 	public static void main(String[] args) {
 		// TEST World class
 		
-		int amountOfStates = 50;
+		int amountOfStates = 80;
 		int[] boardDimensions = {4, 4};
-		int[] amountOfEntities = {6, 0}; // (living,unliving)
-		int[] entityDistribution = {40, 40, 20}; // (S, CoF, I)
-		int heat = 100; // random(2+heat); heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
-		int chanceOnPlague = 50; // P(spawn1Sinner)=1/f(x) and P(spawn1Cradle)=1/2f(x) if chanceOnPlague>=50, with f(100)=2; f(50)=4; f(0)=6
+		int[] amountOfEntities = {1, 0}; // (living,unliving)
+		int[] entityDistribution = {0, 0, 100}; // (S, CoF, I)
+		int heat = 0; // random(2+heat); heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
+		int chanceOnPlague = 0; // P(spawn1Sinner)=1/f(x) and P(spawn1Cradle)=1/2f(x) if chanceOnPlague>=50, with f(100)=2; f(50)=4; f(0)=6
 		
 		try {
 			World w = new World(amountOfStates, amountOfEntities, entityDistribution, boardDimensions, heat, chanceOnPlague);
@@ -115,10 +116,9 @@ public class World {
 			w.setTimeBetweenStates(10);
 			w.run();
 			
-			//int[] rp = {3,4};
-//			for (Entity o : w.objectsAtPosition(rp)) {
-//				System.out.println(o.toStringLong());
-//			}
+			//Entity first = w.entityList.get(0);
+			//System.out.println(first.fetchLog());
+	
 		} catch (IOException io) { io.printStackTrace(); }
 		
 	}

@@ -1,5 +1,7 @@
 package entities.living.demons;
 
+import java.util.Arrays;
+
 import entities.living.CradleOfFilth;
 
 public class Imp extends Demon {
@@ -18,6 +20,7 @@ public class Imp extends Demon {
 		super(name, gender, currentPosition);
 		this.setAge(4);
 		this.setType("Imp");
+		this.appendToLog(this.getName()+", Imp, " + this.getGender() + System.lineSeparator() + "======");
 	}
 	
 	@Override
@@ -30,6 +33,7 @@ public class Imp extends Demon {
 		// destroys Imp object at same position and increases cruelty
 		impVictim.declareDead();
 		this.increaseCruelty();
+		this.appendToLog("Cannibalized Imp at position " + Arrays.toString(this.getCurrentPosition()));
 	}
 	
 	public InfernalDemon evolve() {
@@ -37,7 +41,9 @@ public class Imp extends Demon {
 		
 		InfernalDemon evolved_obj = new InfernalDemon(this.getName(), this.getGender(), this.getCurrentPosition());
 		evolved_obj.setAge(this.getAge());
+		evolved_obj.setCruelty(this.getCruelty());
 		if (this.hasPartner()) { evolved_obj.partner = this.partner; }
+		evolved_obj.copyAndAppendToLog(this, evolved_obj.toStringLong() + "Evolved from Imp.");
 		return evolved_obj;
 	}
 	

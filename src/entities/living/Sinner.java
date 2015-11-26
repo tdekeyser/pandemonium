@@ -12,6 +12,7 @@ public class Sinner extends LivingEntity {
 	public Sinner(String gender, int[] currentPosition) {
 		super(gender, currentPosition);
 		this.setType("Sinner");
+		this.appendToLog("Sinner, "+this.getGender() + System.lineSeparator() + "======");
 	}
 	
 	@Override
@@ -38,6 +39,7 @@ public class Sinner extends LivingEntity {
 	
 	public void pray() {
 		increaseDivinity();
+		appendToLog("Prayed.");
 	}
 	
 	public void setDivinity(int d) {
@@ -57,7 +59,7 @@ public class Sinner extends LivingEntity {
 		NameGenerator an = new NameGenerator("angelic");
 		AngelOfDeath aod = new AngelOfDeath(an.getName(), this.getGender(), this.getCurrentPosition());
 		aod.setAge(this.getAge());
-		
+		aod.copyAndAppendToLog(this, aod.toStringLong() + "Evolved from Sinners");
 		this.declareDead();		
 		return aod;	
 	}

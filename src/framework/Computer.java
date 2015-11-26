@@ -3,12 +3,13 @@ package framework;
 import java.util.ArrayList;
 import java.util.List;
 
+import actionschemas.LActionSchema;
+import actionschemas.UActionSchema;
 import entities.Entity;
 import entities.living.LivingEntity;
 import entities.living.Sinner;
 import entities.living.CradleOfFilth;
 import entities.living.demons.Imp;
-import entities.unliving.DemonicFury;
 
 public class Computer {
 	/* class that brings together methods to compute a new state based on (user) input
@@ -23,11 +24,13 @@ public class Computer {
 	private int heat;
 	private int chanceOnPlague;
 	
-	private ActionSchema actionSchema; // contains method doAction() that randomizes a LivingEntity action
+	private LActionSchema actionSchemaL; // contains method doAction() that randomizes a LivingEntity action
+	private UActionSchema actionSchemaU; // contains unliving actions methods
 	
 	public Computer(int[] boardDimensions, int heat, int chanceOnPlague) {
 		this.boardDimensions = boardDimensions;
-		this.actionSchema = new ActionSchema(boardDimensions);
+		this.actionSchemaL = new LActionSchema(boardDimensions);
+		this.actionSchemaU = new UActionSchema(boardDimensions);
 		this.heat = heat;
 		this.chanceOnPlague = chanceOnPlague;
 	}
@@ -89,39 +92,22 @@ public class Computer {
 		int y = (-1/25)*chanceOnPlague + 6; // P(spawn1Sinner)=1/f(x) and P(spawn1Cradle)=1/2f(x) if chanceOnPlague>=50, with f(100)=2; f(50)=4; f(0)=6
 		
 		if (chanceOnPlague > 0) {
-//			for (int i=0; i<=chanceOnPlague; i+=20) {
 				if (Randomizer.random(Math.abs(y))==0) { spawnedEntities.add(spawnSinner()); }
-//			}
 		}
 		if (chanceOnPlague >= 50) {
-//			for (int i=0; i<=chanceOnPlague; i+=40) {
 				if (Randomizer.random(Math.abs(y*2))==0) { spawnedEntities.add(spawnCradle()); }
-//			}
 		}
 		return spawnedEntities;
-	}
-	
-	public List<Entity> demonicFury(List<Entity> entityList) {
-		if (Randomizer.random(102-heat) == 0) { // P(demonicFury)=1/102-heat
-			return DemonicFury.unleash(entityList);
-		} else {
-			return entityList;
-		}
-	}
-	
-	public void activateUnliving() {
-		// activates unliving things
-		
 	}
 	
 	public List<Entity> activateLiving(List<Entity> ePosList) {
 
 		List<Entity> newEntities = new ArrayList<>();
-		System.out.println("positionList: "+ePosList);
+//		System.out.println("positionList: "+ePosList);
 		if (ePosList.size() == 1) {
 			// single element on position
 			Entity soleEntity = ePosList.get(0);
-			newEntities.add(actionSchema.doAction(soleEntity));
+			newEntities.add(actionSchemaL.doAction(soleEntity));
 			
 		} else {
 			// if more than one entity on position, iterate over entities and over its possible targets
@@ -135,23 +121,23 @@ public class Computer {
 				LivingEntity e = (LivingEntity) ePosList.get(i);
 				
 				targets.remove(e); // remove entity itself (first occurrence of same entity in case of sinner/cradle) from target list
-				System.out.println("TargetList: "+targets);
-				if (targets.size()==0) { newEntities.add(actionSchema.doAction(e)); break; } // if no targets left
+//				System.out.println("TargetList: "+targets);
+				if (targets.size()==0) { newEntities.add(actionSchemaL.doAction(e)); break; } // if no targets left
 				
 				else if (!e.isAlive()) { continue; } // if entity is dead, continue
 				
-				else if (e.getType().equals("CradleOfFilth")) { newEntities.add(actionSchema.doAction(e)); } // cradles do not have targets
+				else if (e.getType().equals("CradleOfFilth")) { newEntities.add(actionSchemaL.doAction(e)); } // cradles do not have targets
 				
 				else { // there is a possible target; now randomize whether it will target or not
-					int r = Randomizer.random(2 + Math.abs(heat/10)); // heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
-					if (r == 0) { // don't target
-						newEntities.add(actionSchema.doAction(e));
+					
+					if ((Randomizer.random(2 + Math.abs(heat/10))) == 0) {  // heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
+						newEntities.add(actionSchemaL.doAction(e));
 						continue entityLoop;						
 					} else { // do the target
 						
 						targetLoop: for (Entity target : targets) {
 														
-							List<Entity> actionResult = actionSchema.doAction(e, target);
+							List<Entity> actionResult = actionSchemaL.doAction(e, target);
 								
 							Entity eResult = actionResult.get(0);
 							if (actionResult.size()==1) { newEntities.add(eResult); break targetLoop; } // this occurs when an entity has failed to target
@@ -182,6 +168,15 @@ public class Computer {
 		}
 		
 		return newEntities;
+	}
+	
+	public List<Entity> activateUnliving(List<Entity> newEntities) {
+		// activates unliving things
+		List<Entity> surviving = new ArrayList<>();
+		
+		surviving.addAll(actionSchemaU.demonicFury(newEntities, heat));
+		
+		return surviving;
 	}
 	
 }

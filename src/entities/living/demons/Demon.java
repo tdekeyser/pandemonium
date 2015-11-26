@@ -35,6 +35,7 @@ public abstract class Demon extends LivingEntity {
 		// demon kills a victim and gains cruelty
 		victim.declareDead();
 		this.increaseCruelty();
+		this.appendToLog("Killed Sinner at position " + Arrays.toString(this.getCurrentPosition()));
 	}
 	
 	public boolean hasPartner() {
