@@ -58,8 +58,7 @@ public class Sinner extends LivingEntity {
 		AngelOfDeath aod = new AngelOfDeath(an.getName(), this.getGender(), this.getCurrentPosition());
 		aod.setAge(this.getAge());
 		
-		this.declareDead(); partner.declareDead(); // declare both Sinners dead
-		
+		this.declareDead();		
 		return aod;	
 	}
 	

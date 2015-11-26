@@ -1,7 +1,6 @@
 package framework;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import entities.Entity;
@@ -41,12 +40,7 @@ public class ActionSchema {
 		return eResult;
 	}
 	
-	public List<Entity> doAction(Entity e, Entity target) throws NoSuchMethodException {
-		/*
-		 * TODO angel of death add evolve : 
-		 */
-		
-		
+	public List<Entity> doAction(Entity e, Entity target) {
 		/* checks the type of entity and randomizes methods with a target
 		 * Returns changed entity afterwards.
 		 */
@@ -57,53 +51,58 @@ public class ActionSchema {
 				switch (target.getType()) {
 					case "Sinner": ((Imp) e).killSinner((Sinner) target); break;
 					case "Imp": ((Imp) e).cannibalize((Imp) target); break;
-					default: throw new NoSuchMethodException();
+					default: targetresult.add(doImpAction((Imp) e)); return targetresult;
 				}; break;
 			case "InfernalDemon":
-				if (target.getType().equals("Sinner")) {
-					int r = Randomizer.random(2);
-					if (r == 0) {
-						((InfernalDemon) e).killSinner((Sinner) target);
-					} else {
-						((InfernalDemon) e).tortureSinner((Sinner) target);
-					}
-				} else {
-					throw new NoSuchMethodException();
-				}; break;
+				switch (target.getType()) {
+					case "Sinner":
+						int r = Randomizer.random(2);
+						if (r == 0) {
+							((InfernalDemon) e).killSinner((Sinner) target);
+						} else {
+							((InfernalDemon) e).tortureSinner((Sinner) target);
+						}; break;
+					default: targetresult.add(doInfernalDemonAction((InfernalDemon) e)); return targetresult;
+					} break;
 			case "DemonCommander": 
 				switch (target.getType()) {
 					case "Sinner": ((DemonCommander) e).killSinner((Sinner) target); break;
-					default: throw new NoSuchMethodException();
+					default: targetresult.add(moveRandomly((LivingEntity) e)); return targetresult;
 				}; break;
 			case "Sinner":
 				switch (target.getType()) {
 				case "Sinner":
 					if ((((Sinner) e).getDivinity()>7) && (((Sinner) target).getDivinity()>7)) { // evolve into angel if both at least 7 divinity
 						targetresult.add(((Sinner) e).evolve((Sinner) target));
+						((LivingEntity) target).declareDead();
+						targetresult.add(target);
+						return targetresult;
 					} else {
 						targetresult.add(0, doSinnerAction((Sinner) e)); // else simply do sinneraction
 						return targetresult;
-					} break;
-				default: throw new NoSuchMethodException();
-				}; break;
+					}
+				default: targetresult.add(doSinnerAction((Sinner) e)); return targetresult;
+				}
 			case "AngelOfDeath":
 				switch (target.getType()) {
 					case "Sinner": ((AngelOfDeath) e).killSinner((Sinner) target); break;
 					case "CradleOfFilth": ((AngelOfDeath) e).killCradle((CradleOfFilth) target); break;
 					case "Imp": ((AngelOfDeath) e).killImp((Imp) target); break;
 					case "InfernalDemon": ((AngelOfDeath) e).killInfernalDemon((InfernalDemon) target); break;
-					default: throw new NoSuchMethodException();
+					default: targetresult.add(doAngelAction((AngelOfDeath) e)); return targetresult;
 				}; break;
+			default: targetresult.add(doAction(e)); return targetresult;
 		}
 		
 		targetresult.add(0, e); // add subject to front
-		targetresult.add(1, target);		
+		targetresult.add(1, target);
+		System.out.println(targetresult);
+		System.out.println(((LivingEntity) targetresult.get(1)).isAlive());
 		return targetresult;
 	}
 		
 	private Entity doSinnerAction(Sinner e) {
 		// sinner specific randomizer
-		System.out.print("move");
 		int r = Randomizer.random(2);
 		if (r==0) {
 			e.pray();
@@ -115,12 +114,16 @@ public class ActionSchema {
 	
 	private Entity doAngelAction(AngelOfDeath e) {
 		// angel specific randomizer
-		return moveRandomly((LivingEntity) e);
+		if (e.getCruelty()<1) {
+			e.declareDead();
+			return e;
+		} else {
+			return moveRandomly((LivingEntity) e);
+		}
 	}
 	
 	private Entity doCradleAction(CradleOfFilth e) {
 		// cof specific action randomizer
-		
 		if (e.getAge() == 3) {
 			Imp ec = e.evolve(); // create imp object and delete cof object
 			return ec;
@@ -131,7 +134,6 @@ public class ActionSchema {
 	
 	private Entity doImpAction(Imp e) {
 		// imp specific action randomizer
-		
 		if ((e.getCruelty() == 6) || (e.getAge() == 20)) {
 			InfernalDemon ei = e.evolve(); // create infernaldemon object and delete imp object
 			return ei;
@@ -237,7 +239,7 @@ public class ActionSchema {
 			return e;
 		}
 	}
-	
+	// TODO check moving; if in right top corner, entities sometimes disappear...
 	public static void main(String[] args) {
 		int[] dim = {3,3};
 		int[] pos = {1,1};
@@ -247,16 +249,12 @@ public class ActionSchema {
 		s2.setDivinity(8);
 		
 		ActionSchema as = new ActionSchema(dim);
-		try {
-			System.out.println(s1.getType());
-			System.out.println(s2.getType());
-			List<Entity> p = as.doAction((Entity) s1, (Entity) s2);
-			System.out.println(((LivingEntity) p.get(0)).isAlive());
-			System.out.println(((LivingEntity) p.get(0)).toStringLong());
-			System.out.println(((LivingEntity) p.get(1)).isAlive());
-			System.out.println(((LivingEntity) p.get(1)).toStringLong());
-			
-		} catch (NoSuchMethodException x) { x.printStackTrace(); }
+		
+		System.out.println(s1.getType());
+		System.out.println(s2.getType());
+		List<Entity> p = as.doAction((Entity) s1, (Entity) s2);
+		System.out.println(((LivingEntity) p.get(0)).isAlive());
+		System.out.println(((LivingEntity) p.get(0)).toStringLong());
 		
 	}
 }

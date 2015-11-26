@@ -1,9 +1,7 @@
 package framework;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.lang.NoSuchMethodException;
 
 import entities.Entity;
 import entities.living.LivingEntity;
@@ -116,7 +114,7 @@ public class Computer {
 	public List<Entity> activateLiving(List<Entity> ePosList) {
 
 		List<Entity> newEntities = new ArrayList<>();
-		
+		System.out.println("positionList: "+ePosList);
 		if (ePosList.size() == 1) {
 			// single element on position
 			Entity soleEntity = ePosList.get(0);
@@ -130,61 +128,50 @@ public class Computer {
 				targets.add(entityOP);
 			}
 
-			for (int i=0; i<ePosList.size(); i++) {
+			entityLoop: for (int i=0; i<ePosList.size(); i++) {
 				LivingEntity e = (LivingEntity) ePosList.get(i);
 				
-				targets.remove(e); // remove entity itself (first occurence of same entity in case of sinner/cradle) from target list
+				targets.remove(e); // remove entity itself (first occurrence of same entity in case of sinner/cradle) from target list
+				System.out.println("TargetList: "+targets);
 				if (targets.size()==0) { newEntities.add(actionSchema.doAction(e)); break; } // if no targets left
-				if (!e.isAlive()) {continue;} // if entity is dead, continue
 				
-				if (e.getType().equals("CradleOfFilth")) { // cradles do not have targets
-					newEntities.add(actionSchema.doAction(e));
-					
-				} else { // there is a possible target; now randomize whether it will target or not
+				else if (!e.isAlive()) { continue; } // if entity is dead, continue
+				
+				else if (e.getType().equals("CradleOfFilth")) { newEntities.add(actionSchema.doAction(e)); } // cradles do not have targets
+				
+				else { // there is a possible target; now randomize whether it will target or not
 					int r = Randomizer.random(2 + Math.abs(heat/10)); // heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
 					if (r == 0) { // don't target
 						newEntities.add(actionSchema.doAction(e));
-						
+						continue entityLoop;						
 					} else { // do the target
 						
 						targetLoop: for (Entity target : targets) {
-							System.out.println(targets);
-							try {
-								List<Entity> actionResult = actionSchema.doAction(e, target);
+														
+							List<Entity> actionResult = actionSchema.doAction(e, target);
 								
-								Entity eResult = actionResult.get(0);
-								if (actionResult.size()==1) { newEntities.add(eResult); break; } // this occurs when a sinner has failed to target
-								
-								LivingEntity tarResult = (LivingEntity) actionResult.get(1);
-								LivingEntity targetInEPos = (LivingEntity) ePosList.get(ePosList.indexOf(target));
-								
-								if (tarResult.isAlive()) { // check if target is still alive, add it to newEntities
-									newEntities.addAll(actionResult);
-									targetInEPos.declareDead(); // tar cannot be targeted a second time
-									
-								} else if (actionResult.size() == 3) {
-									if (actionResult.get(2).getType().equals("AngelOfDeath")) {
-										newEntities.addAll(actionResult);
-									}
-									
-								} else { // if not, add the killer to newEntities, but declare target dead
-									newEntities.add(eResult);
-									targetInEPos.declareDead();
-								}
-								
-								break targetLoop; // if an action is successful, break out of loop
-								
-							} catch (NoSuchMethodException x) {
-								continue targetLoop; // if an action is unsuccessful, continue
+							Entity eResult = actionResult.get(0);
+							if (actionResult.size()==1) { newEntities.add(eResult); break targetLoop; } // this occurs when an entity has failed to target
+							
+							LivingEntity tarResult = (LivingEntity) actionResult.get(1);
+							LivingEntity targetInEPos = (LivingEntity) ePosList.get(ePosList.indexOf(target));
+							
+							if (tarResult.isAlive()) { // check if target is still alive, add it to newEntities
+								newEntities.addAll(actionResult);
+								targetInEPos.declareDead(); // tar cannot be targeted a second time
+							} else { // if not, add the killer to newEntities, but declare target dead
+								newEntities.add(eResult);
+								targetInEPos.declareDead();
 							}
+							
+							continue entityLoop; // if an action is successful, break out of loop and continue the entityLoop
 						}
 					}
 				}
 			}
 		}
 		
-		
-		// final loop to remove entities that have been declared dead during final iteration and to increase age of all		
+		// final loop to remove entities that have been declared dead + increase age of all	
 		for (int i=0; i<newEntities.size(); i++) {
 			LivingEntity newE = (LivingEntity) newEntities.get(i);
 			if (!newE.isAlive()) { newEntities.remove(newE); }

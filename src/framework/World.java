@@ -62,7 +62,6 @@ public class World {
 		// get new entities from Computer
 		
 		for (List<Entity> entitiesOnPosition : board.getBoardMap().values()) {
-			System.out.println(board.getBoardMap());
 			entityList.addAll(computer.activateLiving(entitiesOnPosition));
 		}
 		
@@ -106,10 +105,10 @@ public class World {
 	public static void main(String[] args) {
 		// TEST World class
 		
-		int amountOfStates = 30;
-		int[] boardDimensions = {4, 4};
-		int[] amountOfEntities = {10, 0}; // (living,unliving)
-		int[] entityDistribution = {100, 0, 0}; // (S, CoF, I)
+		int amountOfStates = 50;
+		int[] boardDimensions = {3, 3};
+		int[] amountOfEntities = {4, 0}; // (living,unliving)
+		int[] entityDistribution = {80, 10, 10}; // (S, CoF, I)
 		int heat = 0; // P(kill)=2/3
 		int chanceOnPlague = 0;
 		
@@ -117,7 +116,7 @@ public class World {
 			World w = new World(amountOfStates, amountOfEntities, entityDistribution, boardDimensions, heat, chanceOnPlague);
 			w.initialise();
 			
-			w.setTimeBetweenStates(100);
+			w.setTimeBetweenStates(10);
 			w.run();
 			
 			//int[] rp = {3,4};
