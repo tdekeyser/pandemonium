@@ -104,13 +104,11 @@ public class Computer {
 
 		List<Entity> newEntities = new ArrayList<>();
 //		System.out.println("positionList: "+ePosList);
-		if (ePosList.size() == 1) {
-			// single element on position
+		if (ePosList.size() == 1) { // single element on position
 			Entity soleEntity = ePosList.get(0);
 			newEntities.add(actionSchemaL.doAction(soleEntity));
 			
 		} else {
-			// if more than one entity on position, iterate over entities and over its possible targets
 			
 			List<Entity> targets =  new ArrayList<>(); // clone entitiesOnPositionX for all possible targets
 			for (Entity entityOP : ePosList) {
@@ -139,8 +137,8 @@ public class Computer {
 														
 							List<Entity> actionResult = actionSchemaL.doAction(e, target);
 								
-							Entity eResult = actionResult.get(0);
-							if (actionResult.size()==1) { newEntities.add(eResult); break targetLoop; } // this occurs when an entity has failed to target
+							Entity eResult = actionResult.get(0); // get the first element of the result list
+							if (actionResult.size()==1) { newEntities.add(eResult); break targetLoop; } // this occurs when an entity has failed to target, i.e. a single result is returned
 							
 							LivingEntity tarResult = (LivingEntity) actionResult.get(1);
 							LivingEntity targetInEPos = (LivingEntity) ePosList.get(ePosList.indexOf(target));
@@ -160,8 +158,7 @@ public class Computer {
 			}
 		}
 		
-		// final loop to remove entities that have been declared dead + increase age of all	
-		for (int i=0; i<newEntities.size(); i++) {
+		for (int i=0; i<newEntities.size(); i++) { // final loop to remove entities that have been declared dead + increase age of all	
 			LivingEntity newE = (LivingEntity) newEntities.get(i);
 			if (!newE.isAlive()) { newEntities.remove(newE); }
 			newE.increaseAge();
