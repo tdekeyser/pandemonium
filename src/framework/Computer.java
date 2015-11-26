@@ -83,23 +83,26 @@ public class Computer {
 		return new CradleOfFilth(randomizeGender(), computeRandomPosition());
 	}
 	
-	public List<Entity> spawnPlagues(List<Entity> entityList) {
+	public List<Entity> spawnPlagued() {
 		// spawn Sinners according to chanceOnPlague
+		List<Entity> spawnedEntities = new ArrayList<>();
+		int y = (-1/25)*chanceOnPlague + 6; // P(spawn1Sinner)=1/f(x) and P(spawn1Cradle)=1/2f(x) if chanceOnPlague>=50, with f(100)=2; f(50)=4; f(0)=6
+		
 		if (chanceOnPlague > 0) {
-			for (int i=0; i<=chanceOnPlague; i+=20) { // when chanceOnPlague=100, in best case 5 Sinners spawn
-				if (Randomizer.random(2)==0) { entityList.add(spawnSinner()); }
-			}
+//			for (int i=0; i<=chanceOnPlague; i+=20) {
+				if (Randomizer.random(Math.abs(y))==0) { spawnedEntities.add(spawnSinner()); }
+//			}
 		}
 		if (chanceOnPlague >= 50) {
-			for (int i=0; i<=chanceOnPlague; i+=40) {
-				if (Randomizer.random(2)==0) { entityList.add(spawnCradle()); }
-			}
+//			for (int i=0; i<=chanceOnPlague; i+=40) {
+				if (Randomizer.random(Math.abs(y*2))==0) { spawnedEntities.add(spawnCradle()); }
+//			}
 		}
-		return entityList;
+		return spawnedEntities;
 	}
 	
 	public List<Entity> demonicFury(List<Entity> entityList) {
-		if (Randomizer.random(102-heat) == 0) {
+		if (Randomizer.random(102-heat) == 0) { // P(demonicFury)=1/102-heat
 			return DemonicFury.unleash(entityList);
 		} else {
 			return entityList;

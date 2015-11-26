@@ -10,6 +10,7 @@ import entities.Entity;
 public class World {
 	
 	private Log worldLog = new Log("WORLD LOG"); // simple log String
+	// TODO make log for every entity
 	
 	private int[] amountOfEntities = new int[2]; 	// with [0] living and [1] unliving
 	private int[] entityDistribution;
@@ -55,27 +56,22 @@ public class World {
 	public void update(String id) {
 		// separate living from unliving
 		
-		// first do unliving entities, then living
-		// unlivingl = activateUnliving(unlivinglist);
+		entityList.clear(); // clear the previous entityList
 		
-		entityList.clear();
-		// get new entities from Computer
-		
-		for (List<Entity> entitiesOnPosition : board.getBoardMap().values()) {
+		for (List<Entity> entitiesOnPosition : board.getBoardMap().values()) { // get new entities from Computer
 			entityList.addAll(computer.activateLiving(entitiesOnPosition));
 		}
 		
-		// spawn sinners acc to chanceOnPlague
-		entityList = computer.spawnPlagues(entityList);
+//		 entityList.addAll(activateUnliving(unlivinglist)); // then other unliving entities
+		entityList.addAll(computer.spawnPlagued()); // spawn sinners acc to chanceOnPlague
 
-		// send new entities to Board for update
-		board.updateBoard(entityList);
+		board.updateBoard(entityList); // send new entities to Board for update
 		
 		String updateStr = "State " + id + System.lineSeparator() + board.toString();		
-		worldLog.appendToLog(updateStr);
-		System.out.println(updateStr);
-		try {
-		    //thread to sleep for the specified number of milliseconds
+		worldLog.appendToLog(updateStr); // write the update to worldLog
+		System.out.println(updateStr); // immediately print the result to the screen
+		
+		try { //thread to sleep for the specified number of milliseconds
 			Thread.sleep(timeBetweenStates);
 		} catch (InterruptedException ie) {
 		    System.out.println(ie);
@@ -106,11 +102,11 @@ public class World {
 		// TEST World class
 		
 		int amountOfStates = 50;
-		int[] boardDimensions = {3, 3};
-		int[] amountOfEntities = {4, 0}; // (living,unliving)
-		int[] entityDistribution = {80, 10, 10}; // (S, CoF, I)
-		int heat = 0; // P(kill)=2/3
-		int chanceOnPlague = 0;
+		int[] boardDimensions = {4, 4};
+		int[] amountOfEntities = {6, 0}; // (living,unliving)
+		int[] entityDistribution = {40, 40, 20}; // (S, CoF, I)
+		int heat = 100; // random(2+heat); heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
+		int chanceOnPlague = 50; // P(spawn1Sinner)=1/f(x) and P(spawn1Cradle)=1/2f(x) if chanceOnPlague>=50, with f(100)=2; f(50)=4; f(0)=6
 		
 		try {
 			World w = new World(amountOfStates, amountOfEntities, entityDistribution, boardDimensions, heat, chanceOnPlague);

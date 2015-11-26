@@ -14,14 +14,14 @@ public class DemonicFury extends UnlivingEntity {
 	public static List<Entity> unleash(List<Entity> entityList) {
 		List<Entity> newList = new ArrayList<>();
 		for (int i=0; i<entityList.size(); i++) {
-			try {
-				LivingEntity living = (LivingEntity) entityList.get(i);
-				switch (living.getType()) {
-					case "Sinner": ((Sinner) living).decreaseDivinity(); break;
-					case "CradleOfFilth": continue;
-					default: ((Demon) living).increaseCruelty(); break;
-				}
-			} catch (Error x) { continue; }
+			
+			LivingEntity living = (LivingEntity) entityList.get(i);
+			switch (living.getType()) {
+				case "Sinner": ((Sinner) living).decreaseDivinity(); break;
+				case "CradleOfFilth": break;
+				default: ((Demon) living).increaseCruelty(); break;
+			}
+			newList.add(living);
 		}
 		System.out.println("Demonic Fury unleashed.");
 		return newList;
