@@ -3,13 +3,12 @@ package framework;
 import java.util.ArrayList;
 import java.util.List;
 
-import actionschemas.LActionSchema;
-import actionschemas.UActionSchema;
 import entities.Entity;
 import entities.living.LivingEntity;
 import entities.living.Sinner;
 import entities.living.CradleOfFilth;
 import entities.living.demons.Imp;
+import entities.unliving.DemonicFury;
 
 public class Computer {
 	/* class that brings together methods to compute a new state based on (user) input
@@ -20,17 +19,18 @@ public class Computer {
 	 * 		- computeRandomPosition()
 	 */
 	
-	private int[] boardDimensions;
+	/*
+	 * TODO
+	 * Bug: [H1 H2 X Y] does not return [] but [H1 Y], because the H1 targets H2 first, and then finishes because it targets an unliving entity
+	 */
+	
 	private int heat;
 	private int chanceOnPlague;
 	
-	private LActionSchema actionSchemaL; // contains method doAction() that randomizes a LivingEntity action
-	private UActionSchema actionSchemaU; // contains unliving actions methods
+	private ActionSchema actionSchema; // contains method doAction() that randomizes a LivingEntity action
 	
 	public Computer(int[] boardDimensions, int heat, int chanceOnPlague) {
-		this.boardDimensions = boardDimensions;
-		this.actionSchemaL = new LActionSchema(boardDimensions);
-		this.actionSchemaU = new UActionSchema(boardDimensions);
+		this.actionSchema = new ActionSchema(boardDimensions);
 		this.heat = heat;
 		this.chanceOnPlague = chanceOnPlague;
 	}
@@ -49,22 +49,13 @@ public class Computer {
 			if (r <= entityDistribution[0]) {
 				newEntity = spawnSinner();
 			} else if (r >= 100 - entityDistribution[2]) {
-				newEntity = new Imp(dn.getName(), randomizeGender(), computeRandomPosition());
+				newEntity = new Imp(dn.getName(), randomizeGender(), actionSchema.computeRandomPosition());
 			} else {
 				newEntity = spawnCradle();
 			}
 			livingEntities.add(newEntity);
 		}
 		return livingEntities;
-	}
-	
-	private int[] computeRandomPosition() {
-		// gets a random position depending on Board dimensions
-		
-		int[] newPosition = new int[2];
-		newPosition[0] = Randomizer.random(boardDimensions[0]);
-		newPosition[1] = Randomizer.random(boardDimensions[1]);
-		return newPosition;
 	}
 	
 	private String randomizeGender() {
@@ -79,11 +70,11 @@ public class Computer {
 	}
 	
 	private Entity spawnSinner() {
-		return new Sinner(randomizeGender(), computeRandomPosition());
+		return new Sinner(randomizeGender(), actionSchema.computeRandomPosition());
 	}
 	
 	private Entity spawnCradle() {
-		return new CradleOfFilth(randomizeGender(), computeRandomPosition());
+		return new CradleOfFilth(randomizeGender(), actionSchema.computeRandomPosition());
 	}
 	
 	public List<Entity> spawnPlagued() {
@@ -103,11 +94,11 @@ public class Computer {
 	public List<Entity> activateLiving(List<Entity> ePosList) {
 
 		List<Entity> newEntities = new ArrayList<>();
-//		System.out.println("positionList: "+ePosList);
+		//System.out.println("positionList: "+ePosList);
 		if (ePosList.size() == 1) { // single element on position
 			Entity soleEntity = ePosList.get(0);
-			newEntities.add(actionSchemaL.doAction(soleEntity));
-			
+			newEntities.addAll(actionSchema.doAction(soleEntity));
+			return newEntities;
 		} else {
 			
 			List<Entity> targets =  new ArrayList<>(); // clone entitiesOnPositionX for all possible targets
@@ -116,62 +107,81 @@ public class Computer {
 			}
 
 			entityLoop: for (int i=0; i<ePosList.size(); i++) {
-				LivingEntity e = (LivingEntity) ePosList.get(i);
+				Entity e = ePosList.get(i);
 				
 				targets.remove(e); // remove entity itself (first occurrence of same entity in case of sinner/cradle) from target list
-//				System.out.println("TargetList: "+targets);
-				if (targets.size()==0) { newEntities.add(actionSchemaL.doAction(e)); break; } // if no targets left
+				//System.out.println("TargetList: "+targets);
 				
-				else if (!e.isAlive()) { continue; } // if entity is dead, continue
+				if (!(e.isAlive())) { continue entityLoop; } // if entity is dead, continue
 				
-				else if (e.getType().equals("CradleOfFilth")) { newEntities.add(actionSchemaL.doAction(e)); } // cradles do not have targets
-				
+				else if (targets.size()==0) { newEntities.addAll(actionSchema.doAction(e)); break; } // if no targets left
+					
 				else { // there is a possible target; now randomize whether it will target or not
 					
-					if ((Randomizer.random(2 + Math.abs(heat/10))) == 0) {  // heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
-						newEntities.add(actionSchemaL.doAction(e));
-						continue entityLoop;						
+					if (!(e.getType().equals("unliving")) && ((Randomizer.random(2 + Math.abs(heat/10))) == 0)) {  // heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
+						newEntities.addAll(actionSchema.doAction(e));
+						//System.out.println("random Dont target: " + newEntities);
+						continue entityLoop;
 					} else { // do the target
 						
 						targetLoop: for (Entity target : targets) {
-														
-							List<Entity> actionResult = actionSchemaL.doAction(e, target);
+							
+							//if (targets.size()>1 && e.getType().equals("unliving") && target.getType().equals("unliving")) { continue; }
+							
+							List<Entity> actionResult = actionSchema.doAction(e, target);
+							//System.out.println("actionResult : "+actionResult);
 								
 							Entity eResult = actionResult.get(0); // get the first element of the result list
+							//System.out.println("eresult alive? "+eResult.isAlive());
 							if (actionResult.size()==1) { newEntities.add(eResult); break targetLoop; } // this occurs when an entity has failed to target, i.e. a single result is returned
 							
-							LivingEntity tarResult = (LivingEntity) actionResult.get(1);
-							LivingEntity targetInEPos = (LivingEntity) ePosList.get(ePosList.indexOf(target));
+							Entity tarResult = actionResult.get(1);
+							Entity targetInEPos = ePosList.get(ePosList.indexOf(target));
 							
 							if (tarResult.isAlive()) { // check if target is still alive, add it to newEntities
 								newEntities.addAll(actionResult);
-								targetInEPos.declareDead(); // tar cannot be targeted a second time
+								//System.out.println("target alive, added all: "+newEntities);
+								targetInEPos.declareDead(); // target cannot be looped over anymore
 							} else { // if not, add the killer to newEntities, but declare target dead
-								newEntities.add(eResult);
+								if (eResult.isAlive()) { newEntities.add(eResult); }
+								//System.out.println("target dead, added e: "+newEntities);
 								targetInEPos.declareDead();
 							}
 							
-							continue entityLoop; // if an action is successful, break out of loop and continue the entityLoop
+							break targetLoop; // if an action is successful, break out of loop and continue the entityLoop
 						}
 					}
 				}
 			}
 		}
-		
+		//System.out.println("newEntities" + newEntities);
+		List<Entity> finalEntities = new ArrayList<>();
 		for (int i=0; i<newEntities.size(); i++) { // final loop to remove entities that have been declared dead + increase age of all	
-			LivingEntity newE = (LivingEntity) newEntities.get(i);
-			if (!newE.isAlive()) { newEntities.remove(newE); }
-			newE.increaseAge();
+			Entity newE = newEntities.get(i);
+			if (((Entity) newE).isAlive()) {
+				finalEntities.add(newE);
+				//System.out.println("added " + newE.toString());
+				
+				// go back an iteration in order not to skip one (size of arraylist decreases if removed)
+			}
+			try {
+				((LivingEntity) newE).increaseAge();
+			} catch (ClassCastException cx) { continue; }
 		}
-		
-		return newEntities;
+		//System.out.println("final addings: " + finalEntities);
+		return finalEntities;
 	}
 	
 	public List<Entity> activateUnliving(List<Entity> newEntities) {
 		// activates unliving things
 		List<Entity> surviving = new ArrayList<>();
 		
-		surviving.addAll(actionSchemaU.demonicFury(newEntities, heat));
+		// Unleash DemonicFury
+		if (Randomizer.random(110-heat) == 0) { // P(demonicFury)=1/110-heat
+			surviving.addAll(DemonicFury.unleash(newEntities));
+		} else {
+			surviving.addAll(newEntities);
+		}
 		
 		return surviving;
 	}

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import entities.living.CradleOfFilth;
 import entities.living.Sinner;
 import entities.living.demons.Demon;
+import entities.unliving.HellFire;
 
 public class AngelOfDeath extends Demon {
 	// angelofdeath is very aggressive and can kill everything except for DemonCommanders, but dies when it has no cruelty left
@@ -38,6 +39,13 @@ public class AngelOfDeath extends Demon {
 		this.decreaseCruelty();
 		this.decreaseCruelty();
 		this.appendToLog("Killed InfernalDemon at position " + Arrays.toString(victim.getCurrentPosition()));
+	}
+	
+	public HellFire dropHellFire() {
+		// drop a Bomb-like unliving entity
+		HellFire h = new HellFire(getName(), getType());
+		appendToLog("Dropped HellFire.");
+		return h;	
 	}
 	
 	@Override

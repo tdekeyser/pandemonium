@@ -7,7 +7,6 @@ import entities.Entity;
 public abstract class LivingEntity extends Entity implements Moveable {
 	// superclass for every living entity
 	
-	private boolean isAlive = true;
 	private int age;
 	private final String gender;
 
@@ -15,15 +14,11 @@ public abstract class LivingEntity extends Entity implements Moveable {
 		this.gender = gender;
 		setCurrentPosition(currentPosition);
 	}
-
-	public boolean isAlive() {
-		// get isAlive
-		return isAlive;
-	}
 	
+	@Override
 	public void declareDead() {
 		// set isAlive to false
-		isAlive = false;
+		setAlive(false);
 		appendToLog("Died: " + toStringLong());
 	}
 	

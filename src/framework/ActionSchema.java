@@ -1,4 +1,4 @@
-package actionschemas;
+package framework;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,32 +11,34 @@ import entities.living.demons.AngelOfDeath;
 import entities.living.demons.DemonCommander;
 import entities.living.demons.Imp;
 import entities.living.demons.InfernalDemon;
-import framework.Randomizer;
+import entities.unliving.HellFire;
 
-public class LActionSchema {
-	/* Provides living entity random method activation
+public class ActionSchema {
+	/* Provides entity random method activation
 	 * Only 1 (overloaded) method is available outside this class: doAction(Entity e) and doAction(Entity e, Entity target)
+	 * Up till now, also the method computeRandomPosition() is available within the package (protected)
 	 */
 	
 	private int[] boardDimensions;
 	
-	public LActionSchema(int[] boardDimensions) {
+	public ActionSchema(int[] boardDimensions) {
 		this.boardDimensions = boardDimensions;
 	}
 	
-	public Entity doAction(Entity e) {
+	public List<Entity> doAction(Entity e) {
 		/* checks the type of entity and passes to a specific randomizer method for that entity type
 		 * Returns changed entity afterwards.
 		 */
-		Entity eResult = e;
+		List<Entity> eResult = new ArrayList<>();
 		
 		switch (e.getType()) {
-			case "Sinner": eResult = doSinnerAction((Sinner) e); break;
-			case "AngelOfDeath": eResult = doAngelAction((AngelOfDeath) e); break;
-			case "CradleOfFilth": eResult = doCradleAction((CradleOfFilth) e); break;
-			case "Imp": eResult = doImpAction((Imp) e); break;
-			case "InfernalDemon": eResult = doInfernalDemonAction((InfernalDemon) e); break;
-			case "DemonCommander": eResult = moveRandomly((LivingEntity) e); break;
+			case "Sinner": eResult.add(doSinnerAction((Sinner) e)); break;
+			case "AngelOfDeath": eResult.addAll(doAngelAction((AngelOfDeath) e)); break;
+			case "CradleOfFilth": eResult.add(doCradleAction((CradleOfFilth) e)); break;
+			case "Imp": eResult.add(doImpAction((Imp) e)); break;
+			case "InfernalDemon": eResult.add(doInfernalDemonAction((InfernalDemon) e)); break;
+			case "DemonCommander": eResult.add(moveRandomly((LivingEntity) e)); break;
+			case "unliving": eResult.add(e); break;
 		}
 		return eResult;
 	}
@@ -48,10 +50,16 @@ public class LActionSchema {
 		List<Entity> targetresult = new ArrayList<>(); // 0: e, 1: tar
 		
 		switch (e.getType()) {
+			case "CradleOfFilth":
+				switch (target.getType()) {
+					case "unliving": targetresult.addAll(doULAction(target, e)); return targetresult;
+					default: targetresult.add(doCradleAction((CradleOfFilth) e)); return targetresult;
+				}
 			case "Imp":
 				switch (target.getType()) {
 					case "Sinner": ((Imp) e).killSinner((Sinner) target); break;
 					case "Imp": ((Imp) e).cannibalize((Imp) target); break;
+					case "unliving": targetresult.addAll(doULAction(target, e)); return targetresult;
 					default: targetresult.add(doImpAction((Imp) e)); return targetresult;
 				}; break;
 			case "InfernalDemon":
@@ -63,15 +71,18 @@ public class LActionSchema {
 						} else {
 							((InfernalDemon) e).tortureSinner((Sinner) target);
 						}; break;
+					case "unliving": targetresult.addAll(doULAction(target, e)); return targetresult;
 					default: targetresult.add(doInfernalDemonAction((InfernalDemon) e)); return targetresult;
 					} break;
 			case "DemonCommander": 
 				switch (target.getType()) {
 					case "Sinner": ((DemonCommander) e).killSinner((Sinner) target); break;
+					case "unliving": targetresult.addAll(doULAction(target, e)); return targetresult;
 					default: targetresult.add(moveRandomly((LivingEntity) e)); return targetresult;
 				}; break;
 			case "Sinner":
 				switch (target.getType()) {
+				case "unliving": targetresult.addAll(doULAction(target, e)); return targetresult;
 				case "Sinner":
 					if ((((Sinner) e).getDivinity()>7) && (((Sinner) target).getDivinity()>7)) { // evolve into angel if both at least 7 divinity
 						targetresult.add(((Sinner) e).evolve((Sinner) target));
@@ -90,16 +101,58 @@ public class LActionSchema {
 					case "CradleOfFilth": ((AngelOfDeath) e).killCradle((CradleOfFilth) target); break;
 					case "Imp": ((AngelOfDeath) e).killImp((Imp) target); break;
 					case "InfernalDemon": ((AngelOfDeath) e).killInfernalDemon((InfernalDemon) target); break;
-					default: targetresult.add(doAngelAction((AngelOfDeath) e)); return targetresult;
+					case "unliving": targetresult.addAll(doULAction(target, e)); return targetresult;
+					default: targetresult.addAll(doAngelAction((AngelOfDeath) e)); return targetresult;
 				}; break;
-			default: targetresult.add(doAction(e)); return targetresult;
+			case "unliving": targetresult.addAll(doULAction(e, target)); return targetresult;
+			default: targetresult.addAll(doAction(e)); return targetresult;
 		}
 		
 		targetresult.add(0, e); // add subject to front
 		targetresult.add(1, target);
 //		System.out.println(targetresult);
-//		System.out.println(((LivingEntity) targetresult.get(1)).isAlive());
+//		System.out.println(targetresult.get(1).isAlive());
 		return targetresult;
+	}
+	
+	private List<Entity> doULAction(Entity e, Entity target) {
+		// method that brings together some unliving entity actions
+		List<Entity> result = new ArrayList<>();
+		
+		try {
+			switch (e.toString()) {
+				case "H":
+					((HellFire) e).explode((LivingEntity) target);
+					result.add(0, e);
+					result.add(1, target);
+					//System.out.println("e: "+e.toString()+ e.isAlive());
+					//System.out.println("target : "+ target.toString() + target.isAlive());
+					return result;
+			}
+		} catch (ClassCastException cx) {
+			// target is unliving, do nothing
+			result.add(0, e);
+		}
+		//System.out.println("result of LAction :" + result);
+		return result;
+	}
+	
+	private List<Entity> doAngelAction(AngelOfDeath e) {
+		// angel specific randomizer
+		List<Entity> result = new ArrayList<>();
+		if (e.getCruelty()<1) {
+			e.declareDead();
+		} else {
+			if (Randomizer.random(5)==0) {
+				HellFire h = ((AngelOfDeath) e).dropHellFire();
+				h.setCurrentPosition(computeRandomPosition());
+				result.add(h);
+			} else {
+				moveRandomly(e);
+			}
+		}
+		result.add(e);
+		return result;
 	}
 		
 	private Entity doSinnerAction(Sinner e) {
@@ -111,16 +164,6 @@ public class LActionSchema {
 		} else {
 			return moveRandomly((LivingEntity) e);
 		} 
-	}
-	
-	private Entity doAngelAction(AngelOfDeath e) {
-		// angel specific randomizer
-		if (e.getCruelty()<1) {
-			e.declareDead();
-			return e;
-		} else {
-			return moveRandomly((LivingEntity) e);
-		}
 	}
 	
 	private Entity doCradleAction(CradleOfFilth e) {
@@ -152,6 +195,15 @@ public class LActionSchema {
 		} else {
 			return moveRandomly((LivingEntity) e);
 		}
+	}
+	
+	protected int[] computeRandomPosition() {
+		// gets a random position depending on Board dimensions
+		
+		int[] newPosition = new int[2];
+		newPosition[0] = Randomizer.random(boardDimensions[0]);
+		newPosition[1] = Randomizer.random(boardDimensions[1]);
+		return newPosition;
 	}
 	
 	private LivingEntity moveRandomly(LivingEntity e) {
@@ -241,21 +293,29 @@ public class LActionSchema {
 		}
 	}
 	
-	public static void main(String[] args) {
-		int[] dim = {3,3};
-		int[] pos = {1,1};
-		Sinner s1 = new Sinner("male", pos);
-		Sinner s2 = new Sinner("male", pos);
-		s1.setDivinity(7);
-		s2.setDivinity(8);
-		
-		LActionSchema as = new LActionSchema(dim);
-		
-		System.out.println(s1.getType());
-		System.out.println(s2.getType());
-		List<Entity> p = as.doAction((Entity) s1, (Entity) s2);
-		System.out.println(((LivingEntity) p.get(0)).isAlive());
-		System.out.println(((LivingEntity) p.get(0)).toStringLong());
-		
-	}
+//	public static void main(String[] args) {
+//		int[] dim = {3,3};
+//		int[] pos = {1,1};
+//		
+//		ActionSchema a = new ActionSchema(dim);
+//		
+//		AngelOfDeath aod = new AngelOfDeath("ho", "male", pos);
+//		List<Entity> result = a.doAngelAction(aod);
+//		
+//		System.out.println(result);
+//		//Entity h = result.get(0);
+//		//Entity aod2 = result.get(1);
+////		System.out.println("Pos of h: " + Arrays.toString(h.getCurrentPosition()));
+////		System.out.println("Pos of aod: " + Arrays.toString(aod2.getCurrentPosition()));
+//		
+//		HellFire h1 = new HellFire("name", "type");
+//		h1.setCurrentPosition(pos);
+//		HellFire h2 = new HellFire("name", "type");
+//		h2.setCurrentPosition(pos);
+//		
+//		List<Entity> result2 = a.doAction(h1, h2);
+//		System.out.println("first alive?" + result2.get(0).isAlive());
+//		System.out.println("first alive?" + result2.get(1).isAlive());
+//		
+//	}
 }

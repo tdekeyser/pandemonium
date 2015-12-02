@@ -93,26 +93,27 @@ public class World {
 	
 	public void run() {
 		// runs the world according to the amount of states
-		for (int i=1; i<amountOfStates; i++) {
+		for (int i=1; i<=amountOfStates; i++) {
 			update(Integer.toString(i));
 		}
+		System.exit(1);
 	}
 	
 	public static void main(String[] args) {
 		// TEST World class
 		
 		int amountOfStates = 80;
-		int[] boardDimensions = {5, 5};
-		int[] amountOfEntities = {10, 0}; // (living,unliving)
-		int[] entityDistribution = {50, 0, 50}; // (S, CoF, I)
-		int heat = 20; // random(2+heat); heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
+		int[] boardDimensions = {4, 4};
+		int[] amountOfEntities = {12, 0}; // (living,unliving)
+		int[] entityDistribution = {60, 20, 20}; // (S, CoF, I)
+		int heat = 10; // random(2+heat); heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
 		int chanceOnPlague = 50; // P(spawn1Sinner)=1/f(x) and P(spawn1Cradle)=1/2f(x) if chanceOnPlague>=50, with f(100)=2; f(50)=4; f(0)=6
 		
 		try {
 			World w = new World(amountOfStates, amountOfEntities, entityDistribution, boardDimensions, heat, chanceOnPlague);
 			w.initialise();
 			
-			w.setTimeBetweenStates(10);
+			w.setTimeBetweenStates(0);
 			w.run();
 			
 			//Entity first = w.entityList.get(0);
