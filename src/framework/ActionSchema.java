@@ -33,7 +33,7 @@ public class ActionSchema {
 		
 		switch (e.getType()) {
 			case "Sinner": eResult.add(doSinnerAction((Sinner) e)); break;
-			case "AngelOfDeath": eResult.addAll(doAngelAction((AngelOfDeath) e)); break;
+			case "AngelOfDeath": eResult.addAll(doAngelOfDeathAction((AngelOfDeath) e)); break;
 			case "CradleOfFilth": eResult.add(doCradleAction((CradleOfFilth) e)); break;
 			case "Imp": eResult.add(doImpAction((Imp) e)); break;
 			case "InfernalDemon": eResult.add(doInfernalDemonAction((InfernalDemon) e)); break;
@@ -102,7 +102,7 @@ public class ActionSchema {
 					case "Imp": ((AngelOfDeath) e).killImp((Imp) target); break;
 					case "InfernalDemon": ((AngelOfDeath) e).killInfernalDemon((InfernalDemon) target); break;
 					case "unliving": targetresult.addAll(doULAction(target, e)); return targetresult;
-					default: targetresult.addAll(doAngelAction((AngelOfDeath) e)); return targetresult;
+					default: targetresult.addAll(doAngelOfDeathAction((AngelOfDeath) e)); return targetresult;
 				}; break;
 			case "unliving": targetresult.addAll(doULAction(e, target)); return targetresult;
 			default: targetresult.addAll(doAction(e)); return targetresult;
@@ -110,8 +110,6 @@ public class ActionSchema {
 		
 		targetresult.add(0, e); // add subject to front
 		targetresult.add(1, target);
-//		System.out.println(targetresult);
-//		System.out.println(targetresult.get(1).isAlive());
 		return targetresult;
 	}
 	
@@ -137,7 +135,7 @@ public class ActionSchema {
 		return result;
 	}
 	
-	private List<Entity> doAngelAction(AngelOfDeath e) {
+	private List<Entity> doAngelOfDeathAction(AngelOfDeath e) {
 		// angel specific randomizer
 		List<Entity> result = new ArrayList<>();
 		if (e.getCruelty()<1) {
@@ -293,29 +291,4 @@ public class ActionSchema {
 		}
 	}
 	
-//	public static void main(String[] args) {
-//		int[] dim = {3,3};
-//		int[] pos = {1,1};
-//		
-//		ActionSchema a = new ActionSchema(dim);
-//		
-//		AngelOfDeath aod = new AngelOfDeath("ho", "male", pos);
-//		List<Entity> result = a.doAngelAction(aod);
-//		
-//		System.out.println(result);
-//		//Entity h = result.get(0);
-//		//Entity aod2 = result.get(1);
-////		System.out.println("Pos of h: " + Arrays.toString(h.getCurrentPosition()));
-////		System.out.println("Pos of aod: " + Arrays.toString(aod2.getCurrentPosition()));
-//		
-//		HellFire h1 = new HellFire("name", "type");
-//		h1.setCurrentPosition(pos);
-//		HellFire h2 = new HellFire("name", "type");
-//		h2.setCurrentPosition(pos);
-//		
-//		List<Entity> result2 = a.doAction(h1, h2);
-//		System.out.println("first alive?" + result2.get(0).isAlive());
-//		System.out.println("first alive?" + result2.get(1).isAlive());
-//		
-//	}
 }

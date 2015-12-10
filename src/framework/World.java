@@ -11,7 +11,7 @@ public class World {
 	
 	private Log worldLog = new Log("WORLD LOG"); // simple log String
 	
-	private int[] amountOfEntities = new int[2]; 	// with [0] living and [1] unliving
+	private int amountOfEntities; 	// # living
 	private int[] entityDistribution;
 	private int amountOfStates;
 	private int timeBetweenStates = 1000; // in ms
@@ -23,7 +23,7 @@ public class World {
 	
 	public World(
 			int amountOfStates,
-			int[] amountOfEntities,
+			int amountOfEntities,
 			int[] entityDistribution,
 			int[] boardDimensions,
 			int heat,
@@ -31,10 +31,13 @@ public class World {
 		) throws IOException {
 		// attempts to create a World; throws IOException if there is an invalid input
 		
+		if (amountOfStates<0 || amountOfEntities<0 || entityDistribution[0]<0 || entityDistribution[1]<0 || entityDistribution[2]<0) throw new IOException("None of the input can be negative!");
+		if (boardDimensions[0]<2 || boardDimensions[1]<2) throw new IOException("Board dimensions cannot be smaller than 2!");
+		
 		this.amountOfStates = amountOfStates;
 		this.amountOfEntities = amountOfEntities;
 		this.entityDistribution = entityDistribution;
-		
+
 		this.computer = new Computer(boardDimensions, heat, chanceOnPlague);
 		this.board = new Board(boardDimensions);
 
@@ -43,7 +46,7 @@ public class World {
 	public void initialise() {
 		// initialises the full board to a first state
 		
-		entityList.addAll(computer.createLivingEntities(amountOfEntities[0], entityDistribution));
+		entityList.addAll(computer.createLivingEntities(amountOfEntities, entityDistribution));
 		
 		board.setBoardEntities(entityList);
 		board.initialiseBoard();	// initialises board
@@ -59,7 +62,7 @@ public class World {
 		
 		List<Entity> livingList = new ArrayList<>();
 		for (List<Entity> entitiesOnPosition : board.getBoardMap().values()) { // get new entities from Computer
-			livingList.addAll(computer.activateLiving(entitiesOnPosition));
+			livingList.addAll(computer.activateEntities(entitiesOnPosition));
 		}
 		
 		entityList.addAll(computer.activateUnliving(livingList)); // activate unliving entities and add surviving to entityList
@@ -74,11 +77,12 @@ public class World {
 		try { //thread to sleep for the specified number of milliseconds
 			Thread.sleep(timeBetweenStates);
 		} catch (InterruptedException ie) {
-		    System.out.println(ie);
+		    System.out.println("Interrupted.");
 		}	
 	}
 	
-	public void setTimeBetweenStates(int timeBetweenStates) {
+	public void setTimeBetweenStates(int timeBetweenStates) throws IOException {
+		if (timeBetweenStates<0) throw new IOException("Time between states should be greater than 0!");
 		this.timeBetweenStates = timeBetweenStates;
 	}
 	
@@ -96,17 +100,17 @@ public class World {
 		for (int i=1; i<=amountOfStates; i++) {
 			update(Integer.toString(i));
 		}
-		System.exit(1);
+		System.out.println("World finished.");
 	}
 	
 	public static void main(String[] args) {
 		// TEST World class
 		
 		int amountOfStates = 80;
-		int[] boardDimensions = {4, 4};
-		int[] amountOfEntities = {12, 0}; // (living,unliving)
+		int[] boardDimensions = {2, 2};
+		int amountOfEntities = 4; // (living,unliving)
 		int[] entityDistribution = {60, 20, 20}; // (S, CoF, I)
-		int heat = 10; // random(2+heat); heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
+		int heat = 50; // random(2+heat); heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
 		int chanceOnPlague = 50; // P(spawn1Sinner)=1/f(x) and P(spawn1Cradle)=1/2f(x) if chanceOnPlague>=50, with f(100)=2; f(50)=4; f(0)=6
 		
 		try {
@@ -116,8 +120,8 @@ public class World {
 			w.setTimeBetweenStates(0);
 			w.run();
 			
-			//Entity first = w.entityList.get(0);
-			//System.out.println(first.fetchLog());
+			Entity first = w.entityList.get(0);
+			System.out.println(first.fetchLog());
 	
 		} catch (IOException io) { io.printStackTrace(); }
 		

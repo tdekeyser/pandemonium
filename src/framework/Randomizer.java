@@ -19,7 +19,6 @@ public class Randomizer {
 		
 		System.out.println(Randomizer.random(5));
 		System.out.println(Randomizer.random(120));
-		Randomizer.random(0); 		// should return IOException
 	}
 
 }

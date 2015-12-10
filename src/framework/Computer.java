@@ -91,15 +91,15 @@ public class Computer {
 		return spawnedEntities;
 	}
 	
-	public List<Entity> activateLiving(List<Entity> ePosList) {
+	public List<Entity> activateEntities(List<Entity> ePosList) {
 
 		List<Entity> newEntities = new ArrayList<>();
-		//System.out.println("positionList: "+ePosList);
+		
 		if (ePosList.size() == 1) { // single element on position
 			Entity soleEntity = ePosList.get(0);
 			newEntities.addAll(actionSchema.doAction(soleEntity));
 			return newEntities;
-		} else {
+		} else { // there is more than 1 element on this position
 			
 			List<Entity> targets =  new ArrayList<>(); // clone entitiesOnPositionX for all possible targets
 			for (Entity entityOP : ePosList) {
@@ -110,7 +110,6 @@ public class Computer {
 				Entity e = ePosList.get(i);
 				
 				targets.remove(e); // remove entity itself (first occurrence of same entity in case of sinner/cradle) from target list
-				//System.out.println("TargetList: "+targets);
 				
 				if (!(e.isAlive())) { continue entityLoop; } // if entity is dead, continue
 				
@@ -120,7 +119,6 @@ public class Computer {
 					
 					if (!(e.getType().equals("unliving")) && ((Randomizer.random(2 + Math.abs(heat/10))) == 0)) {  // heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
 						newEntities.addAll(actionSchema.doAction(e));
-						//System.out.println("random Dont target: " + newEntities);
 						continue entityLoop;
 					} else { // do the target
 						
@@ -128,11 +126,9 @@ public class Computer {
 							
 							//if (targets.size()>1 && e.getType().equals("unliving") && target.getType().equals("unliving")) { continue; }
 							
-							List<Entity> actionResult = actionSchema.doAction(e, target);
-							//System.out.println("actionResult : "+actionResult);
-								
+							List<Entity> actionResult = actionSchema.doAction(e, target);								
 							Entity eResult = actionResult.get(0); // get the first element of the result list
-							//System.out.println("eresult alive? "+eResult.isAlive());
+							
 							if (actionResult.size()==1) { newEntities.add(eResult); break targetLoop; } // this occurs when an entity has failed to target, i.e. a single result is returned
 							
 							Entity tarResult = actionResult.get(1);
@@ -140,35 +136,29 @@ public class Computer {
 							
 							if (tarResult.isAlive()) { // check if target is still alive, add it to newEntities
 								newEntities.addAll(actionResult);
-								//System.out.println("target alive, added all: "+newEntities);
 								targetInEPos.declareDead(); // target cannot be looped over anymore
 							} else { // if not, add the killer to newEntities, but declare target dead
 								if (eResult.isAlive()) { newEntities.add(eResult); }
-								//System.out.println("target dead, added e: "+newEntities);
 								targetInEPos.declareDead();
 							}
-							
 							break targetLoop; // if an action is successful, break out of loop and continue the entityLoop
 						}
 					}
 				}
 			}
 		}
-		//System.out.println("newEntities" + newEntities);
+		
 		List<Entity> finalEntities = new ArrayList<>();
 		for (int i=0; i<newEntities.size(); i++) { // final loop to remove entities that have been declared dead + increase age of all	
 			Entity newE = newEntities.get(i);
 			if (((Entity) newE).isAlive()) {
 				finalEntities.add(newE);
-				//System.out.println("added " + newE.toString());
-				
-				// go back an iteration in order not to skip one (size of arraylist decreases if removed)
 			}
 			try {
 				((LivingEntity) newE).increaseAge();
 			} catch (ClassCastException cx) { continue; }
 		}
-		//System.out.println("final addings: " + finalEntities);
+		
 		return finalEntities;
 	}
 	
