@@ -44,7 +44,7 @@ public class InfernalDemon extends Demon {
 		evolved_obj.setAge(this.getAge());
 		evolved_obj.setCruelty(this.getCruelty());
 		if (this.hasPartner()) { evolved_obj.partner = this.partner; }
-		evolved_obj.copyAndAppendToLog(this, evolved_obj.toStringLong() + "Evolved from InfernalDemon.");
+		evolved_obj.copyAndAppendToLog(this, "Evolved to DemonCommander from InfernalDemon.");
 		return evolved_obj;
 	}
 

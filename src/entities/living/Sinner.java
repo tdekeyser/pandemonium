@@ -3,7 +3,7 @@ package entities.living;
 import java.util.Arrays;
 
 import entities.living.demons.AngelOfDeath;
-import framework.NameGenerator;
+import randomizers.NameGenerator;
 
 public class Sinner extends LivingEntity {
 
@@ -12,7 +12,7 @@ public class Sinner extends LivingEntity {
 	public Sinner(String gender, int[] currentPosition) {
 		super(gender, currentPosition);
 		this.setType("Sinner");
-		this.appendToLog("Sinner, "+this.getGender() + System.lineSeparator() + "======");
+		this.appendToLog("Sinner, "+ this.getGender() + System.lineSeparator() + "======");
 	}
 	
 	@Override
@@ -59,7 +59,7 @@ public class Sinner extends LivingEntity {
 		NameGenerator an = new NameGenerator("angelic");
 		AngelOfDeath aod = new AngelOfDeath(an.getName(), this.getGender(), this.getCurrentPosition());
 		aod.setAge(this.getAge());
-		aod.copyAndAppendToLog(this, aod.toStringLong() + "Evolved from Sinners");
+		aod.copyAndAppendToLog(this, "Evolved to AngelOfDeath from Sinners");
 		this.declareDead();		
 		return aod;	
 	}

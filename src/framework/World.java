@@ -106,12 +106,12 @@ public class World {
 	public static void main(String[] args) {
 		// TEST World class
 		
-		int amountOfStates = 80;
-		int[] boardDimensions = {2, 2};
+		int amountOfStates = 120;
+		int[] boardDimensions = {3, 3};
 		int amountOfEntities = 4; // (living,unliving)
-		int[] entityDistribution = {60, 20, 20}; // (S, CoF, I)
-		int heat = 50; // random(2+heat); heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
-		int chanceOnPlague = 50; // P(spawn1Sinner)=1/f(x) and P(spawn1Cradle)=1/2f(x) if chanceOnPlague>=50, with f(100)=2; f(50)=4; f(0)=6
+		int[] entityDistribution = {0, 0, 100}; // (S, CoF, I)
+		int heat = 100; // random(2+heat); heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
+		int chanceOnPlague = 0; // P(spawn1Sinner)=1/f(x) and P(spawn1Cradle)=1/2f(x) if chanceOnPlague>=50, with f(100)=2; f(50)=4; f(0)=6
 		
 		try {
 			World w = new World(amountOfStates, amountOfEntities, entityDistribution, boardDimensions, heat, chanceOnPlague);
@@ -122,6 +122,7 @@ public class World {
 			
 			Entity first = w.entityList.get(0);
 			System.out.println(first.fetchLog());
+			System.out.println(first.toStringLong());
 	
 		} catch (IOException io) { io.printStackTrace(); }
 		

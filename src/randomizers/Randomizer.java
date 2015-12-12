@@ -1,4 +1,4 @@
-package framework;
+package randomizers;
 
 public class Randomizer {
 	/* Randomizer returns random integers using the module Math.random().

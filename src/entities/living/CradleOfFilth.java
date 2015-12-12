@@ -3,7 +3,7 @@ package entities.living;
 import java.util.Arrays;
 
 import entities.living.demons.Imp;
-import framework.NameGenerator;
+import randomizers.NameGenerator;
 
 public class CradleOfFilth extends LivingEntity {
 	/* class for lowest hierarchy

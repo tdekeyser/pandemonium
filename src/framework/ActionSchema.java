@@ -7,11 +7,14 @@ import entities.Entity;
 import entities.living.CradleOfFilth;
 import entities.living.LivingEntity;
 import entities.living.Sinner;
+import entities.living.demons.Demon;
 import entities.living.demons.AngelOfDeath;
 import entities.living.demons.DemonCommander;
 import entities.living.demons.Imp;
 import entities.living.demons.InfernalDemon;
 import entities.unliving.HellFire;
+import randomizers.EntityGenerator;
+import randomizers.Randomizer;
 
 public class ActionSchema {
 	/* Provides entity random method activation
@@ -20,9 +23,11 @@ public class ActionSchema {
 	 */
 	
 	private int[] boardDimensions;
+	private EntityGenerator entityGen;
 	
 	public ActionSchema(int[] boardDimensions) {
 		this.boardDimensions = boardDimensions;
+		this.entityGen = new EntityGenerator(boardDimensions);
 	}
 	
 	public List<Entity> doAction(Entity e) {
@@ -31,13 +36,19 @@ public class ActionSchema {
 		 */
 		List<Entity> eResult = new ArrayList<>();
 		
+		if ((e.getType()!="unliving") && (((LivingEntity) e).getAge()>90)) { // elderly entities die from old age
+			e.declareDead();
+			eResult.add(e);
+			return eResult;
+		}
+		
 		switch (e.getType()) {
 			case "Sinner": eResult.add(doSinnerAction((Sinner) e)); break;
 			case "AngelOfDeath": eResult.addAll(doAngelOfDeathAction((AngelOfDeath) e)); break;
 			case "CradleOfFilth": eResult.add(doCradleAction((CradleOfFilth) e)); break;
 			case "Imp": eResult.add(doImpAction((Imp) e)); break;
 			case "InfernalDemon": eResult.add(doInfernalDemonAction((InfernalDemon) e)); break;
-			case "DemonCommander": eResult.add(moveRandomly((LivingEntity) e)); break;
+			case "DemonCommander": eResult.addAll(doDemonCommanderAction((DemonCommander) e)); break;
 			case "unliving": eResult.add(e); break;
 		}
 		return eResult;
@@ -76,9 +87,15 @@ public class ActionSchema {
 					} break;
 			case "DemonCommander": 
 				switch (target.getType()) {
-					case "Sinner": ((DemonCommander) e).killSinner((Sinner) target); break;
+					case "AngelOfDeath": ((DemonCommander) e).killAngelOfDeath((AngelOfDeath) target); break;
+					case "Sinner": 
+						if (Randomizer.random(2)==0) {
+							((DemonCommander) e).killSinner((Sinner) target);
+						} else {
+							((DemonCommander) e).demonizeSinner((Sinner) target);
+						}; break;
 					case "unliving": targetresult.addAll(doULAction(target, e)); return targetresult;
-					default: targetresult.add(moveRandomly((LivingEntity) e)); return targetresult;
+					default: targetresult.add(entityGen.moveRandomly((LivingEntity) e)); return targetresult;
 				}; break;
 			case "Sinner":
 				switch (target.getType()) {
@@ -99,8 +116,9 @@ public class ActionSchema {
 				switch (target.getType()) {
 					case "Sinner": ((AngelOfDeath) e).killSinner((Sinner) target); break;
 					case "CradleOfFilth": ((AngelOfDeath) e).killCradle((CradleOfFilth) target); break;
-					case "Imp": ((AngelOfDeath) e).killImp((Imp) target); break;
-					case "InfernalDemon": ((AngelOfDeath) e).killInfernalDemon((InfernalDemon) target); break;
+					case "Imp": ((AngelOfDeath) e).killDemon((Demon) target); break;
+					case "InfernalDemon": ((AngelOfDeath) e).killDemon((Demon) target); break;
+					case "DemonCommander": ((AngelOfDeath) e).killDemon((Demon) target); break;
 					case "unliving": targetresult.addAll(doULAction(target, e)); return targetresult;
 					default: targetresult.addAll(doAngelOfDeathAction((AngelOfDeath) e)); return targetresult;
 				}; break;
@@ -115,23 +133,21 @@ public class ActionSchema {
 	
 	private List<Entity> doULAction(Entity e, Entity target) {
 		// method that brings together some unliving entity actions
-		List<Entity> result = new ArrayList<>();
 		
+		List<Entity> result = new ArrayList<>();
 		try {
 			switch (e.toString()) {
 				case "H":
 					((HellFire) e).explode((LivingEntity) target);
 					result.add(0, e);
 					result.add(1, target);
-					//System.out.println("e: "+e.toString()+ e.isAlive());
-					//System.out.println("target : "+ target.toString() + target.isAlive());
 					return result;
 			}
 		} catch (ClassCastException cx) {
 			// target is unliving, do nothing
 			result.add(0, e);
 		}
-		//System.out.println("result of LAction :" + result);
+		
 		return result;
 	}
 	
@@ -142,11 +158,10 @@ public class ActionSchema {
 			e.declareDead();
 		} else {
 			if (Randomizer.random(5)==0) {
-				HellFire h = ((AngelOfDeath) e).dropHellFire();
-				h.setCurrentPosition(computeRandomPosition());
+				HellFire h = ((AngelOfDeath) e).dropHellFire(boardDimensions);
 				result.add(h);
 			} else {
-				moveRandomly(e);
+				entityGen.moveRandomly(e);
 			}
 		}
 		result.add(e);
@@ -160,7 +175,7 @@ public class ActionSchema {
 			e.pray();
 			return e;
 		} else {
-			return moveRandomly((LivingEntity) e);
+			return entityGen.moveRandomly((LivingEntity) e);
 		} 
 	}
 	
@@ -170,7 +185,7 @@ public class ActionSchema {
 			Imp ec = e.evolve(); // create imp object and delete cof object
 			return ec;
 		} else {
-			return moveRandomly((LivingEntity) e);
+			return entityGen.moveRandomly((LivingEntity) e);
 		}
 	}
 	
@@ -180,7 +195,7 @@ public class ActionSchema {
 			InfernalDemon ei = e.evolve(); // create infernaldemon object and delete imp object
 			return ei;
 		} else {
-			return moveRandomly((LivingEntity) e);
+			return entityGen.moveRandomly((LivingEntity) e);
 		}
 	}
 	
@@ -191,104 +206,23 @@ public class ActionSchema {
 			DemonCommander einf = e.evolve();
 			return einf;
 		} else {
-			return moveRandomly((LivingEntity) e);
+			return entityGen.moveRandomly((LivingEntity) e);
 		}
 	}
 	
-	protected int[] computeRandomPosition() {
-		// gets a random position depending on Board dimensions
+	private List<Entity> doDemonCommanderAction(DemonCommander e) {
+		// demoncommander specific action randomizer
 		
-		int[] newPosition = new int[2];
-		newPosition[0] = Randomizer.random(boardDimensions[0]);
-		newPosition[1] = Randomizer.random(boardDimensions[1]);
-		return newPosition;
-	}
-	
-	private LivingEntity moveRandomly(LivingEntity e) {
-		// randomly move the moveable entity
-		int onePos = e.getCurrentPosition()[0];
-		int twoPos = e.getCurrentPosition()[1];
-		int oneDimLimit = boardDimensions[0]-1;
-		int twoDimLimit = boardDimensions[1]-1;
+		List<Entity> result = new ArrayList<>();
 		
-		if ((onePos == 0) && (twoPos == 0)) {
-			// entity is in top left corner (0,0)
-			int r = Randomizer.random(2);
-			switch (r) {
-				case 0: e.moveDown(); break;
-				case 1: e.moveRight(); break;
-			}
-			return e;
-		} else if ((onePos == 0) && (twoPos == twoDimLimit)) {
-			// entity is in top right corner (0, B)
-			int r = Randomizer.random(2);
-			switch (r) {
-				case 0: e.moveDown(); break;
-				case 1: e.moveLeft(); break;
-			}
-			return e;
-		} else if ((onePos == oneDimLimit) && (twoPos == 0)) {
-			// entity is in bottom left corner (B, 0)
-			int r = Randomizer.random(2);
-			switch (r) {
-				case 0: e.moveUp(); break;
-				case 1: e.moveRight(); break;
-			}
-			return e;
-		} else if ((onePos == oneDimLimit) && (twoPos == twoDimLimit)) {
-			// entity is in bottom right corner (B, B)
-			int r = Randomizer.random(2);
-			switch (r) {
-				case 0: e.moveLeft(); break;
-				case 1: e.moveUp(); break;
-			}
-			return e;
-		} else if (onePos == 0) {
-			// entity is at (0, 0<x<B)
-			int r = Randomizer.random(3);
-			switch (r) {
-				case 0: e.moveLeft(); break;
-				case 1: e.moveRight(); break;
-				case 2: e.moveDown(); break;
-			}
-			return e;
-		} else if (onePos == oneDimLimit) {
-			// entity is at (B, 0<x<B)
-			int r = Randomizer.random(3);
-			switch (r) {
-				case 0: e.moveLeft(); break;
-				case 1: e.moveUp(); break;
-				case 2: e.moveRight(); break;
-			}
-			return e;
-		} else if (twoPos == 0) {
-			// entity is on (0<x<B, 0)
-			int r = Randomizer.random(3);
-			switch (r) {
-				case 0: e.moveRight(); break;
-				case 1: e.moveUp(); break;
-				case 2: e.moveDown(); break;
-			}
-			return e;
-		} else if (twoPos == twoDimLimit) {
-			// entity is on (0<x<B, B)
-			int r = Randomizer.random(3);
-			switch (r) {
-				case 0: e.moveLeft(); break;
-				case 1: e.moveUp(); break;
-				case 2: e.moveDown(); break;
-			}
-			return e;
+		if (Randomizer.random(3)==0) {
+			Imp summonedImp = e.summonImp(boardDimensions);
+			result.add(summonedImp);
 		} else {
-			int r = Randomizer.random(4);
-			switch (r) {
-				case 0: e.moveLeft(); break;
-				case 1: e.moveUp(); break;
-				case 2: e.moveDown(); break;
-				case 3: e.moveRight(); break;
-			}
-			return e;
+			entityGen.moveRandomly(e);
 		}
+		result.add(e);
+		return result;
 	}
 	
 }

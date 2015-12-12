@@ -5,10 +5,10 @@ import java.util.List;
 
 import entities.Entity;
 import entities.living.LivingEntity;
-import entities.living.Sinner;
-import entities.living.CradleOfFilth;
-import entities.living.demons.Imp;
 import entities.unliving.DemonicFury;
+import entities.unliving.DivineIntervention;
+import randomizers.EntityGenerator;
+import randomizers.Randomizer;
 
 public class Computer {
 	/* class that brings together methods to compute a new state based on (user) input
@@ -28,9 +28,11 @@ public class Computer {
 	private int chanceOnPlague;
 	
 	private ActionSchema actionSchema; // contains method doAction() that randomizes a LivingEntity action
+	private EntityGenerator entityGen; // contains methods to create random entities
 	
 	public Computer(int[] boardDimensions, int heat, int chanceOnPlague) {
 		this.actionSchema = new ActionSchema(boardDimensions);
+		this.entityGen = new EntityGenerator(boardDimensions);
 		this.heat = heat;
 		this.chanceOnPlague = chanceOnPlague;
 	}
@@ -39,7 +41,6 @@ public class Computer {
 		// initial state of living entities; choose between S, CoF, and I based on entityDistribution
 		
 		List<Entity> livingEntities = new ArrayList<>(); // output
-		NameGenerator dn = new NameGenerator("demonic");
 		
 		for (int i=0; i<amountOfLiving; i++) {
 			Entity newEntity;
@@ -47,34 +48,15 @@ public class Computer {
 			// randomize object type acc to distribution, e.g. 40 (S), 30 (CoF), 30 (I)
 			int r = Randomizer.random(100);
 			if (r <= entityDistribution[0]) {
-				newEntity = spawnSinner();
+				newEntity = entityGen.spawnSinner();
 			} else if (r >= 100 - entityDistribution[2]) {
-				newEntity = new Imp(dn.getName(), randomizeGender(), actionSchema.computeRandomPosition());
+				newEntity = entityGen.spawnImp();
 			} else {
-				newEntity = spawnCradle();
+				newEntity = entityGen.spawnCradle();
 			}
 			livingEntities.add(newEntity);
 		}
 		return livingEntities;
-	}
-	
-	private String randomizeGender() {
-		// randomize gender
-		String gender = "Unknown";
-		int g = Randomizer.random(2);
-		switch (g) {
-			case 0:	gender = "male"; break;
-			case 1: gender = "female"; break;
-		}
-		return gender;
-	}
-	
-	private Entity spawnSinner() {
-		return new Sinner(randomizeGender(), actionSchema.computeRandomPosition());
-	}
-	
-	private Entity spawnCradle() {
-		return new CradleOfFilth(randomizeGender(), actionSchema.computeRandomPosition());
 	}
 	
 	public List<Entity> spawnPlagued() {
@@ -83,10 +65,10 @@ public class Computer {
 		int y = (-1/25)*chanceOnPlague + 6; // P(spawn1Sinner)=1/f(x) and P(spawn1Cradle)=1/2f(x) if chanceOnPlague>=50, with f(100)=2; f(50)=4; f(0)=6
 		
 		if (chanceOnPlague > 0) {
-				if (Randomizer.random(Math.abs(y))==0) { spawnedEntities.add(spawnSinner()); }
+				if (Randomizer.random(Math.abs(y))==0) { spawnedEntities.add(entityGen.spawnSinner()); }
 		}
 		if (chanceOnPlague >= 50) {
-				if (Randomizer.random(Math.abs(y*2))==0) { spawnedEntities.add(spawnCradle()); }
+				if (Randomizer.random(Math.abs(y*2))==0) { spawnedEntities.add(entityGen.spawnCradle()); }
 		}
 		return spawnedEntities;
 	}
@@ -98,7 +80,7 @@ public class Computer {
 		if (ePosList.size() == 1) { // single element on position
 			Entity soleEntity = ePosList.get(0);
 			newEntities.addAll(actionSchema.doAction(soleEntity));
-			return newEntities;
+			
 		} else { // there is more than 1 element on this position
 			
 			List<Entity> targets =  new ArrayList<>(); // clone entitiesOnPositionX for all possible targets
@@ -123,8 +105,6 @@ public class Computer {
 					} else { // do the target
 						
 						targetLoop: for (Entity target : targets) {
-							
-							//if (targets.size()>1 && e.getType().equals("unliving") && target.getType().equals("unliving")) { continue; }
 							
 							List<Entity> actionResult = actionSchema.doAction(e, target);								
 							Entity eResult = actionResult.get(0); // get the first element of the result list
@@ -171,6 +151,11 @@ public class Computer {
 			surviving.addAll(DemonicFury.unleash(newEntities));
 		} else {
 			surviving.addAll(newEntities);
+		}
+		
+		// Divine Intervention
+		if (Randomizer.random(150-heat) == 0) {
+			surviving.addAll(DivineIntervention.intervene(entityGen, 3));
 		}
 		
 		return surviving;

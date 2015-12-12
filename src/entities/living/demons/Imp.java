@@ -20,7 +20,7 @@ public class Imp extends Demon {
 		super(name, gender, currentPosition);
 		this.setAge(4);
 		this.setType("Imp");
-		this.appendToLog(this.getName()+", Imp, " + this.getGender() + System.lineSeparator() + "======");
+		this.appendToLog(this.getName() + ", " + this.getGender() + System.lineSeparator() + "======");
 	}
 	
 	@Override
@@ -43,7 +43,7 @@ public class Imp extends Demon {
 		evolved_obj.setAge(this.getAge());
 		evolved_obj.setCruelty(this.getCruelty());
 		if (this.hasPartner()) { evolved_obj.partner = this.partner; }
-		evolved_obj.copyAndAppendToLog(this, evolved_obj.toStringLong() + "Evolved from Imp.");
+		evolved_obj.copyAndAppendToLog(this, "Evolved to InfernalDemon from Imp.");
 		return evolved_obj;
 	}
 	

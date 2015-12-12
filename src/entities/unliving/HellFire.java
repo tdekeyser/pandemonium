@@ -2,17 +2,16 @@ package entities.unliving;
 
 import java.util.Arrays;
 
-import entities.Entity;
 import entities.Printable;
 import entities.living.LivingEntity;
-import entities.living.demons.Demon;
+
 
 public class HellFire extends UnlivingEntity implements Printable {
 	// class for Bomb-like entity (entities that step on HellFire will die)
 	private String placedBy;
 	
 	public HellFire(String placername, String placertype) {
-		placedBy = placername + ", " + placertype + " at " + Arrays.toString(getCurrentPosition());
+		placedBy = placername + ", " + placertype;
 	}
 	
 	public void explode(LivingEntity victim) {
@@ -28,7 +27,7 @@ public class HellFire extends UnlivingEntity implements Printable {
 	
 	public String toStringLong() {
 		StringBuilder str = new StringBuilder("HellFire"+System.lineSeparator());
-		str.append("Placed by " + placedBy + System.lineSeparator());
+		str.append("Placed by " + placedBy + " at " + Arrays.toString(getCurrentPosition()) + System.lineSeparator());
 		return str.toString();
 	}
 	

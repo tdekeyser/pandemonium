@@ -6,6 +6,7 @@ import entities.living.CradleOfFilth;
 import entities.living.Sinner;
 import entities.living.demons.Demon;
 import entities.unliving.HellFire;
+import randomizers.EntityGenerator;
 
 public class AngelOfDeath extends Demon {
 	// angelofdeath is very aggressive and can kill everything except for DemonCommanders, but dies when it has no cruelty left
@@ -24,26 +25,20 @@ public class AngelOfDeath extends Demon {
 	public void killCradle(CradleOfFilth victim) {
 		victim.declareDead();
 		this.decreaseCruelty();
-		this.decreaseCruelty();
 		this.appendToLog("Killed Cradle at position " + Arrays.toString(victim.getCurrentPosition()));
 	}
 	
-	public void killImp(Imp victim) {
+	public void killDemon(Demon victim) {
 		victim.declareDead();
 		this.decreaseCruelty();
-		this.appendToLog("Killed Imp at position " + Arrays.toString(victim.getCurrentPosition()));
+		this.appendToLog("Killed " + victim.getType() + " at position " + Arrays.toString(victim.getCurrentPosition()));
 	}
 	
-	public void killInfernalDemon(InfernalDemon victim) {
-		victim.declareDead();
-		this.decreaseCruelty();
-		this.decreaseCruelty();
-		this.appendToLog("Killed InfernalDemon at position " + Arrays.toString(victim.getCurrentPosition()));
-	}
-	
-	public HellFire dropHellFire() {
+	public HellFire dropHellFire(int[] boardDimensions) {
 		// drop a Bomb-like unliving entity
-		HellFire h = new HellFire(getName(), getType());
+		EntityGenerator eg = new EntityGenerator(boardDimensions);
+		HellFire h = (HellFire) eg.createHellFire(getName(), getType());
+		this.decreaseCruelty();
 		appendToLog("Dropped HellFire.");
 		return h;	
 	}
