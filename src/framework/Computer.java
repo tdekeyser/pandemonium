@@ -74,6 +74,12 @@ public class Computer {
 	}
 	
 	public List<Entity> activateEntities(List<Entity> ePosList) {
+		/*
+		 * Method that gets as input entities at a specific position,
+		 * It first evaluates whether there are more than one present, if there is, there is a chance that they target one another.
+		 * Then, in case of an existing target, it creates a list of possible targets, loops over the targets (entityLoop and targetLoop) and adds the result to a result list.
+		 * Finally, in lifeLoop it loops over the result list and removes any entities that have been declared dead.
+		 */
 
 		List<Entity> newEntities = new ArrayList<>();
 		
@@ -129,14 +135,14 @@ public class Computer {
 		}
 		
 		List<Entity> finalEntities = new ArrayList<>();
-		for (int i=0; i<newEntities.size(); i++) { // final loop to remove entities that have been declared dead + increase age of all	
+		lifeLoop: for (int i=0; i<newEntities.size(); i++) { // final loop to remove entities that have been declared dead + increase age of all	
 			Entity newE = newEntities.get(i);
 			if (((Entity) newE).isAlive()) {
 				finalEntities.add(newE);
 			}
 			try {
 				((LivingEntity) newE).increaseAge();
-			} catch (ClassCastException cx) { continue; }
+			} catch (ClassCastException cx) { continue lifeLoop; }
 		}
 		
 		return finalEntities;
