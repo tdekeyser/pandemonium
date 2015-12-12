@@ -110,13 +110,14 @@ public class Computer {
 						continue entityLoop;
 					} else { // do the target
 						
+						boolean targetSuccessful = false;
 						targetLoop: for (Entity target : targets) {
 							
-							List<Entity> actionResult = actionSchema.doAction(e, target);								
-							Entity eResult = actionResult.get(0); // get the first element of the result list
+							List<Entity> actionResult = actionSchema.doAction(e, target);		
 							
-							if (actionResult.size()==1) { newEntities.add(eResult); break targetLoop; } // this occurs when an entity has failed to target, i.e. a single result is returned
+							if (actionResult.size()==1) { continue targetLoop; } // this occurs when an entity has failed to target, i.e. a single result is returned
 							
+							Entity eResult = actionResult.get(0);
 							Entity tarResult = actionResult.get(1);
 							Entity targetInEPos = ePosList.get(ePosList.indexOf(target));
 							
@@ -127,8 +128,14 @@ public class Computer {
 								if (eResult.isAlive()) { newEntities.add(eResult); }
 								targetInEPos.declareDead();
 							}
+							targetSuccessful = true;
 							break targetLoop; // if an action is successful, break out of loop and continue the entityLoop
 						}
+						
+						if (!targetSuccessful) { // none of the targets have been successful
+							newEntities.addAll(actionSchema.doAction(e));
+						}
+						
 					}
 				}
 			}

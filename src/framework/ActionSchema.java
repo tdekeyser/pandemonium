@@ -64,14 +64,14 @@ public class ActionSchema {
 			case "CradleOfFilth":
 				switch (target.getType()) {
 					case "unliving": targetresult.addAll(doULAction(target, e)); return targetresult;
-					default: targetresult.add(doCradleAction((CradleOfFilth) e)); return targetresult;
+					default: targetresult.add(e); return targetresult;
 				}
 			case "Imp":
 				switch (target.getType()) {
 					case "Sinner": ((Imp) e).killSinner((Sinner) target); break;
 					case "Imp": ((Imp) e).cannibalize((Imp) target); break;
 					case "unliving": targetresult.addAll(doULAction(target, e)); return targetresult;
-					default: targetresult.add(doImpAction((Imp) e)); return targetresult;
+					default: targetresult.add(e); return targetresult;
 				}; break;
 			case "InfernalDemon":
 				switch (target.getType()) {
@@ -83,7 +83,7 @@ public class ActionSchema {
 							((InfernalDemon) e).tortureSinner((Sinner) target);
 						}; break;
 					case "unliving": targetresult.addAll(doULAction(target, e)); return targetresult;
-					default: targetresult.add(doInfernalDemonAction((InfernalDemon) e)); return targetresult;
+					default: targetresult.add(e); return targetresult;
 					} break;
 			case "DemonCommander": 
 				switch (target.getType()) {
@@ -95,7 +95,7 @@ public class ActionSchema {
 							((DemonCommander) e).demonizeSinner((Sinner) target);
 						}; break;
 					case "unliving": targetresult.addAll(doULAction(target, e)); return targetresult;
-					default: targetresult.add(entityGen.moveRandomly((LivingEntity) e)); return targetresult;
+					default: targetresult.add(e); return targetresult;
 				}; break;
 			case "Sinner":
 				switch (target.getType()) {
@@ -107,10 +107,9 @@ public class ActionSchema {
 						targetresult.add(target);
 						return targetresult;
 					} else {
-						targetresult.add(0, doSinnerAction((Sinner) e)); // else simply do sinneraction
-						return targetresult;
+						targetresult.add(e); return targetresult;
 					}
-				default: targetresult.add(doSinnerAction((Sinner) e)); return targetresult;
+				default: targetresult.add(e); return targetresult;
 				}
 			case "AngelOfDeath":
 				switch (target.getType()) {
@@ -123,7 +122,6 @@ public class ActionSchema {
 					default: targetresult.addAll(doAngelOfDeathAction((AngelOfDeath) e)); return targetresult;
 				}; break;
 			case "unliving": targetresult.addAll(doULAction(e, target)); return targetresult;
-			default: targetresult.addAll(doAction(e)); return targetresult;
 		}
 		
 		targetresult.add(0, e); // add subject to front

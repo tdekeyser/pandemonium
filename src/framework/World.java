@@ -111,7 +111,7 @@ public class World {
 		// TEST World class
 		
 		int amountOfStates = 120;
-		int[] boardDimensions = {3, 3};
+		int[] boardDimensions = {2, 2};
 		int amountOfEntities = 4; // (living,unliving)
 		int[] entityDistribution = {0, 0, 100}; // (S, CoF, I)
 		int heat = 100; // random(2+heat); heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
