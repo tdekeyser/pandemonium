@@ -17,9 +17,9 @@ import randomizers.EntityGenerator;
 import randomizers.Randomizer;
 
 public class ActionSchema {
-	/* Provides entity random method activation
+	/* 
+	 * Provides entity random method activation
 	 * Only 1 (overloaded) method is available outside this class: doAction(Entity e) and doAction(Entity e, Entity target)
-	 * Up till now, also the method computeRandomPosition() is available within the package (protected)
 	 */
 	
 	private int[] boardDimensions;
