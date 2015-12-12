@@ -28,7 +28,7 @@ public class DemonCommander extends Demon {
 	public Imp demonizeSinner(Sinner victim) {
 		victim.declareDead();
 		this.appendToLog("Demonized Sinner at position " + Arrays.toString(this.getCurrentPosition()));
-		return summonImp(this.getCurrentPosition());
+		return summonImp(this.getCurrentPosition()); // TODO : does not work as it is intended... (see summonImp()
 	}
 	
 	public Imp summonImp(int[] boardDimensions) {

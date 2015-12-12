@@ -191,7 +191,7 @@ public class ActionSchema {
 	
 	private Entity doImpAction(Imp e) {
 		// imp specific action randomizer
-		if ((e.getCruelty() == 6) || (e.getAge() == 20)) {
+		if ((e.getCruelty() == 6) || (e.getAge() >= 20)) {
 			InfernalDemon ei = e.evolve(); // create infernaldemon object and delete imp object
 			return ei;
 		} else {
@@ -202,7 +202,7 @@ public class ActionSchema {
 	private Entity doInfernalDemonAction(InfernalDemon e) {
 		// infernaldemon specific action randomizer
 		
-		if ((e.getCruelty() == 18) || (e.getAge() == 50)) {
+		if ((e.getCruelty() == 18) || (e.getAge() >= 50)) {
 			DemonCommander einf = e.evolve();
 			return einf;
 		} else {

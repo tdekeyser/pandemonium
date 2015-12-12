@@ -7,7 +7,7 @@ import framework.Log;
 public abstract class Entity implements Printable {
 	// abstract superclass for all entities; defines a currentPosition
 
-	private boolean isAlive = true;
+	private boolean isAlive = true; // means as much as "has to appear in next state"
 	private String type;
 	private int[] currentPosition = new int[2]; // current position on the board
 	private Log log = new Log();
