@@ -8,6 +8,10 @@ import java.lang.InterruptedException;
 import entities.Entity;
 
 public class World {
+	/*
+	 * Main class that deals with the proceedings of the world simulator.
+	 * It keeps track of the inputs, creates new states computed by Computer object, and visualises these states by Board object.
+	 */
 	
 	private Log worldLog = new Log("WORLD LOG"); // simple log String
 	
