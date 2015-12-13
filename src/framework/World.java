@@ -2,6 +2,7 @@ package framework;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.lang.InterruptedException;
 
@@ -19,6 +20,7 @@ public class World {
 	private int[] entityDistribution;
 	private int amountOfStates;
 	private int timeBetweenStates = 1000; // in ms
+	private boolean printOnScreen = false;
 	
 	private Computer computer;
 	private Board board;
@@ -37,6 +39,9 @@ public class World {
 		
 		if (amountOfStates<0 || amountOfEntities<0 || entityDistribution[0]<0 || entityDistribution[1]<0 || entityDistribution[2]<0) throw new IOException("None of the input can be negative!");
 		if (boardDimensions[0]<2 || boardDimensions[1]<2) throw new IOException("Board dimensions cannot be smaller than 2!");
+		if (boardDimensions[0]>50 || boardDimensions[1]>50) throw new IOException("Board dimensions cannot be larger than 25!");
+		if (entityDistribution.length!=3) throw new IOException("Entity distribution must have three inputs!");
+		if (entityDistribution[0]+entityDistribution[1]+entityDistribution[2]!=100) throw new IOException("Entity distribution must be totalled to 100!");
 		
 		this.amountOfStates = amountOfStates;
 		this.amountOfEntities = amountOfEntities;
@@ -56,7 +61,9 @@ public class World {
 		board.initialiseBoard();	// initialises board
 		
 		worldLog.appendToLog("Initial" + System.lineSeparator() + board.toString());
-		System.out.println(worldLog.fetchLog());
+		if (printOnScreen) {
+			System.out.println(worldLog.fetchLog());
+		}
 	}
 	
 	public void update(String id) {
@@ -70,19 +77,24 @@ public class World {
 		}
 		
 		entityList.addAll(computer.activateUnliving(livingList)); // activate unliving entities and add surviving to entityList
-		entityList.addAll(computer.spawnPlagued()); // spawn sinners/cradles acc to chanceOnPlague
 
 		board.updateBoard(entityList); // send new entities to Board for update
 		
 		String updateStr = "State " + id + System.lineSeparator() + board.toString();		
 		worldLog.appendToLog(updateStr); // write the update to worldLog
-		System.out.println(updateStr); // immediately print the result to the screen
+		if (printOnScreen) {
+			System.out.println(updateStr); // immediately print the result to the screen
+		}
 		
 		try { //thread to sleep for the specified number of milliseconds
 			Thread.sleep(timeBetweenStates);
 		} catch (InterruptedException ie) {
 		    System.out.println("Interrupted.");
 		}	
+	}
+	
+	public void printOnScreen() {
+		printOnScreen = true;
 	}
 	
 	public void setTimeBetweenStates(int timeBetweenStates) throws IOException {
@@ -93,6 +105,10 @@ public class World {
 	public List<Entity> objectsAtPosition(int[] requestedPosition) {
 		// returns list of entities at a given position
 		return board.objectsAtPosition(requestedPosition);
+	}
+	
+	public String[][] getBoardMatrix() {
+		return board.getBoardMatrix();
 	}
 	
 	public String getWorldLog() {
@@ -110,19 +126,27 @@ public class World {
 	public static void main(String[] args) {
 		// TEST World class
 		
-		int amountOfStates = 120;
-		int[] boardDimensions = {2, 2};
-		int amountOfEntities = 4; // (living,unliving)
-		int[] entityDistribution = {0, 0, 100}; // (S, CoF, I)
-		int heat = 100; // random(2+heat); heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
-		int chanceOnPlague = 0; // P(spawn1Sinner)=1/f(x) and P(spawn1Cradle)=1/2f(x) if chanceOnPlague>=50, with f(100)=2; f(50)=4; f(0)=6
+		int amountOfStates = 1200;
+		int[] boardDimensions = {5, 5};
+		int amountOfEntities = 10; // (living,unliving)
+		int[] entityDistribution = {60, 0, 40}; // (S, CoF, I)
+		int heat = 60; // random(2+heat); heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
+		int chanceOnPlague = 40; // P(spawn1Sinner)=1/f(x) and P(spawn1Cradle)=1/2f(x) if chanceOnPlague>=50, with f(100)=2; f(50)=4; f(0)=6
 		
 		try {
 			World w = new World(amountOfStates, amountOfEntities, entityDistribution, boardDimensions, heat, chanceOnPlague);
 			w.initialise();
 			
+			//w.printOnScreen(); // allows printing of states in console
 			w.setTimeBetweenStates(0);
 			w.run();
+			
+			for (String[] a : w.getBoardMatrix()) {
+				System.out.println(Arrays.toString(a));
+			}
+			
+			int[] pos = {1, 2};
+			System.out.println(w.objectsAtPosition(pos)); // null if nothing; else arraylist with entities at position
 			
 			Entity first = w.entityList.get(0);
 			System.out.println(first.fetchLog());

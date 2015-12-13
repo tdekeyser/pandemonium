@@ -11,12 +11,16 @@ import entities.unliving.HellFire;
 public class EntityGenerator {
 	// brings together methods to create new entities at random
 	
-	int[] boardDimensions;
-	NameGenerator demonGen = new NameGenerator("demonic");
-	NameGenerator angelGen = new NameGenerator("angelic");
+	private int[] boardDimensions;
+	private NameGenerator demonGen = new NameGenerator("demonic");
+	private NameGenerator angelGen = new NameGenerator("angelic");
 	
 	public EntityGenerator(int[] boardDimensions) {
 		this.boardDimensions = boardDimensions;
+	}
+	
+	public int[] getBoardDimensions() {
+		return boardDimensions;
 	}
 	
 	public Entity spawnSinner() {
@@ -32,7 +36,7 @@ public class EntityGenerator {
 	}
 	
 	public Entity spawnAngelOfDeath() {
-		return new AngelOfDeath(demonGen.getName(), randomizeGender(), computeRandomPosition());
+		return new AngelOfDeath(angelGen.getName(), randomizeGender(), computeRandomPosition());
 	}
 	
 	public Entity createHellFire(String placername, String placertype) {

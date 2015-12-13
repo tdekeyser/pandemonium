@@ -73,15 +73,17 @@ public class Board {
 		return boardMap;
 	}
 	
+	public String[][] getBoardMatrix() {
+		return boardMatrix;
+	}
+	
 	public List<Entity> objectsAtPosition(int[] requestedPosition) {
 		// returns list of entities at a given position
-		
 		return boardMap.get(Arrays.toString(requestedPosition));
 	}
 	
 	public int[] getBoardDimensions() {
 		// get Array of board dimensions
-		
 		return boardDimensions;
 	}
 	

@@ -7,6 +7,7 @@ import entities.Entity;
 import entities.living.LivingEntity;
 import entities.unliving.DemonicFury;
 import entities.unliving.DivineIntervention;
+import entities.unliving.Plague;
 import randomizers.EntityGenerator;
 import randomizers.Randomizer;
 
@@ -30,11 +31,19 @@ public class Computer {
 	private ActionSchema actionSchema; // contains method doAction() that randomizes a LivingEntity action
 	private EntityGenerator entityGen; // contains methods to create random entities
 	
+	private DivineIntervention divineIntervention;
+	private Plague plague;
+	
 	public Computer(int[] boardDimensions, int heat, int chanceOnPlague) {
 		this.actionSchema = new ActionSchema(boardDimensions);
 		this.entityGen = new EntityGenerator(boardDimensions);
-		this.heat = heat;
+		
+		this.divineIntervention = new DivineIntervention(entityGen, ((int) Math.abs(heat/20)+3));
+		this.plague = new Plague(entityGen, chanceOnPlague);
+		
 		this.chanceOnPlague = chanceOnPlague;
+		this.heat = heat;
+		
 	}
 	
 	public List<Entity> createLivingEntities(int amountOfLiving, int[] entityDistribution) {
@@ -57,20 +66,6 @@ public class Computer {
 			livingEntities.add(newEntity);
 		}
 		return livingEntities;
-	}
-	
-	public List<Entity> spawnPlagued() {
-		// spawn Sinners according to chanceOnPlague
-		List<Entity> spawnedEntities = new ArrayList<>();
-		int y = (-1/25)*chanceOnPlague + 6; // P(spawn1Sinner)=1/f(x) and P(spawn1Cradle)=1/2f(x) if chanceOnPlague>=50, with f(100)=2; f(50)=4; f(0)=6
-		
-		if (chanceOnPlague > 0) {
-				if (Randomizer.random(Math.abs(y))==0) { spawnedEntities.add(entityGen.spawnSinner()); }
-		}
-		if (chanceOnPlague >= 50) {
-				if (Randomizer.random(Math.abs(y*2))==0) { spawnedEntities.add(entityGen.spawnCradle()); }
-		}
-		return spawnedEntities;
 	}
 	
 	public List<Entity> activateEntities(List<Entity> ePosList) {
@@ -167,8 +162,13 @@ public class Computer {
 		}
 		
 		// Divine Intervention
-		if (Randomizer.random(150-heat) == 0) {
-			surviving.addAll(DivineIntervention.intervene(entityGen, 3));
+		if (Randomizer.random(110-heat) == 0) {
+			surviving.addAll(divineIntervention.intervene());
+		}
+		
+		// Plague
+		if (Randomizer.random(100)<chanceOnPlague) {
+			surviving.addAll(plague.spawnDead());
 		}
 		
 		return surviving;
