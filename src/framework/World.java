@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.lang.InterruptedException;
 
 import entities.Entity;
@@ -19,6 +20,8 @@ public class World {
 	private int amountOfEntities; 	// # living
 	private int[] entityDistribution;
 	private int amountOfStates;
+	private int heat;
+	private int chanceOnPlague;
 	private int timeBetweenStates = 1000; // in ms
 	private boolean printOnScreen = false;
 	
@@ -46,6 +49,8 @@ public class World {
 		this.amountOfStates = amountOfStates;
 		this.amountOfEntities = amountOfEntities;
 		this.entityDistribution = entityDistribution;
+		this.heat = heat;
+		this.chanceOnPlague = chanceOnPlague;
 
 		this.computer = new Computer(boardDimensions, heat, chanceOnPlague);
 		this.board = new Board(boardDimensions);
@@ -60,7 +65,7 @@ public class World {
 		board.setBoardEntities(entityList);
 		board.initialiseBoard();	// initialises board
 		
-		worldLog.appendToLog("Initial" + System.lineSeparator() + board.toString());
+		worldLog.appendToLog("Initial" + System.lineSeparator() + "heat: " + heat + System.lineSeparator() + "chance on plague: " + chanceOnPlague + System.lineSeparator() + board.toString());
 		if (printOnScreen) {
 			System.out.println(worldLog.fetchLog());
 		}
@@ -107,6 +112,10 @@ public class World {
 		return board.objectsAtPosition(requestedPosition);
 	}
 	
+	public Map<String, List<Entity>> getBoardMap() {
+		return board.getBoardMap();
+	}
+	
 	public String[][] getBoardMatrix() {
 		return board.getBoardMatrix();
 	}
@@ -127,9 +136,9 @@ public class World {
 		// TEST World class
 		
 		int amountOfStates = 1200;
-		int[] boardDimensions = {5, 5};
 		int amountOfEntities = 10; // (living,unliving)
 		int[] entityDistribution = {60, 0, 40}; // (S, CoF, I)
+		int[] boardDimensions = {5, 5};
 		int heat = 60; // random(2+heat); heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
 		int chanceOnPlague = 40; // P(spawn1Sinner)=1/f(x) and P(spawn1Cradle)=1/2f(x) if chanceOnPlague>=50, with f(100)=2; f(50)=4; f(0)=6
 		
