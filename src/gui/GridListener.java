@@ -1,37 +1,44 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
 
 import entities.Entity;
 
 public class GridListener implements ActionListener {
 	
-	JPanel infoPanel;
-	JPanel textPanel = new JPanel();
-	JTextArea charInfo = new JTextArea();
+	JPanel infoPanel; // the EAST panel of MainWindow
+	JPanel textPanel = new JPanel(); // panel that comprises the text of the infoPanel
+	JTextArea charInfo = new JTextArea(); // actual content of the infoPanel
 	
-	int rows;
-	int columns;
-	private Map<String, List<Entity>> boardMap;
-	private Map<String, JButton> buttonGrid;
+	int rows; // of grid
+	int columns; // of grid
+	private Map<String, List<Entity>> boardMap; // boardMap from World; contains entity info per position
+	private Map<JButton, String> buttonGrid; // buttonGrid from GridPanel; contains position per button
 
 	public GridListener(JPanel infoPanel, int rows, int columns) {
 		this.infoPanel = infoPanel;
 		this.rows = rows;
 		this.columns = columns;
 		
+		charInfo.setEditable(false);
 		textPanel.add(charInfo);
+		textPanel.setPreferredSize(new Dimension(200, 500));
 		
 		textPanel.setOpaque(true); // must be opaque to be able to change background of JLabel
 		textPanel.setBackground(Color.WHITE);
@@ -39,25 +46,28 @@ public class GridListener implements ActionListener {
 		
 	}
 	
-	public void setMaps(Map<String, JButton> buttonGrid, Map<String, List<Entity>> boardMap) {
+	public void setMaps(Map<JButton, String> buttonGrid, Map<String, List<Entity>> boardMap) {
 		this.buttonGrid = buttonGrid;
 		this.boardMap = boardMap;
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {
-		for (int i=0; i<rows; i++) {
-			for (int j=0; j<columns; j++) {
-				int[] position = {i,j};
-				String posStr = Arrays.toString(position);
-				JButton b = buttonGrid.get(posStr);
+		/* When a gridbutton is clicked, it should show Entity info of all Entities on this position.
+		 * When a button is clicked, the event identifies which button has been clicked in the grid,
+		 * then gets its position within the grid from Map<>buttonGrid.
+		 * The position is then a key in boardMap that gains access to every Entity on that specific position.
+		 */
+		
+		charInfo.setText(""); // empty charInfo
+		
+		for (JButton b : buttonGrid.keySet()) {
+			if (b == arg0.getSource()) {
+				String position = buttonGrid.get(b);
 				
-				if (b == arg0.getSource()) {
-					
-					for (Entity e : boardMap.get(posStr)) {
-						charInfo.append(e.toStringLong() + System.lineSeparator()	);
-						textPanel.revalidate();
-					}
-				}
+				for (Entity e : boardMap.get(position)) {
+					charInfo.append(e.toStringLong() + System.lineSeparator());
+					textPanel.revalidate();
+				}	
 			}
 		}
 	}

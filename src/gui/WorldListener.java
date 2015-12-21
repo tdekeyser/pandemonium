@@ -18,6 +18,7 @@ public class WorldListener implements ActionListener {
 	
 	JPanel boardPanel;
 	JPanel infoPanel;
+	JLabel statusBar;
 	JTextField aoS; // amount of states
 	JTextField tbs; // time between states
 	JTextField aoE; // amount of initial entities
@@ -37,8 +38,7 @@ public class WorldListener implements ActionListener {
 	int heat;
 	int chanceOnPlague;
 	
-	JLabel statusBar;
-	World w;
+	World w; // World instance
 	
 	public WorldListener(
 			JPanel boardPanel,
@@ -72,10 +72,11 @@ public class WorldListener implements ActionListener {
 	}
 	
 	public void initialiseWorld() throws IOException {
-		// initialises world simulator and returns whether it has successfully initialised
+		// creates World instance 
+		
 		w = new World(amountOfStates, amountOfEntities, entityDistribution, boardDimensions, heat, chanceOnPlague);
-		w.printOnScreen();
-		w.setTimeBetweenStates(timeBetweenStates);
+		w.printOnScreen(); // uncomment to print Log in console
+		w.setTimeBetweenStates(timeBetweenStates); // default 1000 ms
 		w.initialise();
 	}
 	
@@ -86,7 +87,12 @@ public class WorldListener implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+		/*
+		 * Processes user input, handles invalid input, and initialises the world simulator.
+		 */
+		
 		try {
+			// process input
 			amountOfStates = Integer.parseInt(aoS.getText());
 			timeBetweenStates = Integer.parseInt(tbs.getText());
 			amountOfEntities = Integer.parseInt(aoE.getText());
@@ -98,18 +104,21 @@ public class WorldListener implements ActionListener {
 			heat = (int) heatS.getValue();
 			chanceOnPlague = (int) chanceOnPlagueS.getValue();
 			
-			boardPanel.removeAll();
-			initialiseWorld();
-			JPanel grid = makeGrid(w.getBoardMatrix(), w.getBoardMap());
+			// build World based on user input
+			boardPanel.removeAll(); // remove existing panel if they exist
+			infoPanel.removeAll();
+			
+			initialiseWorld(); // create World instance (w)
+			JPanel grid = makeGrid(w.getBoardMatrix(), w.getBoardMap()); // create GridPanel instance
 			boardPanel.add(grid);
-			boardPanel.revalidate();
+			boardPanel.revalidate(); // repacks the Grid if it is initialised a second time
 			
 			statusBar.setText("World initialised.");
 			
 		} catch (NumberFormatException ne) {
 			statusBar.setText("Use numerical input only!");
 		} catch (IOException io) {
-			statusBar.setText(io.getMessage());
+			statusBar.setText(io.getMessage()); // handles IOExceptions thrown by World class
 		}
 	
 	}

@@ -39,7 +39,7 @@ public class CradleOfFilth extends LivingEntity {
 		info.append("\nAge: ");
 		info.append(getAge());
 		info.append("\nPosition: ");
-		info.append(Arrays.toString(getCurrentPosition()));
+		info.append(Arrays.toString(getCurrentPosition()) + System.lineSeparator());
 		return info.toString();
 	}
 	

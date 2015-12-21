@@ -13,13 +13,13 @@ import javax.swing.JPanel;
 import entities.Entity;
 
 public class GridPanel extends JPanel {
-
+	
 	JPanel infoPanel;
 	private int r; // # rows
 	private int c; // # columns
-	private Map<String, JButton> buttonGrid = new HashMap<String, JButton>();
-	private String[][] boardMatrix;
-	private Map<String, List<Entity>> boardMap;
+	private String[][] boardMatrix; // boardMatrix of World instance; matrix of Strings
+	private Map<String, List<Entity>> boardMap; // boardMap from World instance; contains list of Entities per position
+	private Map<JButton, String> buttonGrid; // HashMap contains position per button in grid
 	
 	public GridPanel(JPanel infoPanel, int r, int c, String[][] boardMatrix, Map<String, List<Entity>> boardMap) {
 		this.infoPanel = infoPanel;
@@ -27,6 +27,7 @@ public class GridPanel extends JPanel {
 		this.c = c;
 		this.boardMatrix = boardMatrix;
 		this.boardMap = boardMap;
+		this.buttonGrid = new HashMap<JButton, String>();
 		
 		this.setLayout(new GridLayout(r,c)); // == boardDimensions
 		this.setPreferredSize(new Dimension(500,500));
@@ -36,27 +37,36 @@ public class GridPanel extends JPanel {
 	}
 	
 	public void makeButtonGrid() {
-
+		 /*
+		  * For each row and for each column, create new button with corresponding boardMatrix text.
+		  * 
+		  * If there is the boardMatrix position is empty (i.e. there's no Entity on this position),
+		  * the button cannot be clicked.
+		  * If there is at least one Entity on the position, the button is connected to a GridListener object,
+		  * and the button and its position are added to a Map<> buttonGrid, that is at the end passed on to
+		  * the GridListener object for Entity info matching (see further info in GridListener.java).
+		  * 
+		  */
+		
 		GridListener gridListener = new GridListener(infoPanel, r, c);
 		
 		for (int i=0; i<r; i++) {
 			for (int j=0; j<c; j++) {
-				JButton button = new JButton(boardMatrix[i][j]); // create new button on each position
+				JButton button = new JButton(boardMatrix[i][j]);
 				
 				if (boardMatrix[i][j].equals("")) {
 					button.setEnabled(false);  // no entities on this position, so button can't be clicked
 				} else {
-					int[] position = {i, j};
-					buttonGrid.put(Arrays.toString(position), button); // available button added to Map object
 					button.addActionListener(gridListener);
+					int[] position = {i, j};
+					buttonGrid.put(button, Arrays.toString(position)); // available button added to Map object
 				}
-				this.add(button);
+				this.add(button); // GridLayout default adds left to right, top to bottom
 			}
 		}
 		
-		gridListener.setMaps(buttonGrid, boardMap);
+		gridListener.setMaps(buttonGrid, boardMap); // pass Map<> buttonGrid and boardMap to GridListener object
 		
-		this.revalidate();
 	}
 
 }
