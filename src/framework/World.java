@@ -24,6 +24,7 @@ public class World {
 	private int chanceOnPlague;
 	private int timeBetweenStates = 1000; // in ms
 	private boolean printOnScreen = false;
+	private int stateNr = 1;
 	
 	private Computer computer;
 	private Board board;
@@ -66,9 +67,8 @@ public class World {
 		board.initialiseBoard();	// initialises board
 		
 		worldLog.appendToLog("Initial" + System.lineSeparator() + "heat: " + heat + System.lineSeparator() + "chance on plague: " + chanceOnPlague + System.lineSeparator() + board.toString());
-		if (printOnScreen) {
-			System.out.println(worldLog.fetchLog());
-		}
+		if (printOnScreen) System.out.println(worldLog.fetchLog());
+		
 	}
 	
 	public void update(String id) {
@@ -87,9 +87,7 @@ public class World {
 		
 		String updateStr = "State " + id + System.lineSeparator() + board.toString();		
 		worldLog.appendToLog(updateStr); // write the update to worldLog
-		if (printOnScreen) {
-			System.out.println(updateStr); // immediately print the result to the screen
-		}
+		if (printOnScreen) System.out.println(updateStr); // immediately print the result to the screen
 		
 		try { //thread to sleep for the specified number of milliseconds
 			Thread.sleep(timeBetweenStates);
@@ -124,13 +122,26 @@ public class World {
 		return worldLog.fetchLog();
 	}
 	
+	public int getAmountOfStates() {
+		return amountOfStates;
+	}
+	
 	public void run() {
 		// runs the world according to the amount of states
 		for (int i=1; i<=amountOfStates; i++) {
 			update(Integer.toString(i));
+			stateNr++;
 		}
-		System.out.println("World finished.");
+		if (printOnScreen) System.out.println("World finished.");
 	}
+	
+	public void runOnce() {
+		// proceeds with 1 state
+		
+		update(Integer.toString(stateNr));
+		stateNr++;
+	}
+	
 	
 	public static void main(String[] args) {
 		// TEST World class
