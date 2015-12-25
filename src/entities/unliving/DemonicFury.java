@@ -6,6 +6,7 @@ import java.util.List;
 import entities.Entity;
 import entities.living.Sinner;
 import entities.living.demons.Demon;
+import framework.Log;
 
 public class DemonicFury extends UnlivingEntity {
 	// demonic fury increases all demons' cruelty and decreases all sinners' divinity
@@ -24,7 +25,7 @@ public class DemonicFury extends UnlivingEntity {
 				newList.add(e);
 			} catch (ClassCastException cx) { newList.add(e); continue; }
 		}
-		System.out.println("Demonic Fury unleashed!");
+		
 		return newList;
 	}
 	

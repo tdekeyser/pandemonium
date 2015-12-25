@@ -45,7 +45,7 @@ public abstract class Entity implements Printable {
 	}
 	
 	public void appendToLog(String entry) {
-		log.appendToLog(entry, "noDate");
+		log.appendToLogWithoutDate(entry);
 	}
 	
 	public void copyAndAppendToLog(Entity copier, String entry) {

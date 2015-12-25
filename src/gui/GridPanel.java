@@ -14,15 +14,15 @@ import entities.Entity;
 
 public class GridPanel extends JPanel {
 	
-	JPanel infoPanel;
+	JPanel textPanel;
 	private int r; // # rows
 	private int c; // # columns
 	private String[][] boardMatrix; // boardMatrix of World instance; matrix of Strings
 	private Map<String, List<Entity>> boardMap; // boardMap from World instance; contains list of Entities per position
 	private Map<JButton, String> buttonGrid; // HashMap contains position per button in grid
 	
-	public GridPanel(JPanel infoPanel, int r, int c, String[][] boardMatrix, Map<String, List<Entity>> boardMap) {
-		this.infoPanel = infoPanel;
+	public GridPanel(JPanel textPanel, int r, int c, String[][] boardMatrix, Map<String, List<Entity>> boardMap) {
+		this.textPanel = textPanel;
 		this.r = r;
 		this.c = c;
 		this.boardMatrix = boardMatrix;
@@ -48,7 +48,7 @@ public class GridPanel extends JPanel {
 		  * 
 		  */
 		
-		GridListener gridListener = new GridListener(infoPanel, r, c);
+		GridListener gridListener = new GridListener(textPanel, r, c);
 		
 		for (int i=0; i<r; i++) {
 			for (int j=0; j<c; j++) {

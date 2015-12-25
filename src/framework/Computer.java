@@ -33,6 +33,7 @@ public class Computer {
 	
 	private DivineIntervention divineIntervention;
 	private Plague plague;
+	private List<String> unlivingActions = new ArrayList<>();
 	
 	public Computer(int[] boardDimensions, int heat, int chanceOnPlague) {
 		this.actionSchema = new ActionSchema(boardDimensions);
@@ -150,25 +151,43 @@ public class Computer {
 		return finalEntities;
 	}
 	
+	public List<String> getUnlivingActions() {
+		return unlivingActions;
+	}
+	
 	public List<Entity> activateUnliving(List<Entity> newEntities) {
 		// activates unliving things
+		unlivingActions.clear();
+		String unlivingAction;
 		List<Entity> surviving = new ArrayList<>();
 		
 		// Unleash DemonicFury
 		if (Randomizer.random(110-heat) == 0) { // P(demonicFury)=1/110-heat
 			surviving.addAll(DemonicFury.unleash(newEntities));
+			unlivingAction = "Demonic Fury unleashed!" + System.lineSeparator();
+			unlivingActions.add(unlivingAction);
 		} else {
 			surviving.addAll(newEntities);
 		}
 		
 		// Divine Intervention
 		if (Randomizer.random(110-heat) == 0) {
-			surviving.addAll(divineIntervention.intervene());
+			List<Entity> intervention = divineIntervention.intervene();
+			surviving.addAll(intervention);
+			if (intervention.size()>0) {
+				unlivingAction = "Devine Intervention!" + System.lineSeparator() + "(" + intervention.size() + " intervened)" + System.lineSeparator();
+				unlivingActions.add(unlivingAction);
+			}
 		}
 		
 		// Plague
 		if (Randomizer.random(100)<chanceOnPlague) {
-			surviving.addAll(plague.spawnDead());
+			List<Entity> spawnedEntities = plague.spawnDead();
+			surviving.addAll(spawnedEntities);
+			if (spawnedEntities.size()>0) {
+				unlivingAction = "Plague! (" + spawnedEntities.size() + " spawned)" + System.lineSeparator();
+				unlivingActions.add(unlivingAction);
+			}
 		}
 		
 		return surviving;

@@ -29,7 +29,8 @@ public class World {
 	private Computer computer;
 	private Board board;
 	
-	public List<Entity> entityList = new ArrayList<>();
+	private List<Entity> entityList = new ArrayList<>();
+	private List<String> unlivingActionList;
 	
 	public World(
 			int amountOfStates,
@@ -82,12 +83,17 @@ public class World {
 		}
 		
 		entityList.addAll(computer.activateUnliving(livingList)); // activate unliving entities and add surviving to entityList
-
+		
 		board.updateBoard(entityList); // send new entities to Board for update
 		
 		String updateStr = "State " + id + System.lineSeparator() + board.toString();		
 		worldLog.appendToLog(updateStr); // write the update to worldLog
 		if (printOnScreen) System.out.println(updateStr); // immediately print the result to the screen
+		
+		unlivingActionList = computer.getUnlivingActions();
+		for (String action : unlivingActionList) {
+			worldLog.appendToLogWithoutDate(action);
+		}
 		
 		try { //thread to sleep for the specified number of milliseconds
 			Thread.sleep(timeBetweenStates);
@@ -118,6 +124,10 @@ public class World {
 		return board.getBoardMatrix();
 	}
 	
+	public List<String> getUnlivingActions() {
+		return unlivingActionList;
+	}
+	
 	public String getWorldLog() {
 		return worldLog.fetchLog();
 	}
@@ -136,7 +146,7 @@ public class World {
 	}
 	
 	public void runOnce() {
-		// proceeds with 1 state
+		// proceeds by 1 state
 		
 		update(Integer.toString(stateNr));
 		stateNr++;

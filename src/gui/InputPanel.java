@@ -1,10 +1,11 @@
 package gui;
 
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -17,29 +18,29 @@ public class InputPanel extends JPanel implements ActionListener {
 	JLabel aosL = new JLabel("Amount of states:");
 	JTextField aoS = new JTextField("10");
 	
-	JLabel tbsL = new JLabel("Time between states (ms):");
+	JLabel tbsL = new JLabel("Time between state (ms):");
 	JTextField tbs = new JTextField("1000");
 	
 	JLabel aoeL = new JLabel("Amount of initial entities:");
-	JTextField aoE = new JTextField("5");
+	JTextField aoE = new JTextField("10");
 	
-	JLabel edaL = new JLabel("Entity distribution: (a)");
+	JPanel entityDistrPanel = new JPanel();
+	JLabel edaL = new JLabel("Entity distribution:");
 	JTextField eDA = new JTextField("33");
-	JLabel edbL = new JLabel("Entity distribution: (b)");
 	JTextField eDB = new JTextField("33");
-	JLabel edcL = new JLabel("Entity distribution: (c)");
 	JTextField eDC = new JTextField("34");
 	
-	JLabel bdaL = new JLabel("Board dimensions: (a)");
-	JTextField bDA = new JTextField("4");
-	JLabel bdbL = new JLabel("Board dimensions: (b)");
-	JTextField bDB = new JTextField("4");
+	JPanel boardDimPanel = new JPanel();
+	JLabel bdaL = new JLabel("Board dimensions:");
+	JTextField bDA = new JTextField("6");
+	JTextField bDB = new JTextField("6");
 	
 	JLabel heatL = new JLabel("Heat:");
 	JSlider heatS = new JSlider(0, 100, 0);
 	JLabel copL = new JLabel("Chance on plague:");
 	JSlider chanceOnPlagueS = new JSlider(0, 100, 0);
 	
+	JPanel buttonPanel = new JPanel();
 	private final JButton reset = new JButton("Reset");
 	
 	public InputPanel() {
@@ -49,8 +50,23 @@ public class InputPanel extends JPanel implements ActionListener {
 		paintSliderLabels(heatS, 20, 5);
 		paintSliderLabels(chanceOnPlagueS, 20, 5);
 		
-		this.setBorder(BorderFactory.createTitledBorder("Simulator input"));
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		entityDistrPanel.setLayout(new GridLayout(2,3));
+		entityDistrPanel.add(new JLabel("<html><font color='gray'>Sinner</font>"));
+		entityDistrPanel.add(new JLabel("<html><font color='gray'>Cradle</font>"));
+		entityDistrPanel.add(new JLabel("<html><font color='gray'>Imp</font>"));
+		entityDistrPanel.add(eDA);
+		entityDistrPanel.add(eDB);
+		entityDistrPanel.add(eDC);
+		
+		boardDimPanel.setLayout(new GridLayout(2,2));
+		boardDimPanel.add(new JLabel("<html><font color='gray'>x</font>"));
+		boardDimPanel.add(new JLabel("<html><font color='gray'>y</font>"));
+		boardDimPanel.add(bDA);
+		boardDimPanel.add(bDB);
+		
+		this.setLayout(new GridLayout(0,1));
+		this.setPreferredSize(new Dimension(200,500));
+		//this.setBorder(BorderFactory.createTitledBorder("Input"));
 		this.add(aosL);
 		this.add(aoS);
 		this.add(tbsL);
@@ -58,15 +74,9 @@ public class InputPanel extends JPanel implements ActionListener {
 		this.add(aoeL);
 		this.add(aoE);
 		this.add(edaL);
-		this.add(eDA);
-		this.add(edbL);
-		this.add(eDB);
-		this.add(edcL);
-		this.add(eDC);
+		this.add(entityDistrPanel);
 		this.add(bdaL);
-		this.add(bDA);
-		this.add(bdbL);
-		this.add(bDB);
+		this.add(boardDimPanel);
 		this.add(heatL);
 		this.add(heatS);
 		this.add(copL);

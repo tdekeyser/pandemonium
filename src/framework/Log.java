@@ -7,7 +7,6 @@ public class Log {
 	// simple string-based log class
 	
 	private StringBuilder logText;
-	int i = 0;
 	
 	public Log() {
 		this.logText = new StringBuilder();
@@ -26,9 +25,8 @@ public class Log {
 		logText.append(getDate() + System.lineSeparator() + info + System.lineSeparator() + System.lineSeparator());
 	}
 	
-	public void appendToLog(String info, String noDate) {
-		logText.append(i + ": " + info + System.lineSeparator());
-		i++;
+	public void appendToLogWithoutDate(String info) {
+		logText.append(info + System.lineSeparator());
 	}
 	
 	public void emptyLog() {

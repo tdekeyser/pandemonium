@@ -27,7 +27,7 @@ public class HellFire extends UnlivingEntity implements Printable {
 	
 	public String toStringLong() {
 		StringBuilder str = new StringBuilder("HellFire"+System.lineSeparator());
-		str.append("Placed by " + placedBy + " at " + Arrays.toString(getCurrentPosition()) + System.lineSeparator());
+		str.append("Placed by: " + System.lineSeparator() + placedBy + System.lineSeparator() + "At position: " + Arrays.toString(getCurrentPosition()) + System.lineSeparator());
 		return str.toString();
 	}
 	

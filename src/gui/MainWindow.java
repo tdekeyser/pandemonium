@@ -3,7 +3,11 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -32,7 +36,8 @@ public class MainWindow extends JFrame {
 
 	private final JButton initializer = new JButton("Init");
 	private final JButton runner = new JButton("Run");
-	JButton[] wButtons = {initializer, runner};
+	private final JButton getLog = new JButton("Log");
+	JButton[] wButtons = {initializer, runner, getLog};
 	
 	public MainWindow() {
 		
@@ -55,12 +60,15 @@ public class MainWindow extends JFrame {
 							);
 		initializer.addActionListener(worldMaker);
 		runner.addActionListener(worldMaker);
+		getLog.addActionListener(worldMaker);
 		
 		try {
 			Image init = ImageIO.read(new File("src/pics/init.png"));
 			Image run = ImageIO.read(new File("src/pics/run.png"));
-		    initializer.setIcon(new ImageIcon(init));
-		    runner.setIcon(new ImageIcon(run));
+			Image log = ImageIO.read(new File("src/pics/log.png"));
+			initializer.setIcon(new ImageIcon(init));
+			runner.setIcon(new ImageIcon(run));
+			getLog.setIcon(new ImageIcon(log));
 		} catch (IOException io) {}
 		
 		// boardPanel
@@ -79,12 +87,20 @@ public class MainWindow extends JFrame {
 		statusBar.setPreferredSize(new Dimension(100, 30));
 		
 		// titlePanel
-		JLabel title = new JLabel("<html><font size='50' color='#c34528'>Pandemonium</font>");
+		JLabel title;
+		try {
+			Image titleImage = ImageIO.read(new File("src/pics/torn_paper2.png"));
+			title = new JLabel(new ImageIcon(titleImage));
+		} catch (IOException io) {
+			title = new JLabel("<html><font size='50' color='#c34528'>Pandemonium</font>");
+		}
 		titlePanel.add(title);
-		titlePanel.add(Box.createRigidArea(new Dimension(300,0)));
+		titlePanel.add(Box.createRigidArea(new Dimension(200,150)));
 		titlePanel.add(initializer);
 		titlePanel.add(runner);
-		
+		titlePanel.add(getLog);
+	
+		this.setTitle("Pandemonium simulator v1.0");
 		this.getContentPane().add(outerPanel);
 		outerPanel.setLayout(new BorderLayout(10, 10)); // BorderLayout(int horizontalGap, int verticalGap)
 		outerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));

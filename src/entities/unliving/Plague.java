@@ -33,10 +33,6 @@ public class Plague extends UnlivingEntity {
 			}
 		}
 		
-		if (spawnedEntities.size()>0) {
-			System.out.println("Plague! " + spawnedEntities.size() + " spawned.");
-		}
-		
 		return spawnedEntities;
 	}
 }

@@ -37,10 +37,6 @@ public class DivineIntervention extends UnlivingEntity {
 			}
 		}
 		
-		if (intervention.size()>0) {
-			System.out.println("Devine Intervention! " + intervention.size() + " intervened.");
-		}
-		
 		return intervention;
 		
 	}

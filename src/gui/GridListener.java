@@ -4,45 +4,45 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
+import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
 
 import entities.Entity;
 
 public class GridListener implements ActionListener {
 	
-	JPanel infoPanel; // the EAST panel of MainWindow
 	JPanel textPanel = new JPanel(); // panel that comprises the text of the infoPanel
-	JTextArea charInfo = new JTextArea(); // actual content of the infoPanel
+	JTextPane charInfo = new JTextPane(); // actual content of the infoPanel
+	JScrollPane scrollPane = new JScrollPane(charInfo);
 	
 	int rows; // of grid
 	int columns; // of grid
 	private Map<String, List<Entity>> boardMap; // boardMap from World; contains entity info per position
 	private Map<JButton, String> buttonGrid; // buttonGrid from GridPanel; contains position per button
 
-	public GridListener(JPanel infoPanel, int rows, int columns) {
-		this.infoPanel = infoPanel;
+	public GridListener(JPanel textPanel, int rows, int columns) {
+		this.textPanel = textPanel;
 		this.rows = rows;
 		this.columns = columns;
 		
 		charInfo.setEditable(false);
-		textPanel.add(charInfo);
-		textPanel.setPreferredSize(new Dimension(200, 500));
-		
-		textPanel.setOpaque(true); // must be opaque to be able to change background of JLabel
-		textPanel.setBackground(Color.WHITE);
-		infoPanel.add(textPanel);
+		scrollPane.setPreferredSize(new Dimension(220,390));
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		textPanel.add(scrollPane);
 		
 	}
 	
@@ -65,8 +65,28 @@ public class GridListener implements ActionListener {
 				String position = buttonGrid.get(b);
 				
 				for (Entity e : boardMap.get(position)) {
-					charInfo.append(e.toStringLong() + System.lineSeparator());
+					
+					switch (e.getType()) { // match gifs
+					case "CradleOfFilth": charInfo.insertIcon(new ImageIcon("src/pics/cradle2.gif")); break;
+					case "Imp": charInfo.insertIcon(new ImageIcon("src/pics/imp5.gif")); break;
+					case "InfernalDemon": charInfo.insertIcon(new ImageIcon("src/pics/infernal2.gif")); break;
+					case "DemonCommander": charInfo.insertIcon(new ImageIcon("src/pics/commander1.gif")); break;
+					case "Sinner": charInfo.insertIcon(new ImageIcon("src/pics/sinner4.gif")); break;
+					case "AngelOfDeath": charInfo.insertIcon(new ImageIcon("src/pics/angelofdeath1.gif")); break;
+					case "unliving": charInfo.insertIcon(new ImageIcon("src/pics/hellfire.gif")); break;
+					}
+					
+					StyledDocument doc = charInfo.getStyledDocument();
+					StyleContext sc = StyleContext.getDefaultStyleContext(); 
+					AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, Color.BLACK);
+					try{
+						doc.insertString(doc.getEndPosition().getOffset(), e.toStringLong()+System.lineSeparator(), aset);
+					}catch(BadLocationException bl) {}				
+					
+					//scrollPane.revalidate();
+					//scrollPane.repaint();
 					textPanel.revalidate();
+					textPanel.repaint();
 				}	
 			}
 		}
