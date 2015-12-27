@@ -12,7 +12,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -83,8 +82,6 @@ public class GridListener implements ActionListener {
 						doc.insertString(doc.getEndPosition().getOffset(), e.toStringLong()+System.lineSeparator(), aset);
 					}catch(BadLocationException bl) {}				
 					
-					//scrollPane.revalidate();
-					//scrollPane.repaint();
 					textPanel.revalidate();
 					textPanel.repaint();
 				}	

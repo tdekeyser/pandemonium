@@ -3,11 +3,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -102,6 +98,7 @@ public class MainWindow extends JFrame {
 	
 		this.setTitle("Pandemonium simulator v1.0");
 		this.getContentPane().add(outerPanel);
+		this.setPreferredSize(new Dimension(1200,810));
 		outerPanel.setLayout(new BorderLayout(10, 10)); // BorderLayout(int horizontalGap, int verticalGap)
 		outerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		outerPanel.add(titlePanel, BorderLayout.NORTH);
@@ -114,12 +111,5 @@ public class MainWindow extends JFrame {
 		pack();
 		setVisible(true);
 	}
-
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			 public void run() {
-			    new MainWindow();
-			   }
-		});
-	}
+	
 }

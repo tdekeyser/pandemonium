@@ -66,7 +66,7 @@ public class InputPanel extends JPanel implements ActionListener {
 		
 		this.setLayout(new GridLayout(0,1));
 		this.setPreferredSize(new Dimension(200,500));
-		//this.setBorder(BorderFactory.createTitledBorder("Input"));
+		this.setBorder(BorderFactory.createTitledBorder("Input"));
 		this.add(aosL);
 		this.add(aoS);
 		this.add(tbsL);
