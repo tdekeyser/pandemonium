@@ -25,7 +25,7 @@ public class Sinner extends LivingEntity {
 	public String toStringLong() {
 		// String representation of Sinner object
 		StringBuilder info = new StringBuilder();
-		info.append("Name: " + getType() + System.lineSeparator());
+		info.append("Type: " + getType() + System.lineSeparator());
 		info.append("Gender: " + getGender() + System.lineSeparator());
 		info.append("Age: " + getAge() + System.lineSeparator());
 		info.append("Divinity: " + getDivinity() + System.lineSeparator());

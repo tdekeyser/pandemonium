@@ -42,7 +42,6 @@ public class Imp extends Demon {
 		InfernalDemon evolved_obj = new InfernalDemon(this.getName(), this.getGender(), this.getCurrentPosition());
 		evolved_obj.setAge(this.getAge());
 		evolved_obj.setCruelty(this.getCruelty());
-		if (this.hasPartner()) { evolved_obj.partner = this.partner; }
 		evolved_obj.copyAndAppendToLog(this, "Evolved to InfernalDemon from Imp.");
 		return evolved_obj;
 	}

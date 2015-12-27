@@ -10,7 +10,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -19,43 +18,42 @@ import javax.swing.JSlider;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import entities.Entity;
 import framework.World;
 
 public class WorldMaker implements ActionListener {
 	
-	JPanel boardPanel;
+	private JPanel boardPanel; // contains Grid
 	
-	JPanel infoPanel;
-	JPanel textPanel = new JPanel(); // panel that comprises the character text of the infoPanel
-	JPanel actionDisplay = new JPanel(); // panel that comprises the unliving action text of the infoPanel
-	JTextArea display = new JTextArea(); // text within actionDisplay
+	private JPanel infoPanel; // contains information about Grid
+	private JPanel textPanel = new JPanel(); // panel that comprises the character text of the infoPanel
+	private JPanel actionDisplay = new JPanel(); // panel that comprises the unliving action text of the infoPanel
+	private JTextArea display = new JTextArea(); // text within actionDisplay
 	
-	JLabel statusBar;
-	JButton initializer;
-	JButton runner;
-	JButton getLog;
-	JTextField aoS; // amount of states
-	JTextField tbs; // time between states
-	JTextField aoE; // amount of initial entities
-	JTextField eDA; // entity distribution (a)
-	JTextField eDB; // entity distribution (b)
-	JTextField eDC; // entity distribution (c)
-	JTextField bDA; // board dimensions (a)
-	JTextField bDB; // board dimensions (b)
-	JSlider heatS; // heat
-	JSlider chanceOnPlagueS; // chance on plague
+	private JLabel statusBar;
+	private JButton initializer;
+	private JButton runner;
+	private JButton getLog;
+	private JTextField aoS; // amount of states
+	private JTextField tbs; // time between states
+	private JTextField aoE; // amount of initial entities
+	private JTextField eDA; // entity distribution (a)
+	private JTextField eDB; // entity distribution (b)
+	private JTextField eDC; // entity distribution (c)
+	private JTextField bDA; // board dimensions (a)
+	private JTextField bDB; // board dimensions (b)
+	private JSlider heatS; // heat
+	private JSlider chanceOnPlagueS; // chance on plague
 	
-	int amountOfStates;
-	int timeBetweenStates;
-	int amountOfEntities;
-	int[] entityDistribution = new int[3];
-	int[] boardDimensions = new int[2];
-	int heat;
-	int chanceOnPlague;
+	private int amountOfStates;
+	private int timeBetweenStates;
+	private int amountOfEntities;
+	private int[] entityDistribution = new int[3];
+	private int[] boardDimensions = new int[2];
+	private int heat;
+	private int chanceOnPlague;
 	
-	World w; // World instance
-	int pastStates = 0;
+	private World w; // World instance
+	private int pastStates = 0; // important to keep how many states have passed (for status bar)
 	
 	public WorldMaker(
 			JPanel boardPanel,
@@ -89,6 +87,9 @@ public class WorldMaker implements ActionListener {
 		this.bDB = bDB;
 		this.heatS = heatS;
 		this.chanceOnPlagueS = chanceOnPlagueS;
+		
+		runner.setEnabled(false);
+		getLog.setEnabled(false);
 			
 	}
 	
@@ -99,54 +100,44 @@ public class WorldMaker implements ActionListener {
 		w.printOnScreen(); // uncomment to print Log in console
 		w.setTimeBetweenStates(timeBetweenStates); // default 1000 ms
 		w.initialise();
-		
 	}
 	
-	public void paintGrid(String[][] boardMatrix, Map<String, List<Entity>> boardMap) {
+	public void paintGrid() {
 		// display Grid on boardPanel
 		
-		boardPanel.removeAll(); // remove existing panel if they exist
-		textPanel.removeAll();
-		textPanel.revalidate();
-		textPanel.repaint();
+		boardPanel.removeAll(); // remove existing grid
+		textPanel.removeAll(); // remove existing info
 		
-		JPanel grid = makeGrid(boardMatrix, boardMap); // create GridPanel instance
+		JPanel grid = new GridPanel(textPanel, boardDimensions[0], boardDimensions[1], w.getBoardMatrix(), w.getBoardMap()); // create GridPanel object
 		boardPanel.add(grid);
 		boardPanel.revalidate(); // repacks the Grid if it is initialised a second time
 	}
 	
-	public JPanel makeGrid(String[][] boardMatrix, Map<String, List<Entity>> boardMap) {
-		JPanel gridPanel = new GridPanel(textPanel, boardDimensions[0], boardDimensions[1], boardMatrix, boardMap);
-		return gridPanel;
-	}
-	
 	public void activateActionDisplays() {
+		// initialise child panels of infoPanel
+		
 		textPanel.setPreferredSize(new Dimension(230, 400));
-		textPanel.setOpaque(true); // must be opaque to be able to change background of JLabel
 		textPanel.setBackground(Color.WHITE);
-		infoPanel.add(textPanel);
+		infoPanel.add(textPanel); // will contain Character info
 		
 		display.setEditable(false);
-		actionDisplay.setPreferredSize(new Dimension(230, 110));
-		actionDisplay.setOpaque(true);
+		display.setPreferredSize(new Dimension(220, 100));
 		actionDisplay.setBackground(Color.WHITE);
-		actionDisplay.add(display);
+		actionDisplay.add(display); // will contain unliving action info
 		infoPanel.add(actionDisplay);
 	}
 	
 	public void displayUnlivingActions() {
+		// If last state had effected unliving actions (plague, demonic fury, divine intervention), put them in display (in infoPanel)
+
 		display.setText("");
 		List<String> unlivingActions = w.getUnlivingActions();
 		if (!(unlivingActions.size() == 0)) {
 			for (String action : unlivingActions) {
 				display.append(action + System.lineSeparator());
 			}	
-			actionDisplay.revalidate();
+			actionDisplay.revalidate(); // revalidate panel after adding content
 		}
-	}
-	
-	public World getWorldInstance() {
-		return w;
 	}
 	
 	@Override
@@ -172,11 +163,13 @@ public class WorldMaker implements ActionListener {
 				
 				// build World based on user input
 				initialiseWorld(); // create World instance (w)
-				paintGrid(w.getBoardMatrix(), w.getBoardMap());
+				paintGrid();
 				activateActionDisplays();
 				pastStates = 0;
 				
 				statusBar.setText("World initialised.");
+				runner.setEnabled(true); // enable the next buttons
+				getLog.setEnabled(true);
 				
 			} catch (NumberFormatException ne) {
 				statusBar.setText("Use numerical input only!");
@@ -186,42 +179,49 @@ public class WorldMaker implements ActionListener {
 			
 		} else if (arg0.getSource() == runner) {
 			
-			new Thread(){
-				// thread that repaints Grid one state at a time
+			new Thread(){ // thread that allows to dynamically repaint Grid without freezing the GUI
 				
 				public void run() {
 					
 					if (amountOfStates<100) {
 						for (int i=0; i<amountOfStates; i++) {
-							w.runOnce();
-							paintGrid(w.getBoardMatrix(), w.getBoardMap());
-							displayUnlivingActions();							
+							
+							w.runOnce(); // run world once
+							
+							paintGrid(); // then paint the grid
+							displayUnlivingActions();	
+							
 							pastStates++;
-							statusBar.setText("World simulated " + Integer.toString(pastStates) + " state(s).");
+							statusBar.setText("World simulated " + Integer.toString(pastStates) + " state(s)."); // update the status bar
 						}
 					} else { // large amount of states; faster processing without creating Grid with every step
 						
 						try {
 							w.setTimeBetweenStates(0);
-						} catch (IOException io) {}
+						} catch (IOException io) { /* impossible exception; leaving it empty is OK */ }
 						
-						statusBar.setText("Working...");
-						initializer.setEnabled(false);
+						statusBar.setText("Working..."); // set working text in status bar
+						initializer.setEnabled(false); // while working, you cannot click on buttons
 						runner.setEnabled(false);
+						getLog.setEnabled(false);
 						
-						w.run();
-						
-						initializer.setEnabled(true);
-						runner.setEnabled(true);
-						paintGrid(w.getBoardMatrix(), w.getBoardMap());
+						w.run(); // run all states
+									
+						paintGrid();
 						displayUnlivingActions();
+						
+						initializer.setEnabled(true); // re-enable buttons
+						runner.setEnabled(true);
+						getLog.setEnabled(true);
+						
 						pastStates += amountOfStates;
-						statusBar.setText("World simulated " + Integer.toString(pastStates) + " states.");
+						statusBar.setText("World simulated " + Integer.toString(pastStates) + " states."); // update status bar
 					}
 				}
 			}.start();
 			
 		} else if (arg0.getSource() == getLog) {
+			// Write WorldLog into a .txt file using NIO classes (Files and Paths), appears in pandemonium/ folder.
 			
 			try (BufferedWriter worldLog = Files.newBufferedWriter(Paths.get("Pandemonium_WorldLog.txt"), Charset.defaultCharset())) {
 				worldLog.write(w.getWorldLog());

@@ -11,7 +11,6 @@ public abstract class Demon extends LivingEntity {
 	 */
 	
 	private final String name;
-	Demon partner;
 	private int cruelty; // cruelty defines a demon's position within the hierarchy
 
 	public Demon(String name, String gender, int[] currentPosition) {
@@ -36,11 +35,6 @@ public abstract class Demon extends LivingEntity {
 		victim.declareDead();
 		this.increaseCruelty();
 		this.appendToLog("Killed Sinner at position " + Arrays.toString(this.getCurrentPosition()));
-	}
-	
-	public boolean hasPartner() {
-		// returns true if there is a partner
-		return this.partner != null;
 	}
 	
 	public String getName() {

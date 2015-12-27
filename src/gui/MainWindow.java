@@ -19,21 +19,20 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 
 public class MainWindow extends JFrame {
 	
-	JPanel titlePanel = new JPanel();
-	JPanel outerPanel = new JPanel();
-	JLabel statusBar = new JLabel("** Pandemonium status **");
-	JPanel inputPanel = new InputPanel();
-	JPanel boardPanel = new JPanel();
-	JPanel infoPanel = new JPanel();
+	private JPanel titlePanel = new JPanel();
+	private JPanel outerPanel = new JPanel();
+	private JLabel statusBar = new JLabel("** Pandemonium status **");
+	private JPanel inputPanel = new InputPanel();
+	private JPanel boardPanel = new JPanel();
+	private JPanel infoPanel = new JPanel();
 
 	private final JButton initializer = new JButton("Init");
 	private final JButton runner = new JButton("Run");
 	private final JButton getLog = new JButton("Log");
-	JButton[] wButtons = {initializer, runner, getLog};
+	private JButton[] wButtons = {initializer, runner, getLog};
 	
 	public MainWindow() {
 		
@@ -65,7 +64,7 @@ public class MainWindow extends JFrame {
 			initializer.setIcon(new ImageIcon(init));
 			runner.setIcon(new ImageIcon(run));
 			getLog.setIcon(new ImageIcon(log));
-		} catch (IOException io) {}
+		} catch (IOException io) { /* if exception, then simply no icons */ }
 		
 		// boardPanel
 		boardPanel.setPreferredSize(new Dimension(550, 550));
@@ -91,7 +90,7 @@ public class MainWindow extends JFrame {
 			title = new JLabel("<html><font size='50' color='#c34528'>Pandemonium</font>");
 		}
 		titlePanel.add(title);
-		titlePanel.add(Box.createRigidArea(new Dimension(200,150)));
+		titlePanel.add(Box.createRigidArea(new Dimension(200,150))); // create empty space next to title
 		titlePanel.add(initializer);
 		titlePanel.add(runner);
 		titlePanel.add(getLog);

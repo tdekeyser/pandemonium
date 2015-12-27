@@ -27,7 +27,7 @@ public class GridPanel extends JPanel {
 		this.c = c;
 		this.boardMatrix = boardMatrix;
 		this.boardMap = boardMap;
-		this.buttonGrid = new HashMap<JButton, String>();
+		this.buttonGrid = new HashMap<JButton, String>(); // Maps buttons to their position within the grid
 		
 		this.setLayout(new GridLayout(r,c)); // == boardDimensions
 		this.setPreferredSize(new Dimension(500,500));
@@ -48,7 +48,7 @@ public class GridPanel extends JPanel {
 		  * 
 		  */
 		
-		GridListener gridListener = new GridListener(textPanel, r, c);
+		GridListener gridListener = new GridListener(textPanel);
 		
 		for (int i=0; i<r; i++) {
 			for (int j=0; j<c; j++) {

@@ -26,22 +26,26 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
 public class CoverWindow extends JFrame implements ActionListener {
-	JButton startB = new JButton("Start");
-	JButton infoB = new JButton("Info");
+	/*
+	 * CoverWindow creates an initial screen; it gives the possibility to get some information about the proceedings of the application before starting.
+	 */
 	
-	JPanel outer = new JPanel();
-	JPanel header = new JPanel();
-	JPanel body = new JPanel();
-	JPanel buttonPanel = new JPanel();
+	private JButton startB = new JButton("Start");
+	private JButton infoB = new JButton("Info");
 	
-	CoverWindow() {
+	private JPanel outer = new JPanel();
+	private JPanel header = new JPanel();
+	private JPanel body = new JPanel();
+	private JPanel buttonPanel = new JPanel();
+	
+	public CoverWindow() {
 		
 		makeButton(startB);
 		makeButton(infoB);
-		startB.addActionListener(this);
+		startB.addActionListener(this); // button action listeners are defined below
 		infoB.addActionListener(this);
 		
-		JLabel title;
+		JLabel title; // title of the application
 		try {
 			Image titleImage = ImageIO.read(new File("src/pics/title3.png"));
 			title = new JLabel(new ImageIcon(titleImage));
@@ -80,6 +84,8 @@ public class CoverWindow extends JFrame implements ActionListener {
 	}
 	
 	public void makeButton(JButton button) {
+		// creates fancy black background buttons
+		
 		button.setBackground(new Color(27,27,27));
 		button.setFocusable(false);
 		button.setForeground(Color.LIGHT_GRAY);
@@ -88,6 +94,10 @@ public class CoverWindow extends JFrame implements ActionListener {
 	}
 	
 	public void insertInfo() {
+		/*
+		 * InsertInfo creates a JTextPane with additional information about the world and its entities.
+		 */
+		
 		String infoText = "<font size='4'><p>This application simulates <i><b>Pandemonium</b></i>, the Capital of Satan and his Peers.</p>"
 				+ "<p>It is a world dominated by a hierarchy of demons and corpses, a hive of pain and suffering, and sieged by demonic divinities. The world depends on its temperature (<b>Heat</b>) and the possibility of spawned creatures (<b>Plague</b>). These parameters change the way the world develops.</p><br/></font>";
 		String cradleText = "<b>Cradle of Filth</b><p>Demons are born as a Cradle of Filth, a passive demon that cannot but wait to move up in the demon hierarchy.</p><br/>";
@@ -99,18 +109,18 @@ public class CoverWindow extends JFrame implements ActionListener {
 		String hellfireText = "<b>Hellfire</b><p>Hellfire kills any approaching creature.</p><br/>";
 		
 		JTextPane info = new JTextPane();
-		JScrollPane scroll = new JScrollPane(info);
-		info.setEditable(false);
+		JScrollPane scroll = new JScrollPane(info); // put the textpane in a scrollable window
+		info.setEditable(false); // the pane should not be editable
 		info.setPreferredSize(new Dimension(320, 150));
-		info.setContentType("text/html");		
+		info.setContentType("text/html"); // set type to HTML to easily add some basic style
 		
-		HTMLEditorKit kit = new HTMLEditorKit();
+		HTMLEditorKit kit = new HTMLEditorKit(); // create HTMLEditorKit and HTMLDocument to embed images in the HTML, and link the JTextPane to the HTMLEditor.
 	    HTMLDocument doc = new HTMLDocument();
 	    info.setEditorKit(kit);
-	    info.setDocument(doc);
+	    info.setDocument(doc); // consider the JTextPane as an HTMLDocument
 	    
 	    try {
-		    kit.insertHTML(doc, doc.getLength(), infoText, 0, 0, null);
+		    kit.insertHTML(doc, doc.getLength(), infoText, 0, 0, null); // insert HTML via the editorKit at current endposition (doc.getLength()), without extra tags (null)
 		    
 			info.insertIcon(new ImageIcon("src/pics/cradle2.gif"));
 			kit.insertHTML(doc, doc.getLength(), cradleText, 0, 0, null);
@@ -140,14 +150,14 @@ public class CoverWindow extends JFrame implements ActionListener {
 	
 	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getSource() == startB) {
-			
+			// start simulator in MainWindow
 		    new MainWindow();
 			
-			this.setVisible(false);
+			this.setVisible(false); // get rid of this frame
 			this.dispose();
 			
 		} else if (arg0.getSource() == infoB) {
-			
+			// show info panel
 			insertInfo();
 			
 		}
