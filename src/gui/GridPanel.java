@@ -14,7 +14,7 @@ import entities.Entity;
 
 public class GridPanel extends JPanel {
 	
-	JPanel textPanel;
+	private JPanel textPanel;
 	private int r; // # rows
 	private int c; // # columns
 	private String[][] boardMatrix; // boardMatrix of World instance; matrix of Strings
@@ -36,7 +36,7 @@ public class GridPanel extends JPanel {
 		
 	}
 	
-	public void makeButtonGrid() {
+	private void makeButtonGrid() {
 		 /*
 		  * For each row and for each column, create new button with corresponding boardMatrix text.
 		  * 

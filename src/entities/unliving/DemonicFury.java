@@ -6,7 +6,6 @@ import java.util.List;
 import entities.Entity;
 import entities.living.Sinner;
 import entities.living.demons.Demon;
-import framework.Log;
 
 public class DemonicFury extends UnlivingEntity {
 	// demonic fury increases all demons' cruelty and decreases all sinners' divinity

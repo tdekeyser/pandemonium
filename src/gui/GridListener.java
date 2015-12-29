@@ -25,6 +25,15 @@ public class GridListener implements ActionListener {
 	
 	private Map<String, List<Entity>> boardMap; // boardMap from World; contains entity info per position
 	private Map<JButton, String> buttonGrid; // buttonGrid from GridPanel; contains position per button
+	
+	private String root = "src/gui/pics/"; // locations of entity images
+	private String cradleLoc = root + "cradle2.gif";
+	private String impLoc = root + "imp5.gif";
+	private String infLoc = root + "infernal2.gif";
+	private String dcLoc = root + "commander1.gif";
+	private String sLoc = root + "sinner4.gif";
+	private String aodLoc = root + "angelofdeath1.gif";
+	private String hLoc = root + "hellfire.gif";
 
 	public GridListener(JPanel textPanel) {
 		this.textPanel = textPanel;
@@ -58,13 +67,13 @@ public class GridListener implements ActionListener {
 				for (Entity e : boardMap.get(position)) {
 					
 					switch (e.getType()) { // insert images according to the entity types on board
-					case "CradleOfFilth": charInfo.insertIcon(new ImageIcon("src/pics/cradle2.gif")); break;
-					case "Imp": charInfo.insertIcon(new ImageIcon("src/pics/imp5.gif")); break;
-					case "InfernalDemon": charInfo.insertIcon(new ImageIcon("src/pics/infernal2.gif")); break;
-					case "DemonCommander": charInfo.insertIcon(new ImageIcon("src/pics/commander1.gif")); break;
-					case "Sinner": charInfo.insertIcon(new ImageIcon("src/pics/sinner4.gif")); break;
-					case "AngelOfDeath": charInfo.insertIcon(new ImageIcon("src/pics/angelofdeath1.gif")); break;
-					case "unliving": charInfo.insertIcon(new ImageIcon("src/pics/hellfire.gif")); break;
+					case "CradleOfFilth": charInfo.insertIcon(new ImageIcon(cradleLoc)); break;
+					case "Imp": charInfo.insertIcon(new ImageIcon(impLoc)); break;
+					case "InfernalDemon": charInfo.insertIcon(new ImageIcon(infLoc)); break;
+					case "DemonCommander": charInfo.insertIcon(new ImageIcon(dcLoc)); break;
+					case "Sinner": charInfo.insertIcon(new ImageIcon(sLoc)); break;
+					case "AngelOfDeath": charInfo.insertIcon(new ImageIcon(aodLoc)); break;
+					case "unliving": charInfo.insertIcon(new ImageIcon(hLoc)); break;
 					}
 					
 					StyledDocument doc = charInfo.getStyledDocument(); // add text to the JTextPane

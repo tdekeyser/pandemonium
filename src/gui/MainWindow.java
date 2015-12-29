@@ -25,7 +25,7 @@ public class MainWindow extends JFrame {
 	private JPanel titlePanel = new JPanel();
 	private JPanel outerPanel = new JPanel();
 	private JLabel statusBar = new JLabel("** Pandemonium status **");
-	private JPanel inputPanel = new InputPanel();
+	private InputPanel inputPanel = new InputPanel();
 	private JPanel boardPanel = new JPanel();
 	private JPanel infoPanel = new JPanel();
 
@@ -36,7 +36,7 @@ public class MainWindow extends JFrame {
 	
 	public MainWindow() {
 		
-		JComponent[] inputFields = ((InputPanel) inputPanel).getFields();
+		JComponent[] inputFields = inputPanel.getFields();
 		WorldMaker worldMaker = new WorldMaker(
 						boardPanel,
 						infoPanel,
@@ -75,17 +75,14 @@ public class MainWindow extends JFrame {
 		infoPanel.setBorder(BorderFactory.createTitledBorder("Info"));
 		
 		// status bar
-		statusBar.setOpaque(true); // must be opaque to be able to change background of JLabel
-		statusBar.setBackground(Color.WHITE);
-		statusBar.setHorizontalAlignment(SwingConstants.CENTER);
-		statusBar.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-		statusBar.setPreferredSize(new Dimension(100, 30));
+		createStatusBar();
 		
 		// titlePanel
 		JLabel title;
 		try {
 			Image titleImage = ImageIO.read(new File("src/pics/torn_paper2.png"));
 			title = new JLabel(new ImageIcon(titleImage));
+			//title = new JLabel(new ImageIcon(MainWindow.class.getResource("/pics/torn_paper2.png")));
 		} catch (IOException io) {
 			title = new JLabel("<html><font size='50' color='#c34528'>Pandemonium</font>");
 		}
@@ -109,6 +106,14 @@ public class MainWindow extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
 		setVisible(true);
+	}
+	
+	private void createStatusBar() {
+		statusBar.setOpaque(true); // must be opaque to be able to change background of JLabel
+		statusBar.setBackground(Color.WHITE);
+		statusBar.setHorizontalAlignment(SwingConstants.CENTER);
+		statusBar.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+		statusBar.setPreferredSize(new Dimension(100, 30));
 	}
 	
 }

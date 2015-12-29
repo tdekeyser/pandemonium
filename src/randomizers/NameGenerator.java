@@ -13,12 +13,13 @@ public class NameGenerator {
 	 * NameGenerator contains the getDemonName() method that returns a random name from the file with demon names
 	 */
 
-	private String filePath = "src/demon_names.txt";
+	private String root = "src/randomizers/names/";
+	private String filePath = root + "demon_names.txt";
 	private List<String> names = new ArrayList<>();
 	
 	public NameGenerator(String type) {
 		if (type.equals("angelic")) {
-			setFilePath("src/angelic_names.txt");
+			setFilePath("src/randomizers/names/angelic_names.txt");
 		}
 		readNames();
 	}

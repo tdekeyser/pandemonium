@@ -15,32 +15,31 @@ import javax.swing.JTextField;
 
 public class InputPanel extends JPanel implements ActionListener {
 	
-	JLabel aosL = new JLabel("Amount of states:");
-	JTextField aoS = new JTextField("10");
+	private JLabel aosL = new JLabel("Amount of states:");
+	private JTextField aoS = new JTextField("10");
 	
-	JLabel tbsL = new JLabel("Time between state (ms):");
-	JTextField tbs = new JTextField("1000");
+	private JLabel tbsL = new JLabel("Time between state (ms):");
+	private JTextField tbs = new JTextField("1000");
 	
-	JLabel aoeL = new JLabel("Amount of initial entities:");
-	JTextField aoE = new JTextField("10");
+	private JLabel aoeL = new JLabel("Amount of initial entities:");
+	private JTextField aoE = new JTextField("10");
 	
-	JPanel entityDistrPanel = new JPanel();
-	JLabel edaL = new JLabel("Entity distribution:");
-	JTextField eDA = new JTextField("33");
-	JTextField eDB = new JTextField("33");
-	JTextField eDC = new JTextField("34");
+	private JPanel entityDistrPanel = new JPanel();
+	private JLabel edaL = new JLabel("Entity distribution:");
+	private JTextField eDA = new JTextField("33");
+	private JTextField eDB = new JTextField("33");
+	private JTextField eDC = new JTextField("34");
 	
-	JPanel boardDimPanel = new JPanel();
-	JLabel bdaL = new JLabel("Board dimensions:");
-	JTextField bDA = new JTextField("6");
-	JTextField bDB = new JTextField("6");
+	private JPanel boardDimPanel = new JPanel();
+	private JLabel bdaL = new JLabel("Board dimensions:");
+	private JTextField bDA = new JTextField("6");
+	private JTextField bDB = new JTextField("6");
 	
-	JLabel heatL = new JLabel("Heat:");
-	JSlider heatS = new JSlider(0, 100, 0);
-	JLabel copL = new JLabel("Chance on plague:");
-	JSlider chanceOnPlagueS = new JSlider(0, 100, 0);
+	private JLabel heatL = new JLabel("Heat:");
+	private JSlider heatS = new JSlider(0, 100, 0);
+	private JLabel copL = new JLabel("Chance on plague:");
+	private JSlider chanceOnPlagueS = new JSlider(0, 100, 0);
 	
-	JPanel buttonPanel = new JPanel();
 	private final JButton reset = new JButton("Reset");
 	
 	public InputPanel() {
@@ -85,7 +84,7 @@ public class InputPanel extends JPanel implements ActionListener {
 		
 	}
 	
-	public void paintSliderLabels(JSlider s, int majorTickSpacing, int minorTickSpacing) {
+	private void paintSliderLabels(JSlider s, int majorTickSpacing, int minorTickSpacing) {
 		s.setMajorTickSpacing(majorTickSpacing);
 		s.setMinorTickSpacing(minorTickSpacing);
 		s.setPaintTicks(true);

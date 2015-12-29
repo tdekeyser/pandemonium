@@ -93,7 +93,7 @@ public class WorldMaker implements ActionListener {
 			
 	}
 	
-	public void initialiseWorld() throws IOException {
+	private void initialiseWorld() throws IOException {
 		// creates World instance 
 		
 		w = new World(amountOfStates, amountOfEntities, entityDistribution, boardDimensions, heat, chanceOnPlague);
@@ -102,7 +102,7 @@ public class WorldMaker implements ActionListener {
 		w.initialise();
 	}
 	
-	public void paintGrid() {
+	private void paintGrid() {
 		// display Grid on boardPanel
 		
 		boardPanel.removeAll(); // remove existing grid
@@ -113,7 +113,7 @@ public class WorldMaker implements ActionListener {
 		boardPanel.revalidate(); // repacks the Grid if it is initialised a second time
 	}
 	
-	public void activateActionDisplays() {
+	private void activateActionDisplays() {
 		// initialise child panels of infoPanel
 		
 		textPanel.setPreferredSize(new Dimension(230, 400));
@@ -127,7 +127,7 @@ public class WorldMaker implements ActionListener {
 		infoPanel.add(actionDisplay);
 	}
 	
-	public void displayUnlivingActions() {
+	private void displayUnlivingActions() {
 		// If last state had effected unliving actions (plague, demonic fury, divine intervention), put them in display (in infoPanel)
 
 		display.setText("");
