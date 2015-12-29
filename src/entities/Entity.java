@@ -50,7 +50,7 @@ public abstract class Entity implements Printable {
 	
 	public void copyAndAppendToLog(Entity copier, String entry) {
 		this.appendToLog(copier.fetchLog());
-		log.appendToLog(entry);
+		this.appendToLog(entry);
 	}
 	
 	public void emptyLog() {

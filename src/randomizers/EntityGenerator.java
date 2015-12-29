@@ -1,5 +1,7 @@
 package randomizers;
 
+import java.util.Arrays;
+
 import entities.Entity;
 import entities.living.CradleOfFilth;
 import entities.living.LivingEntity;
@@ -24,19 +26,27 @@ public class EntityGenerator {
 	}
 	
 	public Entity spawnSinner() {
-		return new Sinner(randomizeGender(), computeRandomPosition());
+		Sinner s = new Sinner(randomizeGender(), computeRandomPosition());
+		s.appendToLog("Spawned at " + Arrays.toString(s.getCurrentPosition()));
+		return s;
 	}
 	
 	public Entity spawnCradle() {
-		return new CradleOfFilth(randomizeGender(), computeRandomPosition());
+		CradleOfFilth c = new CradleOfFilth(randomizeGender(), computeRandomPosition());
+		c.appendToLog("Spawned at " + Arrays.toString(c.getCurrentPosition()));
+		return c;
 	}
 	
 	public Entity spawnImp() {
-		return new Imp(demonGen.getName(), randomizeGender(), computeRandomPosition());
+		Imp i = new Imp(demonGen.getName(), randomizeGender(), computeRandomPosition());
+		i.appendToLog("Spawned at " + Arrays.toString(i.getCurrentPosition()));
+		return i;
 	}
 	
 	public Entity spawnAngelOfDeath() {
-		return new AngelOfDeath(angelGen.getName(), randomizeGender(), computeRandomPosition());
+		AngelOfDeath aod = new AngelOfDeath(angelGen.getName(), randomizeGender(), computeRandomPosition());
+		aod.appendToLog("Spawned at " + Arrays.toString(aod.getCurrentPosition()));
+		return aod;
 	}
 	
 	public Entity createHellFire(String placername, String placertype) {

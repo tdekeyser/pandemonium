@@ -67,7 +67,7 @@ public class CoverWindow extends JFrame implements ActionListener {
 		
 		JLabel title; // title of the application
 		try {
-			Image titleImage = ImageIO.read(new File("src/pics/title3.png"));
+			Image titleImage = ImageIO.read(new File("src/gui/pics/title3.png"));
 			title = new JLabel(new ImageIcon(titleImage));
 		} catch (IOException io) {
 			title = new JLabel("<html><font size='50' color='#c34528'>Pandemonium</font>");

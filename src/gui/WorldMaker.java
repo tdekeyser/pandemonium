@@ -18,6 +18,7 @@ import javax.swing.JSlider;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import entities.Entity;
 import framework.World;
 
 public class WorldMaker implements ActionListener {
@@ -33,6 +34,7 @@ public class WorldMaker implements ActionListener {
 	private JButton initializer;
 	private JButton runner;
 	private JButton getLog;
+	private JButton getEntityLog;
 	private JTextField aoS; // amount of states
 	private JTextField tbs; // time between states
 	private JTextField aoE; // amount of initial entities
@@ -77,6 +79,7 @@ public class WorldMaker implements ActionListener {
 		this.initializer = wButtons[0];
 		this.runner = wButtons[1];
 		this.getLog = wButtons[2];
+		this.getEntityLog = wButtons[3];
 		this.aoS = aoS;
 		this.tbs = tbs;
 		this.aoE = aoE;
@@ -90,6 +93,7 @@ public class WorldMaker implements ActionListener {
 		
 		runner.setEnabled(false);
 		getLog.setEnabled(false);
+		getEntityLog.setEnabled(false);
 			
 	}
 	
@@ -170,6 +174,7 @@ public class WorldMaker implements ActionListener {
 				statusBar.setText("World initialised.");
 				runner.setEnabled(true); // enable the next buttons
 				getLog.setEnabled(true);
+				getEntityLog.setEnabled(false); // no interesting log available yet
 				
 			} catch (NumberFormatException ne) {
 				statusBar.setText("Use numerical input only!");
@@ -182,6 +187,11 @@ public class WorldMaker implements ActionListener {
 			new Thread(){ // thread that allows to dynamically repaint Grid without freezing the GUI
 				
 				public void run() {
+					
+					initializer.setEnabled(false); // while working, you cannot click on buttons
+					runner.setEnabled(false);
+					getLog.setEnabled(false);
+					getEntityLog.setEnabled(false);
 					
 					if (amountOfStates<100) {
 						for (int i=0; i<amountOfStates; i++) {
@@ -201,22 +211,21 @@ public class WorldMaker implements ActionListener {
 						} catch (IOException io) { /* impossible exception; leaving it empty is OK */ }
 						
 						statusBar.setText("Working..."); // set working text in status bar
-						initializer.setEnabled(false); // while working, you cannot click on buttons
-						runner.setEnabled(false);
-						getLog.setEnabled(false);
 						
 						w.run(); // run all states
 									
 						paintGrid();
 						displayUnlivingActions();
 						
-						initializer.setEnabled(true); // re-enable buttons
-						runner.setEnabled(true);
-						getLog.setEnabled(true);
-						
 						pastStates += amountOfStates;
 						statusBar.setText("World simulated " + Integer.toString(pastStates) + " states."); // update status bar
 					}
+					
+					initializer.setEnabled(true); // re-enable buttons
+					runner.setEnabled(true);
+					getLog.setEnabled(true);
+					getEntityLog.setEnabled(true);
+					
 				}
 			}.start();
 			
@@ -228,6 +237,17 @@ public class WorldMaker implements ActionListener {
 				statusBar.setText("World log exported.");
 			} catch (IOException io) { io.printStackTrace(); }
 			
+		} else if (arg0.getSource() == getEntityLog) {
+			// write Entity logs in .txt file
+			
+			try (BufferedWriter entityLog = Files.newBufferedWriter(Paths.get("Pandemonium_EntityLogs.txt"), Charset.defaultCharset())) {
+				for (List<Entity> positionList : w.getBoardMap().values()) {
+					for (Entity e : positionList) {
+						entityLog.write(e.fetchLog() + "(end)" + System.lineSeparator() + System.lineSeparator());
+					}
+				}
+				statusBar.setText("Entity logs exported.");
+			} catch (IOException io) { io.printStackTrace(); }
 		}
 	
 	}

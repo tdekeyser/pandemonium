@@ -48,7 +48,7 @@ public class CradleOfFilth extends LivingEntity {
 		NameGenerator n = new NameGenerator("demonic");
 		Imp evolved_obj = new Imp(n.getName(), this.getGender(), this.getCurrentPosition());
 		evolved_obj.emptyLog();
-		evolved_obj.copyAndAppendToLog(this, evolved_obj.toStringLong() + "Evolved from Cradle.");
+		evolved_obj.copyAndAppendToLog(this, "Evolved to " + evolved_obj.getName() + ", Imp, from Cradle.");
 		return evolved_obj;
 	}
 	
