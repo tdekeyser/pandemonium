@@ -35,6 +35,13 @@ public class MainWindow extends JFrame {
 	private final JButton getEntityLog = new JButton("E-Log");
 	private JButton[] wButtons = {initializer, runner, getLog, getEntityLog};
 	
+	private String root = "src/gui/pics/"; // location of image folder
+	private String titleLoc = root + "torn_paper2.png";
+	private String initLoc = root + "init.png";
+	private String runLoc = root + "run.png";
+	private String logLoc = root + "log.png";
+	private String elogLoc = root + "elog.png";
+	
 	private WorldMaker worldMaker; // class that creates World instance and responds to buttons
 	
 	public MainWindow() {
@@ -60,17 +67,7 @@ public class MainWindow extends JFrame {
 		makeWorldButton(runner);
 		makeWorldButton(getLog);
 		makeWorldButton(getEntityLog);
-		
-		try {
-			Image init = ImageIO.read(new File("src/gui/pics/init.png"));
-			Image run = ImageIO.read(new File("src/gui/pics/run.png"));
-			Image log = ImageIO.read(new File("src/gui/pics/log.png"));
-			Image elog = ImageIO.read(new File("src/gui/pics/elog.png"));
-			initializer.setIcon(new ImageIcon(init));
-			runner.setIcon(new ImageIcon(run));
-			getLog.setIcon(new ImageIcon(log));
-			getEntityLog.setIcon(new ImageIcon(elog));
-		} catch (IOException io) { /* if exception, then simply no icons */ }
+		setButtonImages();
 		
 		// boardPanel
 		boardPanel.setPreferredSize(new Dimension(550, 550));
@@ -84,20 +81,7 @@ public class MainWindow extends JFrame {
 		createStatusBar();
 		
 		// titlePanel
-		JLabel title;
-		try {
-			Image titleImage = ImageIO.read(new File("src/gui/pics/torn_paper2.png"));
-			title = new JLabel(new ImageIcon(titleImage));
-			//title = new JLabel(new ImageIcon(MainWindow.class.getResource("/pics/torn_paper2.png")));
-		} catch (IOException io) {
-			title = new JLabel("<html><font size='50' color='#c34528'>Pandemonium</font>");
-		}
-		titlePanel.add(title);
-		titlePanel.add(Box.createRigidArea(new Dimension(150,150))); // create empty space next to title
-		titlePanel.add(initializer);
-		titlePanel.add(runner);
-		titlePanel.add(getLog);
-		titlePanel.add(getEntityLog);
+		createTitlePanel();
 	
 		this.setTitle("Pandemonium simulator v1.0");
 		this.getContentPane().add(outerPanel);
@@ -116,6 +100,20 @@ public class MainWindow extends JFrame {
 		
 	}
 	
+	private void setButtonImages() {
+		// tries to set button icons
+		try {
+			Image init = ImageIO.read(new File(initLoc));
+			Image run = ImageIO.read(new File(runLoc));
+			Image log = ImageIO.read(new File(logLoc));
+			Image elog = ImageIO.read(new File(elogLoc));
+			initializer.setIcon(new ImageIcon(init));
+			runner.setIcon(new ImageIcon(run));
+			getLog.setIcon(new ImageIcon(log));
+			getEntityLog.setIcon(new ImageIcon(elog));
+		} catch (IOException io) { /* if exception, then simply no icons */ }
+	}
+	
 	private void makeWorldButton(JButton b) {
 		// set listener to worldMaker
 		
@@ -129,6 +127,23 @@ public class MainWindow extends JFrame {
 		statusBar.setHorizontalAlignment(SwingConstants.CENTER);
 		statusBar.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		statusBar.setPreferredSize(new Dimension(100, 30));
+	}
+	
+	private void createTitlePanel() {
+		JLabel title;
+		try {
+			Image titleImage = ImageIO.read(new File(titleLoc));
+			title = new JLabel(new ImageIcon(titleImage));
+			//title = new JLabel(new ImageIcon(MainWindow.class.getResource("/pics/torn_paper2.png")));
+		} catch (IOException io) {
+			title = new JLabel("<html><font size='50' color='#c34528'>Pandemonium</font>");
+		}
+		titlePanel.add(title);
+		titlePanel.add(Box.createRigidArea(new Dimension(150,150))); // create empty space next to title
+		titlePanel.add(initializer);
+		titlePanel.add(runner);
+		titlePanel.add(getLog);
+		titlePanel.add(getEntityLog);
 	}
 	
 }

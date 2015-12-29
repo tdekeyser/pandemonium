@@ -38,7 +38,8 @@ public class CoverWindow extends JFrame implements ActionListener {
 	private JPanel body = new JPanel();
 	private JPanel buttonPanel = new JPanel();
 	
-	private String root = "src/gui/pics/"; // locations of entity images
+	private String root = "src/gui/pics/"; // locations of images
+	private String titleLoc = root + "title3.png";
 	private String cradleLoc = root + "cradle2.gif";
 	private String impLoc = root + "imp5.gif";
 	private String infLoc = root + "infernal2.gif";
@@ -67,7 +68,7 @@ public class CoverWindow extends JFrame implements ActionListener {
 		
 		JLabel title; // title of the application
 		try {
-			Image titleImage = ImageIO.read(new File("src/gui/pics/title3.png"));
+			Image titleImage = ImageIO.read(new File(titleLoc));
 			title = new JLabel(new ImageIcon(titleImage));
 		} catch (IOException io) {
 			title = new JLabel("<html><font size='50' color='#c34528'>Pandemonium</font>");
