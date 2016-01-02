@@ -10,17 +10,22 @@ import java.util.List;
 
 public class NameGenerator {
 	/*
-	 * NameGenerator contains the getDemonName() method that returns a random name from the file with demon names
+	 * NameGenerator contains the getName() method that returns a random name from the file with names (angelic or demonic)
 	 */
 
-	private String root = "src/randomizers/names/";
-	private String filePath = root + "demon_names.txt";
+	private String ROOT = "src/randomizers/names/";
+	private String FILE_PATH;
 	private List<String> names = new ArrayList<>();
 	
 	public NameGenerator(String type) {
+		// constructor sets file path to angelic or demonic names
+		
 		if (type.equals("angelic")) {
-			setFilePath("src/randomizers/names/angelic_names.txt");
+			setFilePath(ROOT + "angelic_names.txt");
+		} else if (type.equals("demonic")) {
+			setFilePath(ROOT + "demon_names.txt");
 		}
+		
 		readNames();
 	}
 	
@@ -44,12 +49,12 @@ public class NameGenerator {
 	
 	private void setFilePath(String filePath) {
 		// set different filePath variable
-		this.filePath = filePath;
+		FILE_PATH = filePath;
 	}
 	
 	private void readNames() {
 		// generate demon names based on filePath
-		try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), Charset.defaultCharset())) {
+		try (BufferedReader reader = Files.newBufferedReader(Paths.get(FILE_PATH), Charset.defaultCharset())) {
 			// create bufferedreader and append all read lines to List<String> demonNames
 			String line = null;
 			while ((line = reader.readLine()) != null) {

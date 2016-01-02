@@ -11,7 +11,9 @@ import entities.living.demons.Imp;
 import entities.unliving.HellFire;
 
 public class EntityGenerator {
-	// brings together methods to create new entities at random
+	/* 
+	 * Brings together methods to create new entities at random and to manipulate entities at random
+	 */
 	
 	private int[] boardDimensions;
 	private NameGenerator demonGen = new NameGenerator("demonic");
