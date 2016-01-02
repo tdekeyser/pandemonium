@@ -13,12 +13,5 @@ public class Randomizer {
 	public static int random(int border) {
 		return (int) compute_random(border);
 	}
-	
-	public static void main(String[] args) {
-		// TEST Randomizer.random()
-		
-		System.out.println(Randomizer.random(5));
-		System.out.println(Randomizer.random(120));
-	}
 
 }

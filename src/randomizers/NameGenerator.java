@@ -62,13 +62,5 @@ public class NameGenerator {
 			}
 		} catch (IOException x) { x.printStackTrace(); }		
 	}
-	
-	public static void main(String[] args) throws IOException {
-		// TEST NameGenerator
-		
-		NameGenerator n = new NameGenerator("demonic");
-		System.out.println("Amount of names: " + n.names.size());
-		System.out.println("Random name: " + n.getName());
-	}
 
 }

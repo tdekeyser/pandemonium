@@ -106,43 +106,4 @@ public class Board {
 		return boardString.toString();
 	}
 	
-	public static void main(String[] args) {
-		// TEST Board
-		
-		int[] pos = {3,4};
-		int[] pos2 = {3,4};
-		CradleOfFilth cof = new CradleOfFilth("male", pos);
-		Imp impie = cof.evolve();
-		CradleOfFilth cof2 = new CradleOfFilth("female", pos2);
-		
-		try {
-			int[] boardDimensions = {7, 7};
-			Board a = new Board(boardDimensions);
-			List<Entity> boardEntities = new ArrayList<>();
-			boardEntities.add(cof);
-			boardEntities.add(impie);
-			a.setBoardEntities(boardEntities);
-			a.initialiseBoard();
-			
-			System.out.println(a.toString());
-			
-			List<Entity> entitiesOnPosition34 = a.objectsAtPosition(pos);
-			System.out.println(entitiesOnPosition34);
-			System.out.println(entitiesOnPosition34.get(1).toStringLong());
-			
-			List<Entity> second = new ArrayList<>();
-			second.add(impie);
-			second.add(cof2);
-			
-			a.updateBoard(second);
-			
-			System.out.println(a.toString());
-			System.out.println(a.objectsAtPosition(pos));
-			System.out.println(a.getBoardMap());
-			
-			
-		} catch (IOException io) { io.printStackTrace(); }
-		
-	}
-	
 }

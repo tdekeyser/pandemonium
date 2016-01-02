@@ -52,12 +52,4 @@ public class CradleOfFilth extends LivingEntity {
 		return evolved_obj;
 	}
 	
-	public static void main(String[] args) {
-		// TEST CradleOfFilth
-		
-		int[] cofPos = {3,4};
-		CradleOfFilth cof = new CradleOfFilth("female", cofPos);
-		System.out.println(cof.toString());
-	}
-	
 }

@@ -45,20 +45,6 @@ public class Imp extends Demon {
 		evolved_obj.copyAndAppendToLog(this, "Evolved to InfernalDemon from Imp.");
 		return evolved_obj;
 	}
-	
-	public static void main(String[] args) {
-		// TEST Imp
-		
-		int[] cofPos = {3,4};
-		CradleOfFilth cof = new CradleOfFilth("female", cofPos);
-		cof.increaseAge();
-		cof.increaseAge();
-		
-		Imp impie = cof.evolve();
-		cof = null;
-		
-		System.out.println(impie.toStringLong());	
 
-	}
 	
 }

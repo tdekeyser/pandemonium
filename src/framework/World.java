@@ -154,11 +154,11 @@ public class World {
 	
 	
 	public static void main(String[] args) {
-		// TEST World class
+		// TEST World class, to demonstrate that the simulator can work without a GUI
 		
-		int amountOfStates = 1200;
+		int amountOfStates = 10;
 		int amountOfEntities = 10; // (living,unliving)
-		int[] entityDistribution = {60, 0, 40}; // (S, CoF, I)
+		int[] entityDistribution = {40, 20, 40}; // (S, CoF, I)
 		int[] boardDimensions = {5, 5};
 		int heat = 60; // random(2+heat); heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
 		int chanceOnPlague = 40; // P(spawn1Sinner)=1/f(x) and P(spawn1Cradle)=1/2f(x) if chanceOnPlague>=50, with f(100)=2; f(50)=4; f(0)=6
@@ -167,8 +167,8 @@ public class World {
 			World w = new World(amountOfStates, amountOfEntities, entityDistribution, boardDimensions, heat, chanceOnPlague);
 			w.initialise();
 			
-			//w.printOnScreen(); // allows printing of states in console
-			w.setTimeBetweenStates(0);
+			w.printOnScreen(); // allows printing of states in console
+			w.setTimeBetweenStates(100);
 			w.run();
 			
 			for (String[] a : w.getBoardMatrix()) {
@@ -176,11 +176,9 @@ public class World {
 			}
 			
 			int[] pos = {1, 2};
-			System.out.println(w.objectsAtPosition(pos)); // null if nothing; else arraylist with entities at position
-			
-			Entity first = w.entityList.get(0);
-			System.out.println(first.fetchLog());
-			System.out.println(first.toStringLong());
+			Entity first = w.entityList.get(0); // get an entity on the board
+			System.out.println(first.toStringLong()); // print its characteristics
+			System.out.println(first.fetchLog()); // print its log
 	
 		} catch (IOException io) { io.printStackTrace(); }
 		
