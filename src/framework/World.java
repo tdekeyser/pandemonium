@@ -22,15 +22,16 @@ public class World {
 	private int amountOfStates;
 	private int heat;
 	private int chanceOnPlague;
+	
 	private int timeBetweenStates = 1000; // in ms
-	private boolean printOnScreen = false;
 	private int stateNr = 1;
+	private boolean PRINT_ON_SCREEN = false;
 	
 	private Computer computer;
 	private Board board;
 	
-	private List<Entity> entityList = new ArrayList<>();
-	private List<String> unlivingActionList;
+	private List<Entity> entityList = new ArrayList<>(); // current list of entities on board
+	private List<String> unlivingActionList; // current list of unliving actions performed during last state
 	
 	public World(
 			int amountOfStates,
@@ -68,7 +69,7 @@ public class World {
 		board.initialiseBoard();	// initialises board
 		
 		worldLog.appendToLog("Initial" + System.lineSeparator() + "heat: " + heat + System.lineSeparator() + "chance on plague: " + chanceOnPlague + System.lineSeparator() + board.toString());
-		if (printOnScreen) System.out.println(worldLog.fetchLog());
+		if (PRINT_ON_SCREEN) System.out.println(worldLog.fetchLog());
 		
 	}
 	
@@ -88,7 +89,7 @@ public class World {
 		
 		String updateStr = "State " + id + System.lineSeparator() + board.toString();		
 		worldLog.appendToLog(updateStr); // write the update to worldLog
-		if (printOnScreen) System.out.println(updateStr); // immediately print the result to the screen
+		if (PRINT_ON_SCREEN) System.out.println(updateStr); // immediately print the result to the screen
 		
 		unlivingActionList = computer.getUnlivingActions();
 		for (String action : unlivingActionList) {
@@ -103,7 +104,7 @@ public class World {
 	}
 	
 	public void printOnScreen() {
-		printOnScreen = true;
+		PRINT_ON_SCREEN = true;
 	}
 	
 	public void setTimeBetweenStates(int timeBetweenStates) throws IOException {
@@ -136,15 +137,6 @@ public class World {
 		return amountOfStates;
 	}
 	
-	public void run() {
-		// runs the world according to the amount of states
-		for (int i=1; i<=amountOfStates; i++) {
-			update(Integer.toString(i));
-			stateNr++;
-		}
-		if (printOnScreen) System.out.println("World finished.");
-	}
-	
 	public void runOnce() {
 		// proceeds by 1 state
 		
@@ -152,6 +144,12 @@ public class World {
 		stateNr++;
 	}
 	
+	public void run() {
+		// runs the world according to the amount of states
+		for (int i=0; i<amountOfStates; i++) {
+			runOnce();
+		}
+	}	
 	
 	public static void main(String[] args) {
 		// TEST World class, to demonstrate that the simulator can work without a GUI
@@ -170,10 +168,6 @@ public class World {
 			w.printOnScreen(); // allows printing of states in console
 			w.setTimeBetweenStates(100);
 			w.run();
-			
-			for (String[] a : w.getBoardMatrix()) {
-				System.out.println(Arrays.toString(a));
-			}
 			
 			int[] pos = {1, 2};
 			Entity first = w.entityList.get(0); // get an entity on the board

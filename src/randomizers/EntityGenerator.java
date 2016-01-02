@@ -13,6 +13,7 @@ import entities.unliving.HellFire;
 public class EntityGenerator {
 	/* 
 	 * Brings together methods to create new entities at random and to manipulate entities at random
+	 * Instances of this class are used by Entities or a Computer object.
 	 */
 	
 	private int[] boardDimensions;
@@ -28,30 +29,35 @@ public class EntityGenerator {
 	}
 	
 	public Entity spawnSinner() {
+		// create random Sinner
 		Sinner s = new Sinner(randomizeGender(), computeRandomPosition());
 		s.appendToLog("Spawned at " + Arrays.toString(s.getCurrentPosition()));
 		return s;
 	}
 	
 	public Entity spawnCradle() {
+		// create random Cradle of Filth
 		CradleOfFilth c = new CradleOfFilth(randomizeGender(), computeRandomPosition());
 		c.appendToLog("Spawned at " + Arrays.toString(c.getCurrentPosition()));
 		return c;
 	}
 	
 	public Entity spawnImp() {
+		// create random Imp
 		Imp i = new Imp(demonGen.getName(), randomizeGender(), computeRandomPosition());
 		i.appendToLog("Spawned at " + Arrays.toString(i.getCurrentPosition()));
 		return i;
 	}
 	
 	public Entity spawnAngelOfDeath() {
+		// create random Angel of Death
 		AngelOfDeath aod = new AngelOfDeath(angelGen.getName(), randomizeGender(), computeRandomPosition());
 		aod.appendToLog("Spawned at " + Arrays.toString(aod.getCurrentPosition()));
 		return aod;
 	}
 	
 	public Entity createHellFire(String placername, String placertype) {
+		// create random HellFire
 		HellFire h = new HellFire(placername, placertype);
 		h.setCurrentPosition(computeRandomPosition());
 		return h;

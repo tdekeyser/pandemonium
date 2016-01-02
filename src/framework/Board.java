@@ -12,6 +12,10 @@ import entities.living.CradleOfFilth;
 import entities.living.demons.Imp;
 
 public class Board {
+	/*
+	 * Class that initialises and updates the board population. It keeps both a visual representation
+	 * of the board (boardMatrix) and a HashMap of its content (boardMap).
+	 */
 	
 	private int[] boardDimensions = new int[2];		// boardDimensions comprises [height, width]
 	private String[][] boardMatrix;			// boardMatrix is the visual representation of the board
