@@ -204,7 +204,12 @@ public class ActionSchema {
 			DemonCommander einf = e.evolve();
 			return einf;
 		} else {
-			return entityGen.moveRandomly((LivingEntity) e);
+			if (Randomizer.random(2) == 0) {
+				e.plot();
+				return e;
+			} else {
+				return entityGen.moveRandomly((LivingEntity) e);
+			}
 		}
 	}
 	

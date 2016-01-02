@@ -2,8 +2,6 @@ package entities.living.demons;
 
 import java.util.Arrays;
 
-import entities.living.CradleOfFilth;
-
 public class Imp extends Demon {
 	/* class for the lesser demon, 3rd in hierarchy and first mature
 	 * Imp has following variables:

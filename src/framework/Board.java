@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.ArrayList;
 
 import entities.Entity;
-import entities.living.CradleOfFilth;
-import entities.living.demons.Imp;
 
 public class Board {
 	/*

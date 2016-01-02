@@ -26,14 +26,18 @@ public class DemonCommander extends Demon {
 	}
 	
 	public Imp demonizeSinner(Sinner victim) {
+		// kill sinner and spawn random imp near its position
 		victim.declareDead();
 		this.appendToLog("Demonized Sinner at position " + Arrays.toString(this.getCurrentPosition()));
-		return summonImp(this.getCurrentPosition()); // TODO : does not work as it is intended... (see summonImp()
+		return summonImp(this.getCurrentPosition());
 	}
 	
-	public Imp summonImp(int[] boardDimensions) {
-		EntityGenerator ec = new EntityGenerator(boardDimensions);
-		return (Imp) ec.spawnImp();
+	public Imp summonImp(int[] summonArea) {
+		// summons imp randomly in requested area
+		EntityGenerator ec = new EntityGenerator(summonArea);
+		Imp i = (Imp) ec.spawnImp();
+		this.appendToLog("Summoned imp at position " + Arrays.toString(i.getCurrentPosition()));
+		return i;
 	}
 	
 }

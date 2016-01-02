@@ -2,7 +2,6 @@ package framework;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.lang.InterruptedException;
@@ -169,7 +168,6 @@ public class World {
 			w.setTimeBetweenStates(100);
 			w.run();
 			
-			int[] pos = {1, 2};
 			Entity first = w.entityList.get(0); // get an entity on the board
 			System.out.println(first.toStringLong()); // print its characteristics
 			System.out.println(first.fetchLog()); // print its log

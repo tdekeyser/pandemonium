@@ -29,6 +29,11 @@ public class InfernalDemon extends Demon {
 		return "InfD";
 	}
 	
+	public void plot() {
+		this.increaseCruelty();
+		this.appendToLog("Plotted horrific schemes.");
+	}
+	
 	public void tortureSinner(Sinner victim) {
 		//torture method decreases a Sinner victim's divinity & increases infD's cruelty
 		victim.decreaseDivinity();
