@@ -38,15 +38,15 @@ public class CoverWindow extends JFrame implements ActionListener {
 	private JPanel body = new JPanel();
 	private JPanel buttonPanel = new JPanel();
 	
-	private String root = "src/gui/pics/"; // locations of images
-	private String titleLoc = root + "title3.png";
-	private String cradleLoc = root + "cradle2.gif";
-	private String impLoc = root + "imp5.gif";
-	private String infLoc = root + "infernal2.gif";
-	private String dcLoc = root + "commander1.gif";
-	private String sLoc = root + "sinner4.gif";
-	private String aodLoc = root + "angelofdeath1.gif";
-	private String hLoc = root + "hellfire.gif";
+	final String ROOT = "src/gui/pics/"; // locations of images
+	final String TITLE_LOCATION = ROOT + "title3.png";
+	final String CRADLE_LOCATION = ROOT + "cradle2.gif";
+	final String IMP_LOCATION = ROOT + "imp5.gif";
+	final String INF_LOCATION = ROOT + "infernal2.gif";
+	final String DC_LOCATION = ROOT + "commander1.gif";
+	final String S_LOCATION = ROOT + "sinner4.gif";
+	final String AOD_LOCATION = ROOT + "angelofdeath1.gif";
+	final String H_LOCATION = ROOT + "hellfire.gif";
 	
 	// text for info panel
 	private String infoText = "<font size='4'><p>This application simulates <i><b>Pandemonium</b></i>, the Capital of Satan and his Peers.</p>"
@@ -68,7 +68,7 @@ public class CoverWindow extends JFrame implements ActionListener {
 		
 		JLabel title; // title of the application
 		try {
-			Image titleImage = ImageIO.read(new File(titleLoc));
+			Image titleImage = ImageIO.read(new File(TITLE_LOCATION));
 			title = new JLabel(new ImageIcon(titleImage));
 		} catch (IOException io) {
 			title = new JLabel("<html><font size='50' color='#c34528'>Pandemonium</font>");
@@ -133,25 +133,25 @@ public class CoverWindow extends JFrame implements ActionListener {
 	    try {
 		    kit.insertHTML(doc, doc.getLength(), infoText, 0, 0, null); // insert HTML via the editorKit at current endposition (doc.getLength()), without extra tags (null)
 		    
-			info.insertIcon(new ImageIcon(cradleLoc));
+			info.insertIcon(new ImageIcon(CRADLE_LOCATION));
 			kit.insertHTML(doc, doc.getLength(), cradleText, 0, 0, null);
 			
-			info.insertIcon(new ImageIcon(impLoc));
+			info.insertIcon(new ImageIcon(IMP_LOCATION));
 			kit.insertHTML(doc, doc.getLength(), impText, 0, 0, null);
 			
-			info.insertIcon(new ImageIcon(infLoc));
+			info.insertIcon(new ImageIcon(INF_LOCATION));
 			kit.insertHTML(doc, doc.getLength(), infernalText, 0, 0, null);
 			
-			info.insertIcon(new ImageIcon(dcLoc));
+			info.insertIcon(new ImageIcon(DC_LOCATION));
 			kit.insertHTML(doc, doc.getLength(), commanderText, 0, 0, null);
 			
-			info.insertIcon(new ImageIcon(sLoc));
+			info.insertIcon(new ImageIcon(S_LOCATION));
 			kit.insertHTML(doc, doc.getLength(), sinnerText, 0, 0, null);
 			
-			info.insertIcon(new ImageIcon(aodLoc));
+			info.insertIcon(new ImageIcon(AOD_LOCATION));
 			kit.insertHTML(doc, doc.getLength(), angelText, 0, 0, null);
 			
-			info.insertIcon(new ImageIcon(hLoc));
+			info.insertIcon(new ImageIcon(H_LOCATION));
 			kit.insertHTML(doc, doc.getLength(), hellfireText, 0, 0, null);
 		} catch (BadLocationException | IOException b) {}
 		
