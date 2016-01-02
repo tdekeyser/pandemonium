@@ -50,7 +50,7 @@ public class CoverWindow extends JFrame implements ActionListener {
 	
 	// text for info panel
 	private String infoText = "<font size='4'><p>This application simulates <i><b>Pandemonium</b></i>, the Capital of Satan and his Peers.</p>"
-			+ "<p>It is a world dominated by a hierarchy of demons and corpses, a hive of pain and suffering, and sieged by demonic divinities. The world depends on its temperature (<b>Heat</b>) and the possibility of spawned creatures (<b>Plague</b>). These parameters change the way the world develops.</p><br/></font>";
+			+ "<p>It is a world dominated by a hierarchy of demons and corpses, a hive of pain and suffering, and besieged by demonic divinities. The world depends on its temperature (<b>Heat</b>) and the possibility of spawned creatures (<b>Plague</b>). These parameters change the way the world develops.</p><br/></font>";
 	private String cradleText = "<b>Cradle of Filth</b><p>Demons are born as a Cradle of Filth, a passive demon that cannot but wait to move up in the demon hierarchy.</p><br/>";
 	private String impText = "<b>Imp</b><p>Imps are aggressive creatures that have either evolved from their cradles, spawned from the ground, or answered the call of their Commander. They are the lowest rank of demons in <i>Pandemonium</i>. This demon gets rid of the dead but also cannibalizes its kin when it is able to.</p><br/>";
 	private String infernalText = "<b>Infernal Demon</b><p>Next in the hierarchy is the Infernal Demon. Evolved from Imps, these are cruel demons that torture the unfortunate or kill them.</p><br/>";
