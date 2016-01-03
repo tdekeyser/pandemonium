@@ -111,11 +111,6 @@ public class World {
 		this.timeBetweenStates = timeBetweenStates;
 	}
 	
-	public List<Entity> objectsAtPosition(int[] requestedPosition) {
-		// returns list of entities at a given position
-		return board.objectsAtPosition(requestedPosition);
-	}
-	
 	public Map<String, List<Entity>> getBoardMap() {
 		return board.getBoardMap();
 	}
@@ -130,10 +125,6 @@ public class World {
 	
 	public String getWorldLog() {
 		return worldLog.fetchLog();
-	}
-	
-	public int getAmountOfStates() {
-		return amountOfStates;
 	}
 	
 	public void runOnce() {

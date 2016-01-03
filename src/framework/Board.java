@@ -14,23 +14,20 @@ public class Board {
 	 * Class that initialises and updates the board population. It keeps both a visual representation
 	 * of the board (boardMatrix) and a HashMap of its content (boardMap).
 	 */
-	
-	private int[] boardDimensions = new int[2];		// boardDimensions comprises [height, width]
+
 	private String[][] boardMatrix;			// boardMatrix is the visual representation of the board
 	private Map<String, List<Entity>> boardMap = new HashMap<String, List<Entity>>(); 	// HashMap that contains objects on every position
 	
 	private List<Entity> boardEntities = new ArrayList<>();
 
 	public Board(int[] boardDimensions) throws IOException {
-		// overloaded constructor to define custom rows and columns
 		
 		int rows = boardDimensions[0];
 		int columns = boardDimensions[1];
 		if (rows < 1 || columns < 1) { throw new IOException("Board: Dimensions cannot be smaller than 1."); }
 		
-		this.boardDimensions = boardDimensions;
 		boardMatrix = new String[rows][columns];
-		clearMatrix();
+		clearMatrix(); // sets the matrix with empty strings
 		
 	}
 	
@@ -77,16 +74,6 @@ public class Board {
 	
 	public String[][] getBoardMatrix() {
 		return boardMatrix;
-	}
-	
-	public List<Entity> objectsAtPosition(int[] requestedPosition) {
-		// returns list of entities at a given position
-		return boardMap.get(Arrays.toString(requestedPosition));
-	}
-	
-	public int[] getBoardDimensions() {
-		// get Array of board dimensions
-		return boardDimensions;
 	}
 	
 	private void clearMatrix() {
