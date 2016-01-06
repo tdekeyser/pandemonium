@@ -13,16 +13,12 @@ import randomizers.Randomizer;
 
 public class Computer {
 	/* class that brings together methods to compute a new state based on (user) input
-	 * New entityList:
-	 * 		- createLivingEntities(int amountofLiving, int[] entityDistribution)
-	 * 		- activateLiving(List<Entity> entitiesOnPositionX)
-	 * Random positions:
-	 * 		- computeRandomPosition()
-	 */
-	
-	/*
-	 * TODO
-	 * Bug: [H1 H2 X Y] does not return [] but [H1 Y], because the H1 targets H2 first, and then finishes because it targets an unliving entity
+	 * 
+	 * 		- createLivingEntities(int amountofLiving, int[] entityDistribution),
+	 * 		- activateLiving(List<Entity> entitiesOnPositionX),
+	 * 		- activateUnliving(List<Entity>), and
+	 * 		- getUnlivingActions()
+	 *
 	 */
 	
 	private int heat;
@@ -71,12 +67,13 @@ public class Computer {
 	
 	public List<Entity> activateEntities(List<Entity> ePosList) {
 		/*
-		 * Method that gets as input entities at a specific position,
-		 * It first evaluates whether there are more than one present, if there is, there is a chance that they target one another.
-		 * Then, in case of an existing target, it creates a list of possible targets, loops over the targets (entityLoop and targetLoop) and adds the result to a result list.
+		 * Method that gets as input entities at a specific position.
+		 * It first evaluates whether there is more than one entity in the input. If there is, there is a possibility
+		 * to target, and thus the need to loop over all possible entities in the list (entityLoop).
+		 * Then, it creates a list of possible targets, loops over the targets (targetLoop) and adds the result to a result list.
 		 * Finally, in lifeLoop it loops over the result list and removes any entities that have been declared dead.
 		 */
-
+		
 		List<Entity> newEntities = new ArrayList<>();
 		
 		if (ePosList.size() == 1) { // single element on position
@@ -101,7 +98,9 @@ public class Computer {
 					
 				else { // there is a possible target; now randomize whether it will target or not
 					
-					if (!(e.getType().equals("unliving")) && ((Randomizer.random(2 + Math.abs(heat/10))) == 0)) {  // heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
+					int P_TARGET = 2 + Math.abs(heat/10); // P(don't target) = 1/(P_TO_TARGET)
+					
+					if (!(e.getType().equals("unliving")) && ((Randomizer.random(P_TARGET)) == 0)) {
 						newEntities.addAll(actionSchema.doAction(e));
 						continue entityLoop;
 					} else { // do the target
@@ -115,7 +114,7 @@ public class Computer {
 							
 							Entity eResult = actionResult.get(0);
 							Entity tarResult = actionResult.get(1);
-							Entity targetInEPos = ePosList.get(ePosList.indexOf(target));
+							Entity targetInEPos = ePosList.get(ePosList.indexOf(target)); // get target in entityList (= identical entity)
 							
 							if (tarResult.isAlive()) { // check if target is still alive, add it to newEntities
 								newEntities.addAll(actionResult);
@@ -156,12 +155,15 @@ public class Computer {
 	}
 	
 	public List<Entity> activateUnliving(List<Entity> newEntities) {
-		// activates unliving things
-		unlivingActions.clear();
+		/* 
+		 * Activates unliving entities at random and changes its results in the List<Entity> newEntities
+		 */
+		
+		unlivingActions.clear(); // clear previous list
 		String unlivingAction;
 		List<Entity> surviving = new ArrayList<>();
 		
-		// Unleash DemonicFury
+		// Unleash DemonicFury: P = 1/(110-heat)
 		if (Randomizer.random(110-heat) == 0) { // P(demonicFury)=1/110-heat
 			surviving.addAll(DemonicFury.unleash(newEntities));
 			unlivingAction = "Demonic Fury unleashed!" + System.lineSeparator();
@@ -170,7 +172,7 @@ public class Computer {
 			surviving.addAll(newEntities);
 		}
 		
-		// Divine Intervention
+		// Divine Intervention: P = 1/(110-heat)
 		if (Randomizer.random(110-heat) == 0) {
 			List<Entity> intervention = divineIntervention.intervene();
 			surviving.addAll(intervention);
@@ -180,7 +182,7 @@ public class Computer {
 			}
 		}
 		
-		// Plague
+		// Plague: P = chanceOnPlague/100
 		if (Randomizer.random(100)<chanceOnPlague) {
 			List<Entity> spawnedEntities = plague.spawnDead();
 			surviving.addAll(spawnedEntities);

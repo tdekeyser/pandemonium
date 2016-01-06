@@ -212,13 +212,15 @@ public class WorldMaker implements ActionListener {
 						
 						statusBar.setText("Working..."); // set working text in status bar
 						
+						long startTime = System.currentTimeMillis(); // time process
 						w.run(); // run all states
-									
+						long endTime = System.currentTimeMillis();	
+						
 						paintGrid();
 						displayUnlivingActions();
 						
 						pastStates += amountOfStates;
-						statusBar.setText("World simulated " + Integer.toString(pastStates) + " states."); // update status bar
+						statusBar.setText("World simulated " + Integer.toString(pastStates) + " states. Last run in " + (endTime-startTime) + " miliseconds."); // update status bar
 					}
 					
 					initializer.setEnabled(true); // re-enable buttons

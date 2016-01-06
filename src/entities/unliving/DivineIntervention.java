@@ -11,11 +11,17 @@ public class DivineIntervention extends UnlivingEntity {
 	// unliving entity that spawns Angels and Sinners at random
 	
 	private EntityGenerator eg;
+	int[] boardDimensions;
 	private int w; // weight of the intervention
 	
 	public DivineIntervention(EntityGenerator eg, int w) {
 		this.eg = eg;
 		this.w = w;
+		
+		this.boardDimensions = eg.getBoardDimensions();
+		if (boardDimensions[0]>7 || boardDimensions[1]>7) {
+			this.w = ((boardDimensions[0]+boardDimensions[1])/4);
+		}
 	}
 	
 	public List<Entity> intervene() {
@@ -23,10 +29,8 @@ public class DivineIntervention extends UnlivingEntity {
 		
 		List<Entity> intervention = new ArrayList<>();
 		
-		int[] boardDimensions = eg.getBoardDimensions();
-		if (boardDimensions[0]>7 || boardDimensions[1]>7) {
-			w += ((boardDimensions[0]+boardDimensions[1])/4);
-		}
+		if (Randomizer.random(10)<5) w += boardDimensions[0]; else w -= boardDimensions[0]; // possibly increase weight of intervention
+		if (w<0 || w>(boardDimensions[0]+boardDimensions[1])*2) w = (boardDimensions[0]+boardDimensions[1])/4;
 		
 		for (int i=0; i<w; i++) {
 			int r = Randomizer.random(3);
