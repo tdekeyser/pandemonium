@@ -63,31 +63,35 @@ public class GridListener implements ActionListener {
 		
 		for (JButton b : buttonGrid.keySet()) {
 			if (b == arg0.getSource()) {
-				String position = buttonGrid.get(b);
 				
-				for (Entity e : boardMap.get(position)) {
+				try {
 					
-					switch (e.getType()) { // insert images according to the entity types on board
-					case "CradleOfFilth": charInfo.insertIcon(new ImageIcon(CRADLE_LOCATION)); break;
-					case "Imp": charInfo.insertIcon(new ImageIcon(IMP_LOCATION)); break;
-					case "InfernalDemon": charInfo.insertIcon(new ImageIcon(INF_LOCATION)); break;
-					case "DemonCommander": charInfo.insertIcon(new ImageIcon(DC_LOCATION)); break;
-					case "Sinner": charInfo.insertIcon(new ImageIcon(S_LOCATION)); break;
-					case "AngelOfDeath": charInfo.insertIcon(new ImageIcon(AOD_LOCATION)); break;
-					case "unliving": charInfo.insertIcon(new ImageIcon(H_LOCATION)); break;
+					String position = buttonGrid.get(b);
+					
+					for (Entity e : boardMap.get(position)) {
+						
+						switch (e.getType()) { // insert images according to the entity types on board
+						case "CradleOfFilth": charInfo.insertIcon(new ImageIcon(CRADLE_LOCATION)); break;
+						case "Imp": charInfo.insertIcon(new ImageIcon(IMP_LOCATION)); break;
+						case "InfernalDemon": charInfo.insertIcon(new ImageIcon(INF_LOCATION)); break;
+						case "DemonCommander": charInfo.insertIcon(new ImageIcon(DC_LOCATION)); break;
+						case "Sinner": charInfo.insertIcon(new ImageIcon(S_LOCATION)); break;
+						case "AngelOfDeath": charInfo.insertIcon(new ImageIcon(AOD_LOCATION)); break;
+						case "unliving": charInfo.insertIcon(new ImageIcon(H_LOCATION)); break;
+						}
+						
+						StyledDocument doc = charInfo.getStyledDocument(); // add text to the JTextPane
+						try{
+							doc.insertString(doc.getEndPosition().getOffset(), e.toStringLong()+System.lineSeparator(), null); // insert normal string without attributeSet (null)
+						} catch(BadLocationException bl) { // in case the cursor cannot be set on specific location
+							bl.printStackTrace();
+						}				
 					}
-					
-					StyledDocument doc = charInfo.getStyledDocument(); // add text to the JTextPane
-					try{
-						doc.insertString(doc.getEndPosition().getOffset(), e.toStringLong()+System.lineSeparator(), null); // insert normal string without attributeSet (null)
-					} catch(BadLocationException bl) { // in case the cursor cannot be set on specific location
-						bl.printStackTrace();
-					}				
-				}
-					
-				textPanel.revalidate(); // revalidate the panel after adding content
-					
-					
+						
+					textPanel.revalidate(); // revalidate the panel after adding content
+				
+				} catch (NullPointerException nx) {}
+				// Possible NullPointer when trying to click while running. Then just ignore the exception (as the process will go on anyway).
 			}
 		}
 	}
