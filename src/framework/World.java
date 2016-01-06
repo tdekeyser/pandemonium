@@ -129,7 +129,6 @@ public class World {
 	
 	public void runOnce() {
 		// proceeds by 1 state
-		
 		update(Integer.toString(stateNr));
 		stateNr++;
 	}
@@ -146,7 +145,7 @@ public class World {
 		
 		int amountOfStates = 10;
 		int amountOfEntities = 10; // (living,unliving)
-		int[] entityDistribution = {40, 20, 40}; // (S, CoF, I)
+		int[] entityDistribution = {40, 30, 30}; // (S, CoF, I)
 		int[] boardDimensions = {5, 5};
 		int heat = 60; // random(2+heat); heat=10 --> P(target)=2/3; heat=100 --> P(target)=11/12=0.91
 		int chanceOnPlague = 40; // P(spawn1Sinner)=1/f(x) and P(spawn1Cradle)=1/2f(x) if chanceOnPlague>=50, with f(100)=2; f(50)=4; f(0)=6
