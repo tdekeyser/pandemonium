@@ -7,7 +7,7 @@ import entities.Entity;
 public abstract class LivingEntity extends Entity implements Moveable {
 	// superclass for every living entity
 	
-	private int age;
+	private int age = 1;
 	private final String gender;
 
 	public LivingEntity(String gender, int[] currentPosition) {
