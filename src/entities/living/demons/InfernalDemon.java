@@ -5,8 +5,7 @@ import java.util.Arrays;
 import entities.living.Sinner;
 
 public class InfernalDemon extends Demon {
-	/* class for the Greater demon, 1st in hierarchy 
-	 * InfernalDemon has following variables:
+	/* InfernalDemon has following variables (some inherited from parent classes):
 	 * 		String name,
 	 * 		String gender,
 	 * 		int age,
@@ -30,6 +29,7 @@ public class InfernalDemon extends Demon {
 	}
 	
 	public void plot() {
+		// increase cruelty
 		this.increaseCruelty();
 		this.appendToLog("Plotted horrific schemes.");
 	}

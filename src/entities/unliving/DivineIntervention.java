@@ -10,8 +10,8 @@ import randomizers.Randomizer;
 public class DivineIntervention extends UnlivingEntity {
 	// unliving entity that spawns Angels and Sinners at random
 	
-	private EntityGenerator eg;
-	int[] boardDimensions;
+	private EntityGenerator eg; // contains random entity creator methods
+	private int[] boardDimensions;
 	private int w; // weight of the intervention
 	
 	public DivineIntervention(EntityGenerator eg, int w) {

@@ -14,15 +14,13 @@ public class DemonicFury extends UnlivingEntity {
 		List<Entity> newList = new ArrayList<>();
 		for (int i=0; i<entityList.size(); i++) {
 			Entity e = entityList.get(i);
-			try {
-				switch (e.getType()) {
-					case "Sinner": ((Sinner) e).decreaseDivinity(); break;
-					case "CradleOfFilth": break;
-					case "unliving": throw new ClassCastException();
-					default: ((Demon) e).increaseCruelty(); break;
-				}
-				newList.add(e);
-			} catch (ClassCastException cx) { newList.add(e); continue; }
+			switch (e.getType()) {
+				case "Sinner": ((Sinner) e).decreaseDivinity(); break;
+				case "CradleOfFilth": break;
+				case "unliving": break;
+				default: ((Demon) e).increaseCruelty(); break;
+			}
+			newList.add(e);
 		}
 		
 		return newList;
