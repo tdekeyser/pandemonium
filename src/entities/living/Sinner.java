@@ -7,7 +7,7 @@ import randomizers.NameGenerator;
 
 public class Sinner extends LivingEntity {
 
-	private int divinity; // divinity defines a sinner's position within the hierarchy
+	private int divinity; // divinity defines a sinner's ability to evolve in an Angel
 	
 	public Sinner(String gender, int[] currentPosition) {
 		super(gender, currentPosition);

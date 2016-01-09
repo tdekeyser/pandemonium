@@ -6,12 +6,11 @@ import entities.living.LivingEntity;
 import entities.living.Sinner;
 
 public abstract class Demon extends LivingEntity {
-	/* abstract class is superclass for InfernalDemon, Imp, DemonCommander
-	 * not a superclass for CradleOfFilth
+	/* This abstract class is superclass for InfernalDemon, Imp, DemonCommander, but not for CradleOfFilth.
 	 */
 	
 	private final String name;
-	private int cruelty; // cruelty defines a demon's position within the hierarchy
+	private int cruelty; // cruelty defines a demon's ability to evolve in the hierarchy
 
 	public Demon(String name, String gender, int[] currentPosition) {
 		super(gender, currentPosition);
