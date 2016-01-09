@@ -103,7 +103,6 @@ public class ActionSchema {
 				case "Sinner":
 					if ((((Sinner) e).getDivinity()>7) && (((Sinner) target).getDivinity()>7)) { // evolve into angel if both at least 7 divinity
 						targetresult.add(((Sinner) e).evolve((Sinner) target));
-						((LivingEntity) target).declareDead();
 						targetresult.add(target);
 						return targetresult;
 					} else {

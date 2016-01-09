@@ -60,6 +60,7 @@ public class Sinner extends LivingEntity {
 		AngelOfDeath aod = new AngelOfDeath(an.getName(), this.getGender(), this.getCurrentPosition());
 		aod.setAge(this.getAge());
 		aod.copyAndAppendToLog(this, "Evolved to AngelOfDeath from Sinners");
+		partner.declareDead();
 		this.declareDead();		
 		return aod;	
 	}
