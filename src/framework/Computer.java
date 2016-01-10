@@ -183,7 +183,7 @@ public class Computer {
 		}
 		
 		// Plague: P = chanceOnPlague/100
-		if (Randomizer.random(110)<chanceOnPlague) {
+		if (Randomizer.random(110-chanceOnPlague) == 0) {
 			List<Entity> spawnedEntities = plague.spawnDead();
 			surviving.addAll(spawnedEntities);
 			if (spawnedEntities.size()>0) { // only add entities if there are entities in the plague
