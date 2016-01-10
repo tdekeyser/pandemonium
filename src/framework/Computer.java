@@ -35,7 +35,7 @@ public class Computer {
 		this.actionSchema = new ActionSchema(boardDimensions);
 		this.entityGen = new EntityGenerator(boardDimensions);
 		
-		this.divineIntervention = new DivineIntervention(entityGen, ((int) Math.abs(heat/20)+3));
+		this.divineIntervention = new DivineIntervention(entityGen, heat);
 		this.plague = new Plague(entityGen, chanceOnPlague);
 		
 		this.chanceOnPlague = chanceOnPlague;
