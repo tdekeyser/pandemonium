@@ -63,14 +63,14 @@ public class ActionSchema {
 		switch (e.getType()) {
 			case "CradleOfFilth":
 				switch (target.getType()) {
-					case "unliving": targetresult.addAll(doULAction(target, e)); return targetresult;
+					case "unliving": targetresult.addAll(doHellFireAction(target, e)); return targetresult;
 					default: targetresult.add(e); return targetresult;
 				}
 			case "Imp":
 				switch (target.getType()) {
 					case "Sinner": ((Imp) e).killSinner((Sinner) target); break;
 					case "Imp": ((Imp) e).cannibalize((Imp) target); break;
-					case "unliving": targetresult.addAll(doULAction(target, e)); return targetresult;
+					case "unliving": targetresult.addAll(doHellFireAction(target, e)); return targetresult;
 					default: targetresult.add(e); return targetresult;
 				}; break;
 			case "InfernalDemon":
@@ -82,7 +82,7 @@ public class ActionSchema {
 						} else {
 							((InfernalDemon) e).tortureSinner((Sinner) target);
 						}; break;
-					case "unliving": targetresult.addAll(doULAction(target, e)); return targetresult;
+					case "unliving": targetresult.addAll(doHellFireAction(target, e)); return targetresult;
 					default: targetresult.add(e); return targetresult;
 					} break;
 			case "DemonCommander": 
@@ -94,21 +94,21 @@ public class ActionSchema {
 						} else {
 							((DemonCommander) e).demonizeSinner((Sinner) target);
 						}; break;
-					case "unliving": targetresult.addAll(doULAction(target, e)); return targetresult;
+					case "unliving": targetresult.addAll(doHellFireAction(target, e)); return targetresult;
 					default: targetresult.add(e); return targetresult;
 				}; break;
 			case "Sinner":
 				switch (target.getType()) {
-				case "unliving": targetresult.addAll(doULAction(target, e)); return targetresult;
-				case "Sinner":
-					if ((((Sinner) e).getDivinity()>7) && (((Sinner) target).getDivinity()>7)) { // evolve into angel if both at least 7 divinity
-						targetresult.add(((Sinner) e).evolve((Sinner) target));
-						targetresult.add(target);
-						return targetresult;
-					} else {
-						targetresult.add(e); return targetresult;
-					}
-				default: targetresult.add(e); return targetresult;
+					case "unliving": targetresult.addAll(doHellFireAction(target, e)); return targetresult;
+					case "Sinner":
+						if ((((Sinner) e).getDivinity()>7) && (((Sinner) target).getDivinity()>7)) { // evolve into angel if both at least 7 divinity
+							targetresult.add(((Sinner) e).evolve((Sinner) target));
+							targetresult.add(target);
+							return targetresult;
+						} else {
+							targetresult.add(e); return targetresult;
+						}
+					default: targetresult.add(e); return targetresult;
 				}
 			case "AngelOfDeath":
 				switch (target.getType()) {
@@ -117,10 +117,10 @@ public class ActionSchema {
 					case "Imp": ((AngelOfDeath) e).killDemon((Demon) target); break;
 					case "InfernalDemon": ((AngelOfDeath) e).killDemon((Demon) target); break;
 					case "DemonCommander": ((AngelOfDeath) e).killDemon((Demon) target); break;
-					case "unliving": targetresult.addAll(doULAction(target, e)); return targetresult;
+					case "unliving": targetresult.addAll(doHellFireAction(target, e)); return targetresult;
 					default: targetresult.addAll(doAngelOfDeathAction((AngelOfDeath) e)); return targetresult;
 				}; break;
-			case "unliving": targetresult.addAll(doULAction(e, target)); return targetresult;
+			case "unliving": targetresult.addAll(doHellFireAction(e, target)); return targetresult;
 		}
 		
 		targetresult.add(0, e); // add subject to front
@@ -128,18 +128,14 @@ public class ActionSchema {
 		return targetresult;
 	}
 	
-	private List<Entity> doULAction(Entity e, Entity target) {
-		// method that brings together some unliving entity actions
-		
+	private List<Entity> doHellFireAction(Entity e, Entity target) {
+		// specific HellFire method		
 		List<Entity> result = new ArrayList<>();
 		try {
-			switch (e.toString()) {
-				case "H":
-					((HellFire) e).explode((LivingEntity) target);
-					result.add(0, e);
-					result.add(1, target);
-					return result;
-			}
+			((HellFire) e).explode((LivingEntity) target);
+			result.add(0, e);
+			result.add(1, target);
+			return result;
 		} catch (ClassCastException cx) {
 			// target is unliving, do nothing
 			result.add(0, e);

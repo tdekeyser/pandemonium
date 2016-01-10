@@ -14,13 +14,12 @@ public class DivineIntervention extends UnlivingEntity {
 	private int[] boardDimensions;
 	private int w; // weight of the intervention
 	
-	public DivineIntervention(EntityGenerator eg, int w) {
+	public DivineIntervention(EntityGenerator eg, int heat) {
 		this.eg = eg;
-		this.w = w;
 		
 		this.boardDimensions = eg.getBoardDimensions();
 		if (boardDimensions[0]>7 || boardDimensions[1]>7) {
-			this.w = ((boardDimensions[0]+boardDimensions[1])/4);
+			this.w = ((boardDimensions[0]+boardDimensions[1])/4) + heat/20;
 		}
 	}
 	

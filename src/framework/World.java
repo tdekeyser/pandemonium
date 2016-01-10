@@ -78,8 +78,8 @@ public class World {
 		entityList.clear(); // clear the previous entityList
 		
 		List<Entity> livingList = new ArrayList<>();
-		for (List<Entity> entitiesOnPosition : board.getBoardMap().values()) { // get new entities from Computer
-			livingList.addAll(computer.activateEntities(entitiesOnPosition));
+		for (List<Entity> entitiesOnPosition : board.getBoardMap().values()) {
+			livingList.addAll(computer.activateEntities(entitiesOnPosition)); // get new entities from Computer per position
 		}
 		
 		entityList.addAll(computer.activateUnliving(livingList)); // activate unliving entities and add surviving to entityList
