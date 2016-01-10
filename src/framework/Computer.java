@@ -98,9 +98,9 @@ public class Computer {
 					
 				else { // there is a possible target; now randomize whether it will target or not
 					
-					int P_TARGET = 2 + Math.abs(heat/10); // P(don't target) = 1/(P_TO_TARGET)
+					int P_TARGET = 10 + Math.abs(heat/10); // Probability (don't target) = 1/(P_TARGET)
 					
-					if (!(e.getType().equals("unliving")) && ((Randomizer.random(P_TARGET)) == 0)) {
+					if (!(e.getType().equals("unliving")) && ((Randomizer.random(P_TARGET)) == 0)) { // don't target!
 						newEntities.addAll(actionSchema.doAction(e));
 						continue entityLoop;
 					} else { // do the target
@@ -108,7 +108,7 @@ public class Computer {
 						boolean targetSuccessful = false;
 						targetLoop: for (Entity target : targets) {
 							
-							List<Entity> actionResult = actionSchema.doAction(e, target);		
+							List<Entity> actionResult = actionSchema.doAction(e, target);
 							
 							if (actionResult.size()==1) { continue targetLoop; } // this occurs when an entity has failed to target, i.e. a single result is returned
 							
@@ -118,11 +118,11 @@ public class Computer {
 							
 							if (tarResult.isAlive()) { // check if target is still alive, add it to newEntities
 								newEntities.addAll(actionResult);
-								targetInEPos.declareDead(); // target cannot be looped over anymore
-							} else { // if not, add the killer to newEntities, but declare target dead
-								if (eResult.isAlive()) { newEntities.add(eResult); }
-								targetInEPos.declareDead();
+							} else if (eResult.isAlive()) { // if not, add the killer to newEntities, but declare target dead
+								 newEntities.add(eResult);
 							}
+							targetInEPos.declareDead(); // target cannot be looped over anymore
+							
 							targetSuccessful = true;
 							break targetLoop; // if an action is successful, break out of loop and continue the entityLoop
 						}
@@ -130,7 +130,6 @@ public class Computer {
 						if (!targetSuccessful) { // none of the targets have been successful
 							newEntities.addAll(actionSchema.doAction(e));
 						}
-						
 					}
 				}
 			}
@@ -143,8 +142,8 @@ public class Computer {
 				finalEntities.add(newE);
 			}
 			try {
-				((LivingEntity) newE).increaseAge();
-			} catch (ClassCastException cx) { continue lifeLoop; } // ClassCastException when unliving entity is encountered
+				((LivingEntity) newE).increaseAge();  // ClassCastException when HellFire (not an LivingEntity) is encountered
+			} catch (ClassCastException cx) { continue lifeLoop; }
 		}
 		
 		return finalEntities;
