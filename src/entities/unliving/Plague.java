@@ -22,7 +22,7 @@ public class Plague extends UnlivingEntity {
 		List<Entity> spawnedEntities = new ArrayList<>();
 		
 		int w = (eg.getBoardDimensions()[0] + eg.getBoardDimensions()[1])/2;	
-		int y = (-1/25)*chanceOnPlague + 6; // P(spawn1Sinner)=1/f(x) and P(spawn1Cradle)=1/2f(x) if chanceOnPlague>=50, with f(100)=2; f(50)=4; f(0)=6
+		int y = (-1/25)*chanceOnPlague + 6; // P(spawn1Sinner)=1/f(x) and P(spawn1Cradle)=1/2f(x) if x=chanceOnPlague>=50, with f(100)=2; f(50)=4; f(0)=6
 		
 		for (int i=0; i<w; i++) {
 			if (chanceOnPlague > 0) {

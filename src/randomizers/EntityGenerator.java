@@ -85,12 +85,12 @@ public class EntityGenerator {
 	
 	public LivingEntity moveRandomly(LivingEntity e) {
 		// randomly move the moveable entity
-		int onePos = e.getCurrentPosition()[0];
-		int twoPos = e.getCurrentPosition()[1];
-		int oneDimLimit = boardDimensions[0]-1;
-		int twoDimLimit = boardDimensions[1]-1;
+		int rowPos = e.getCurrentPosition()[0];
+		int columnPos = e.getCurrentPosition()[1];
+		int rowLimit = boardDimensions[0]-1;
+		int columnLimit = boardDimensions[1]-1;
 		
-		if ((onePos == 0) && (twoPos == 0)) {
+		if ((rowPos == 0) && (columnPos == 0)) {
 			// entity is in top left corner (0,0)
 			int r = Randomizer.random(2);
 			switch (r) {
@@ -98,7 +98,7 @@ public class EntityGenerator {
 				case 1: e.moveRight(); break;
 			}
 			return e;
-		} else if ((onePos == 0) && (twoPos == twoDimLimit)) {
+		} else if ((rowPos == 0) && (columnPos == columnLimit)) {
 			// entity is in top right corner (0, B)
 			int r = Randomizer.random(2);
 			switch (r) {
@@ -106,7 +106,7 @@ public class EntityGenerator {
 				case 1: e.moveLeft(); break;
 			}
 			return e;
-		} else if ((onePos == oneDimLimit) && (twoPos == 0)) {
+		} else if ((rowPos == rowLimit) && (columnPos == 0)) {
 			// entity is in bottom left corner (B, 0)
 			int r = Randomizer.random(2);
 			switch (r) {
@@ -114,7 +114,7 @@ public class EntityGenerator {
 				case 1: e.moveRight(); break;
 			}
 			return e;
-		} else if ((onePos == oneDimLimit) && (twoPos == twoDimLimit)) {
+		} else if ((rowPos == rowLimit) && (columnPos == columnLimit)) {
 			// entity is in bottom right corner (B, B)
 			int r = Randomizer.random(2);
 			switch (r) {
@@ -122,7 +122,7 @@ public class EntityGenerator {
 				case 1: e.moveUp(); break;
 			}
 			return e;
-		} else if (onePos == 0) {
+		} else if (rowPos == 0) {
 			// entity is at (0, 0<x<B)
 			int r = Randomizer.random(3);
 			switch (r) {
@@ -131,7 +131,7 @@ public class EntityGenerator {
 				case 2: e.moveDown(); break;
 			}
 			return e;
-		} else if (onePos == oneDimLimit) {
+		} else if (rowPos == rowLimit) {
 			// entity is at (B, 0<x<B)
 			int r = Randomizer.random(3);
 			switch (r) {
@@ -140,7 +140,7 @@ public class EntityGenerator {
 				case 2: e.moveRight(); break;
 			}
 			return e;
-		} else if (twoPos == 0) {
+		} else if (columnPos == 0) {
 			// entity is on (0<x<B, 0)
 			int r = Randomizer.random(3);
 			switch (r) {
@@ -149,7 +149,7 @@ public class EntityGenerator {
 				case 2: e.moveDown(); break;
 			}
 			return e;
-		} else if (twoPos == twoDimLimit) {
+		} else if (columnPos == columnLimit) {
 			// entity is on (0<x<B, B)
 			int r = Randomizer.random(3);
 			switch (r) {

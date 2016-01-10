@@ -144,7 +144,7 @@ public class Computer {
 			}
 			try {
 				((LivingEntity) newE).increaseAge();
-			} catch (ClassCastException cx) { continue lifeLoop; }
+			} catch (ClassCastException cx) { continue lifeLoop; } // ClassCastException when unliving entity is encountered
 		}
 		
 		return finalEntities;
@@ -176,7 +176,7 @@ public class Computer {
 		if (Randomizer.random(110-heat) == 0) {
 			List<Entity> intervention = divineIntervention.intervene();
 			surviving.addAll(intervention);
-			if (intervention.size()>0) {
+			if (intervention.size()>0) { // only add entities if there are entities in the intervention
 				unlivingAction = "Devine Intervention!" + System.lineSeparator() + "(" + intervention.size() + " intervened)" + System.lineSeparator();
 				unlivingActions.add(unlivingAction);
 			}
@@ -186,7 +186,7 @@ public class Computer {
 		if (Randomizer.random(110)<chanceOnPlague) {
 			List<Entity> spawnedEntities = plague.spawnDead();
 			surviving.addAll(spawnedEntities);
-			if (spawnedEntities.size()>0) {
+			if (spawnedEntities.size()>0) { // only add entities if there are entities in the plague
 				unlivingAction = "Plague! (" + spawnedEntities.size() + " spawned)" + System.lineSeparator();
 				unlivingActions.add(unlivingAction);
 			}
